@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="./frontend/public/ene-dei-precision-commerce.webp" alt="Ene Dei" width="220" />
+<img src="./frontend/public/ene-dei-precision-commerce.webp" alt="Ene Dei Precision Commerce" width="320" />
 
 # Ene Dei
 
@@ -11,8 +11,6 @@ operational Admin console, commerce backend, fulfillment workflows, sourcing,
 finance, notifications, inventory, support, and deployment-ready infrastructure.
 
 </div>
-
----
 
 ## Contents
 
