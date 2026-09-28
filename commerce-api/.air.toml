@@ -1,0 +1,40 @@
+root = "."
+tmp_dir = "tmp"
+
+[build]
+cmd = "go build -o ./tmp/commerce-api.exe ./cmd/api"
+entrypoint = ["tmp\\commerce-api.exe"]
+
+include_ext = ["go"]
+include_dir = []
+include_file = []
+
+exclude_dir = [
+    "tmp",
+    "vendor"
+]
+
+exclude_file = []
+exclude_regex = [
+    "_test\\.go"
+]
+
+exclude_unchanged = true
+
+delay = 300
+stop_on_error = true
+
+[log]
+time = true
+main_only = false
+silent = false
+
+[misc]
+clean_on_exit = true
+
+[screen]
+clear_on_rebuild = false
+keep_scroll = true
+
+[proxy]
+enabled = false

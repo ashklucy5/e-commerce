@@ -1,0 +1,60 @@
+﻿# ============================================================
+# Ene Dei backend repository boundary
+# ============================================================
+
+/*
+
+!/.gitignore
+
+!/commerce-api/
+!/ai-service/
+!/infrastructure/
+!/shared/
+!/tmp/
+
+
+# ============================================================
+# Backend-wide local/generated artifacts
+# ============================================================
+
+*.log
+*.tmp
+*.out
+
+*.zip
+*.rar
+*.7z
+*.tar
+*.tar.gz
+*.tgz
+
+*.exe
+*.dll
+*.so
+*.dylib
+
+.env
+.env.*
+
+# ai-service template is part of the repository.
+!/ai-service/.env.example
+
+*.pem
+*.key
+*.p12
+*.pfx
+
+__pycache__/
+*.py[cod]
+
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+coverage/
+.coverage
+
+.DS_Store
+Thumbs.db

@@ -1,0 +1,2 @@
+-- Modify "notification_outbox" table
+ALTER TABLE "notification_outbox" DROP CONSTRAINT "notification_outbox_category_valid", ADD CONSTRAINT "notification_outbox_category_valid" CHECK ((category)::text = ANY ((ARRAY['order'::character varying, 'payment'::character varying, 'delivery'::character varying, 'sourcing'::character varying, 'support'::character varying, 'promotion'::character varying, 'recommendation'::character varying, 'security'::character varying, 'system'::character varying])::text[]));

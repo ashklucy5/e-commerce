@@ -1,0 +1,20 @@
+﻿[
+  {
+    "corsRuleName": "eneDeiBrowserUploads",
+    "allowedOrigins": [
+      "http://localhost:3000"
+    ],
+    "allowedHeaders": [
+      "*"
+    ],
+    "allowedOperations": [
+      "s3_get",
+      "s3_head",
+      "s3_put"
+    ],
+    "exposeHeaders": [
+      "ETag"
+    ],
+    "maxAgeSeconds": 3600
+  }
+]

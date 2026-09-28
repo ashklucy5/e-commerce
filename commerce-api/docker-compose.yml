@@ -1,0 +1,217 @@
+x-app-build: &app-build
+  context: .
+  dockerfile: Dockerfile
+  target: runtime
+
+x-app-environment: &app-environment
+  HTTP_ADDR: ":8080"
+
+  # ------------------------------------------------------------
+  # PostgreSQL
+  #
+  # Default:
+  #   Docker application containers use the local postgres service.
+  #
+  # Production:
+  #   APP_POSTGRES_* can point API/scheduler/worker at an external
+  #   managed PostgreSQL database without changing the local
+  #   POSTGRES_* values used by host development and Atlas.
+  # ------------------------------------------------------------
+  POSTGRES_HOST: ${APP_POSTGRES_HOST:-postgres}
+  POSTGRES_PORT: ${APP_POSTGRES_PORT:-5432}
+  POSTGRES_DB: ${APP_POSTGRES_DB:-${POSTGRES_DB}}
+  POSTGRES_USER: ${APP_POSTGRES_USER:-${POSTGRES_USER}}
+  POSTGRES_PASSWORD: ${APP_POSTGRES_PASSWORD:-${POSTGRES_PASSWORD}}
+  POSTGRES_SSLMODE: ${APP_POSTGRES_SSLMODE:-disable}
+
+  # ------------------------------------------------------------
+  # Redis
+  #
+  # Docker application containers continue to use the local
+  # Redis service for now.
+  # ------------------------------------------------------------
+  REDIS_ADDR: redis:6379
+
+  # ------------------------------------------------------------
+  # Object storage
+  #
+  # STORAGE_ENDPOINT comes from .env when configured.
+  # This allows production Backblaze B2 to be used instead of
+  # forcibly overriding the endpoint with local MinIO.
+  #
+  # If STORAGE_ENDPOINT is not configured, local MinIO remains
+  # the fallback.
+  # ------------------------------------------------------------
+  STORAGE_ENDPOINT: ${STORAGE_ENDPOINT:-http://commerce-minio:9000}
+
+x-app-logging: &app-logging
+  driver: json-file
+  options:
+    max-size: 10m
+    max-file: "5"
+
+x-app-common: &app-common
+  build: *app-build
+  image: commerce-api:local
+  env_file:
+    - .env
+  environment: *app-environment
+  restart: unless-stopped
+  security_opt:
+    - no-new-privileges:true
+  stop_grace_period: 20s
+  logging: *app-logging
+
+services:
+  postgres:
+    image: pgvector/pgvector:0.8.6-pg18-bookworm
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:?POSTGRES_DB is required}
+      POSTGRES_USER: ${POSTGRES_USER:?POSTGRES_USER is required}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+
+    ports:
+      - "127.0.0.1:${DOCKER_POSTGRES_PORT:-5433}:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql
+      - ./deploy/database-bootstrap.sql:/docker-entrypoint-initdb.d/00-database-bootstrap.sql:ro
+
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - pg_isready -h 127.0.0.1 -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+
+    stop_grace_period: 30s
+    logging: *app-logging
+
+  redis:
+    image: redis:8.2.9-bookworm
+    restart: unless-stopped
+
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-}
+
+    command:
+      - sh
+      - -ec
+      - |
+        if [ -n "$$REDIS_PASSWORD" ]; then
+          exec redis-server --appendonly yes --requirepass "$$REDIS_PASSWORD"
+        fi
+        exec redis-server --appendonly yes
+
+    ports:
+      - "127.0.0.1:${DOCKER_REDIS_PORT:-6380}:6379"
+
+    volumes:
+      - redis_data:/data
+
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - >-
+          if [ -n "$$REDIS_PASSWORD" ]; then
+            redis-cli -a "$$REDIS_PASSWORD" ping | grep -q PONG;
+          else
+            redis-cli ping | grep -q PONG;
+          fi
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 5s
+
+    stop_grace_period: 20s
+    logging: *app-logging
+
+  commerce-minio:
+    image: minio/minio:latest
+    container_name: commerce-minio
+    restart: unless-stopped
+
+    command:
+      - server
+      - /data
+      - --console-address
+      - ":9001"
+
+    environment:
+      MINIO_ROOT_USER: ${STORAGE_ACCESS_KEY:?STORAGE_ACCESS_KEY is required}
+      MINIO_ROOT_PASSWORD: ${STORAGE_SECRET_KEY:?STORAGE_SECRET_KEY is required}
+
+    ports:
+      - "127.0.0.1:${DOCKER_MINIO_API_PORT:-9000}:9000"
+      - "127.0.0.1:${DOCKER_MINIO_CONSOLE_PORT:-9001}:9001"
+
+    volumes:
+      - minio_data:/data
+
+    stop_grace_period: 20s
+    logging: *app-logging
+
+  api:
+    <<: *app-common
+
+    command:
+      - /app/bin/api
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+      redis:
+        condition: service_healthy
+
+      commerce-minio:
+        condition: service_started
+
+    ports:
+      - "${DOCKER_API_BIND:-127.0.0.1}:${DOCKER_API_PORT:-8081}:8080"
+
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - -fsS
+        - --max-time
+        - "3"
+        - http://127.0.0.1:8080/health/ready
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+
+  scheduler:
+    <<: *app-common
+
+    command:
+      - /app/bin/scheduler
+
+    depends_on:
+      api:
+        condition: service_healthy
+
+  worker:
+    <<: *app-common
+
+    command:
+      - /app/bin/worker
+
+    depends_on:
+      api:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+
+  redis_data:
+
+  minio_data:
+    external: true
+    name: commerce-minio-data
