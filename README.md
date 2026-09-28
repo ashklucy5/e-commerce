@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="./frontend/public/ene-dei-precision-commerce.webp" alt="Ene Dei Precision Commerce" width="320" />
+<img src="./frontend/public/ene-dei readme logo.png" alt="Ene Dei Precision Commerce" width="320" />
 
 # Ene Dei
 
