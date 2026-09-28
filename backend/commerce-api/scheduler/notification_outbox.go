@@ -2,6 +2,7 @@ package scheduler
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"time"
 )
@@ -43,6 +44,41 @@ func NewNotificationOutboxQueue(
 
 		logger: logger,
 	}
+}
+
+// RunOnce performs one notification-outbox scheduling pass.
+//
+// It is used by finite/serverless runtimes. The normal scheduler
+// continues to use Run, which calls this method repeatedly.
+func (q *NotificationOutboxQueue) RunOnce(
+	ctx context.Context,
+) error {
+	if q == nil {
+		return fmt.Errorf(
+			"notification outbox scheduler is required",
+		)
+	}
+
+	if q.enqueuer == nil {
+		return fmt.Errorf(
+			"notification outbox scheduler has no queue enqueuer",
+		)
+	}
+
+	if q.batchSize <= 0 {
+		return fmt.Errorf(
+			"notification outbox scheduler batch size must be greater than zero",
+		)
+	}
+
+	if err := ctx.Err(); err != nil {
+		return err
+	}
+
+	return q.enqueuer.Enqueue(
+		ctx,
+		q.batchSize,
+	)
 }
 
 func (q *NotificationOutboxQueue) Run(
@@ -102,14 +138,9 @@ func (q *NotificationOutboxQueue) Run(
 func (q *NotificationOutboxQueue) enqueue(
 	ctx context.Context,
 ) {
-	if ctx.Err() != nil {
-		return
-	}
-
 	if err :=
-		q.enqueuer.Enqueue(
+		q.RunOnce(
 			ctx,
-			q.batchSize,
 		); err != nil {
 
 		if ctx.Err() != nil {

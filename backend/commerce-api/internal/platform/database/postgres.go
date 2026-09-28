@@ -10,22 +10,35 @@ import (
 	"project.local/commerce-api/internal/platform/config"
 )
 
+const (
+	defaultPostgresMaxConns int32 = 20
+	defaultPostgresMinConns int32 = 2
+
+	serverlessPostgresMaxConns int32 = 5
+	serverlessPostgresMinConns int32 = 0
+)
+
 func NewPostgres(
 	ctx context.Context,
 	cfg config.Config,
 ) (*pgxpool.Pool, error) {
-	poolConfig, err := pgxpool.ParseConfig(
-		cfg.PostgresURL(),
-	)
-	if err != nil {
-		return nil, fmt.Errorf(
-			"parse postgres config: %w",
-			err,
+	poolConfig, err :=
+		pgxpool.ParseConfig(
+			cfg.PostgresURL(),
 		)
+	if err != nil {
+		return nil,
+			fmt.Errorf(
+				"parse postgres config: %w",
+				err,
+			)
 	}
 
-	poolConfig.MaxConns = 20
-	poolConfig.MinConns = 2
+	poolConfig.MaxConns,
+		poolConfig.MinConns =
+		postgresPoolLimits(
+			cfg.ServerlessRuntime,
+		)
 
 	poolConfig.MaxConnLifetime =
 		30 * time.Minute
@@ -33,15 +46,17 @@ func NewPostgres(
 	poolConfig.MaxConnIdleTime =
 		5 * time.Minute
 
-	pool, err := pgxpool.NewWithConfig(
-		ctx,
-		poolConfig,
-	)
-	if err != nil {
-		return nil, fmt.Errorf(
-			"create postgres pool: %w",
-			err,
+	pool, err :=
+		pgxpool.NewWithConfig(
+			ctx,
+			poolConfig,
 		)
+	if err != nil {
+		return nil,
+			fmt.Errorf(
+				"create postgres pool: %w",
+				err,
+			)
 	}
 
 	pingCtx, cancel :=
@@ -49,16 +64,37 @@ func NewPostgres(
 			ctx,
 			5*time.Second,
 		)
+
 	defer cancel()
 
-	if err := pool.Ping(pingCtx); err != nil {
+	if err :=
+		pool.Ping(
+			pingCtx,
+		); err != nil {
+
 		pool.Close()
 
-		return nil, fmt.Errorf(
-			"postgres ping failed: %w",
-			err,
-		)
+		return nil,
+			fmt.Errorf(
+				"postgres ping failed: %w",
+				err,
+			)
 	}
 
 	return pool, nil
+}
+
+func postgresPoolLimits(
+	serverless bool,
+) (
+	maxConns int32,
+	minConns int32,
+) {
+	if serverless {
+		return serverlessPostgresMaxConns,
+			serverlessPostgresMinConns
+	}
+
+	return defaultPostgresMaxConns,
+		defaultPostgresMinConns
 }

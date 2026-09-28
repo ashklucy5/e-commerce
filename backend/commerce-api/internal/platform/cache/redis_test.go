@@ -321,7 +321,36 @@ func assertRedisRuntimeOptions(
 		)
 	}
 }
+func TestRedisOptionsServerlessPool(
+	t *testing.T,
+) {
+	t.Parallel()
 
+	options, err :=
+		redisOptions(
+			config.Config{
+				RedisAddr: "localhost:6379",
+
+				ServerlessRuntime: true,
+			},
+		)
+	if err != nil {
+		t.Fatalf(
+			"redis options: %v",
+			err,
+		)
+	}
+
+	if options.PoolSize !=
+		serverlessRedisPoolSize {
+
+		t.Fatalf(
+			"pool size = %d, want %d",
+			options.PoolSize,
+			serverlessRedisPoolSize,
+		)
+	}
+}
 // func contains(
 // 	value string,
 // 	substring string,

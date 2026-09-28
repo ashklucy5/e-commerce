@@ -5,19 +5,12 @@ import (
 	"log"
 	"os"
 	"os/signal"
-	"sync"
 	"syscall"
-	"time"
 
+	"project.local/commerce-api/internal/jobruntime"
 	"project.local/commerce-api/internal/platform/cache"
 	"project.local/commerce-api/internal/platform/config"
-	"project.local/commerce-api/internal/platform/queue"
-	"project.local/commerce-api/internal/supportattachment"
-	"project.local/commerce-api/jobs"
-	"project.local/commerce-api/scheduler"
 )
-
-const supportAttachmentRetentionInterval = time.Hour
 
 func main() {
 	ctx, stop :=
@@ -56,6 +49,10 @@ func main() {
 		)
 	}
 
+	// ---------------------------------------------------------
+	// Redis
+	// ---------------------------------------------------------
+
 	redisClient, err :=
 		cache.NewRedis(
 			ctx,
@@ -79,181 +76,58 @@ func main() {
 		}
 	}()
 
-	queueConfig :=
-		queue.DefaultConfig()
+	// ---------------------------------------------------------
+	// Shared scheduler runtime
+	// ---------------------------------------------------------
 
-	producer, err :=
-		queue.NewProducer(
-			redisClient,
-			queueConfig,
+	runtime, err :=
+		jobruntime.NewSchedulerRuntime(
+			jobruntime.SchedulerDependencies{
+				Redis: redisClient,
+
+				Config: cfg,
+
+				PaymentReconciliationConfig: reconciliationConfig,
+
+				NotificationOutboxConfig: notificationConfig,
+
+				Logger: log.Default(),
+			},
 		)
 	if err != nil {
 		log.Fatalf(
-			"scheduler queue startup failed: %v",
+			"scheduler runtime startup failed: %v",
 			err,
 		)
 	}
 
-	// ---------------------------------------------------------
-	// Order/payment expiry
-	// ---------------------------------------------------------
-
-	paymentExpiryDedupeTTL :=
-		schedulerDedupeTTL(
-			cfg.PaymentExpiryInterval,
-		)
-
-	paymentExpiryEnqueuer :=
-		jobs.NewOrderExpirationEnqueuer(
-			producer,
-			paymentExpiryDedupeTTL,
-		)
-
-	// ---------------------------------------------------------
-	// Payment reconciliation
-	// ---------------------------------------------------------
-
-	paymentReconciliationDedupeTTL :=
-		schedulerDedupeTTL(
-			reconciliationConfig.Interval,
-		)
-
-	paymentReconciliationEnqueuer :=
-		jobs.NewPaymentReconciliationEnqueuer(
-			producer,
-			paymentReconciliationDedupeTTL,
-		)
-
-	paymentRunner :=
-		scheduler.NewQueueWithReconciliation(
-			paymentExpiryEnqueuer,
-			paymentReconciliationEnqueuer,
-			cfg.PaymentExpiryInterval,
-			cfg.PaymentExpiryBatchSize,
-			reconciliationConfig.Interval,
-			reconciliationConfig.BatchSize,
-			log.Default(),
-		)
-
-	// ---------------------------------------------------------
-	// Notification outbox
-	// ---------------------------------------------------------
-
-	notificationDedupeTTL :=
-		schedulerDedupeTTL(
-			notificationConfig.Interval,
-		)
-
-	notificationEnqueuer :=
-		jobs.NewNotificationOutboxEnqueuer(
-			producer,
-			notificationDedupeTTL,
-		)
-
-	notificationRunner :=
-		scheduler.NewNotificationOutboxQueue(
-			notificationEnqueuer,
-			notificationConfig.Interval,
-			notificationConfig.BatchSize,
-			log.Default(),
-		)
-
-	// ---------------------------------------------------------
-	// Private support attachment retention
-	// ---------------------------------------------------------
-
-	retentionDedupeTTL :=
-		schedulerDedupeTTL(
-			supportAttachmentRetentionInterval,
-		)
-
-	retentionEnqueuer :=
-		jobs.NewSupportAttachmentRetentionEnqueuer(
-			producer,
-			retentionDedupeTTL,
-		)
-
-	retentionRunner :=
-		scheduler.NewSupportAttachmentRetentionQueue(
-			retentionEnqueuer,
-			supportAttachmentRetentionInterval,
-			supportattachment.
-				DefaultRetentionBatchSize,
-			log.Default(),
-		)
+	queueConfig :=
+		runtime.QueueConfig()
 
 	log.Printf(
-		"schedulers started in queue mode: expiry_interval=%s expiry_batch_size=%d reconciliation_interval=%s reconciliation_batch_size=%d notification_interval=%s notification_batch_size=%d support_attachment_retention_interval=%s support_attachment_retention_batch_size=%d stream=%s",
+		"schedulers started in queue mode: expiry_interval=%s expiry_batch_size=%d reconciliation_interval=%s reconciliation_batch_size=%d notification_interval=%s notification_batch_size=%d stream=%s",
 		cfg.PaymentExpiryInterval,
 		cfg.PaymentExpiryBatchSize,
 		reconciliationConfig.Interval,
 		reconciliationConfig.BatchSize,
 		notificationConfig.Interval,
 		notificationConfig.BatchSize,
-		supportAttachmentRetentionInterval,
-		supportattachment.
-			DefaultRetentionBatchSize,
 		queueConfig.Stream,
 	)
 
-	/*
-		Each scheduler is an independent loop.
-
-		A temporary failure in one domain does not stop payment,
-		notification, or support-attachment scheduling in the
-		other domains.
-	*/
-	var waitGroup sync.WaitGroup
-
-	waitGroup.Add(
-		3,
-	)
-
-	go func() {
-		defer waitGroup.Done()
-
-		paymentRunner.Run(
+	if err :=
+		runtime.Run(
 			ctx,
+		); err != nil &&
+		ctx.Err() == nil {
+
+		log.Fatalf(
+			"scheduler stopped with error: %v",
+			err,
 		)
-	}()
-
-	go func() {
-		defer waitGroup.Done()
-
-		notificationRunner.Run(
-			ctx,
-		)
-	}()
-
-	go func() {
-		defer waitGroup.Done()
-
-		retentionRunner.Run(
-			ctx,
-		)
-	}()
-
-	waitGroup.Wait()
+	}
 
 	log.Printf(
 		"scheduler stopped",
 	)
-}
-
-func schedulerDedupeTTL(
-	interval time.Duration,
-) time.Duration {
-	dedupeTTL :=
-		interval *
-			4 /
-			5
-
-	if dedupeTTL <
-		time.Second {
-
-		dedupeTTL =
-			time.Second
-	}
-
-	return dedupeTTL
 }

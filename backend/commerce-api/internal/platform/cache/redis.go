@@ -11,6 +11,11 @@ import (
 	"project.local/commerce-api/internal/platform/config"
 )
 
+const (
+	defaultRedisPoolSize    = 20
+	serverlessRedisPoolSize = 5
+)
+
 var errInvalidRedisURL =
 	errors.New(
 		"invalid REDIS_URL",
@@ -103,13 +108,6 @@ func redisOptions(
 			}
 	}
 
-	/*
-		Keep the existing connection behavior identical for now.
-
-		Batch 14 will tune the pool and queue settings specifically
-		for managed/serverless Redis after command compatibility is
-		verified.
-	*/
 	options.DialTimeout =
 		5 * time.Second
 
@@ -120,7 +118,19 @@ func redisOptions(
 		3 * time.Second
 
 	options.PoolSize =
-		20
+		redisPoolSize(
+			cfg.ServerlessRuntime,
+		)
 
 	return options, nil
+}
+
+func redisPoolSize(
+	serverless bool,
+) int {
+	if serverless {
+		return serverlessRedisPoolSize
+	}
+
+	return defaultRedisPoolSize
 }

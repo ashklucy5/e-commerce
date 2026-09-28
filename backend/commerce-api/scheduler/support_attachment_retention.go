@@ -2,6 +2,7 @@ package scheduler
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"time"
 )
@@ -53,6 +54,41 @@ func NewSupportAttachmentRetentionQueue(
 
 		logger: logger,
 	}
+}
+
+// RunOnce performs one support-attachment retention scheduling pass.
+//
+// It is used by finite/serverless runtimes. The normal scheduler
+// continues to use Run, which calls this method repeatedly.
+func (q *SupportAttachmentRetentionQueue) RunOnce(
+	ctx context.Context,
+) error {
+	if q == nil {
+		return fmt.Errorf(
+			"support attachment retention scheduler is required",
+		)
+	}
+
+	if q.enqueuer == nil {
+		return fmt.Errorf(
+			"support attachment retention scheduler has no queue enqueuer",
+		)
+	}
+
+	if q.batchSize <= 0 {
+		return fmt.Errorf(
+			"support attachment retention scheduler batch size must be greater than zero",
+		)
+	}
+
+	if err := ctx.Err(); err != nil {
+		return err
+	}
+
+	return q.enqueuer.Enqueue(
+		ctx,
+		q.batchSize,
+	)
 }
 
 func (q *SupportAttachmentRetentionQueue) Run(
@@ -109,14 +145,9 @@ func (q *SupportAttachmentRetentionQueue) Run(
 func (q *SupportAttachmentRetentionQueue) enqueue(
 	ctx context.Context,
 ) {
-	if ctx.Err() != nil {
-		return
-	}
-
 	if err :=
-		q.enqueuer.Enqueue(
+		q.RunOnce(
 			ctx,
-			q.batchSize,
 		); err != nil {
 
 		if ctx.Err() != nil {

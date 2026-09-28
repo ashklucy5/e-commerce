@@ -11,6 +11,7 @@ import (
 	"time"
 
 	admincore "project.local/commerce-api/internal/admin"
+	"project.local/commerce-api/internal/jobruntime"
 	"project.local/commerce-api/internal/order"
 	"project.local/commerce-api/internal/platform/cache"
 	"project.local/commerce-api/internal/platform/config"
@@ -71,30 +72,45 @@ func main() {
 		)
 	}
 
-	ctx :=
-		context.Background()
-
-	appliedMigrations, err :=
-		database.ApplyMigrations(
-			ctx,
-			cfg,
-		)
+	runtimeTickConfig, err :=
+		config.LoadRuntimeTickConfig()
 	if err != nil {
 		log.Fatalf(
-			"database migration startup failed: %v",
+			"runtime tick configuration error: %v",
 			err,
 		)
 	}
 
-	if appliedMigrations > 0 {
-		log.Printf(
-			"database migrations applied: %d",
-			appliedMigrations,
+	ctx :=
+		context.Background()
+
+	if cfg.ServerlessRuntime {
+		log.Println(
+			"serverless runtime: automatic startup migrations disabled",
 		)
 	} else {
-		log.Println(
-			"database migrations current",
-		)
+		appliedMigrations, err :=
+			database.ApplyMigrations(
+				ctx,
+				cfg,
+			)
+		if err != nil {
+			log.Fatalf(
+				"database migration startup failed: %v",
+				err,
+			)
+		}
+
+		if appliedMigrations > 0 {
+			log.Printf(
+				"database migrations applied: %d",
+				appliedMigrations,
+			)
+		} else {
+			log.Println(
+				"database migrations current",
+			)
+		}
 	}
 
 	db, err :=
@@ -115,25 +131,26 @@ func main() {
 		Synchronize built-in Admin permissions and the
 		admin_superuser system role after PostgreSQL is ready.
 
-		This keeps newly added system permissions, such as:
-
-			admin.finance.read
-			admin.finance.manage
-
-		present in the database and automatically assigned to
-		the Admin Superuser role without requiring another
-		manual bootstrap operation.
+		This keeps newly added system permissions present in the
+		database and automatically assigned to the Admin Superuser
+		role without requiring another manual bootstrap operation.
 	*/
-	if err :=
-		admincore.SyncSystemAuthorization(
-			ctx,
-			db,
-		); err != nil {
-
-		log.Fatalf(
-			"Admin authorization synchronization failed: %v",
-			err,
+	if cfg.ServerlessRuntime {
+		log.Println(
+			"serverless runtime: automatic Admin authorization synchronization disabled",
 		)
+	} else {
+		if err :=
+			admincore.SyncSystemAuthorization(
+				ctx,
+				db,
+			); err != nil {
+
+			log.Fatalf(
+				"Admin authorization synchronization failed: %v",
+				err,
+			)
+		}
 	}
 
 	redisClient, err :=
@@ -179,6 +196,136 @@ func main() {
 		)
 	}
 
+	// ---------------------------------------------------------
+	// Optional finite/serverless background runtime
+	// ---------------------------------------------------------
+
+	var runtimeTickRunner *jobruntime.LockedTickRunner
+
+	if runtimeTickConfig.Enabled {
+		workerConfig, err :=
+			config.LoadWorkerConfig()
+		if err != nil {
+			log.Fatalf(
+				"runtime worker configuration error: %v",
+				err,
+			)
+		}
+
+		reconciliationConfig, err :=
+			config.LoadPaymentReconciliationConfig()
+		if err != nil {
+			log.Fatalf(
+				"runtime payment reconciliation configuration error: %v",
+				err,
+			)
+		}
+
+		notificationConfig, err :=
+			config.LoadNotificationOutboxConfig()
+		if err != nil {
+			log.Fatalf(
+				"runtime notification outbox configuration error: %v",
+				err,
+			)
+		}
+
+		schedulerRuntime, err :=
+			jobruntime.NewSchedulerRuntime(
+				jobruntime.SchedulerDependencies{
+					Redis: redisClient,
+
+					Config: cfg,
+
+					PaymentReconciliationConfig: reconciliationConfig,
+
+					NotificationOutboxConfig: notificationConfig,
+
+					Logger: log.Default(),
+				},
+			)
+		if err != nil {
+			log.Fatalf(
+				"runtime scheduler startup failed: %v",
+				err,
+			)
+		}
+
+		workerRuntime, err :=
+			jobruntime.New(
+				jobruntime.Dependencies{
+					DB: db,
+
+					Redis: redisClient,
+
+					Storage: storageGateway,
+
+					Config: cfg,
+
+					WorkerConfig: workerConfig,
+
+					Logger: log.Default(),
+				},
+			)
+		if err != nil {
+			log.Fatalf(
+				"runtime worker startup failed: %v",
+				err,
+			)
+		}
+
+		tickRunner, err :=
+			jobruntime.NewTickRunner(
+				schedulerRuntime,
+				workerRuntime,
+				jobruntime.TickConfig{
+					MaxMessages: runtimeTickConfig.
+						MaxMessages,
+
+					Timeout: runtimeTickConfig.
+						Timeout,
+				},
+			)
+		if err != nil {
+			log.Fatalf(
+				"runtime tick startup failed: %v",
+				err,
+			)
+		}
+
+		tickLock, err :=
+			jobruntime.NewTickLock(
+				redisClient,
+				runtimeTickConfig.
+					LockTTL,
+			)
+		if err != nil {
+			log.Fatalf(
+				"runtime tick lock startup failed: %v",
+				err,
+			)
+		}
+
+		runtimeTickRunner, err =
+			jobruntime.NewLockedTickRunner(
+				tickRunner,
+				tickLock,
+			)
+		if err != nil {
+			log.Fatalf(
+				"locked runtime tick startup failed: %v",
+				err,
+			)
+		}
+
+		log.Printf(
+			"finite runtime enabled: max_messages=%d timeout=%s lock_ttl=%s",
+			runtimeTickConfig.MaxMessages,
+			runtimeTickConfig.Timeout,
+			runtimeTickConfig.LockTTL,
+		)
+	}
+
 	engine :=
 		router.New(
 			router.Dependencies{
@@ -197,6 +344,10 @@ func main() {
 				TrustedProxies: cfg.TrustedProxies,
 
 				Metrics: metricsConfig,
+
+				RuntimeTickConfig: runtimeTickConfig,
+
+				RuntimeTickRunner: runtimeTickRunner,
 
 				CODEnabled: cfg.CODEnabled,
 
