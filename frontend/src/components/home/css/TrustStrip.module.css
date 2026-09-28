@@ -1,0 +1,818 @@
+.shell {
+  position: relative;
+  z-index: 2;
+
+  width: 100%;
+  max-width: none;
+
+  margin-top:
+    clamp(
+      0.55rem,
+      1vw,
+      0.75rem
+    );
+
+  overflow: hidden;
+
+  border:
+    0.0625rem solid
+    rgba(32, 37, 47, 0.065);
+
+  border-radius:
+    clamp(
+      0.85rem,
+      1.2vw,
+      1rem
+    );
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.78
+    );
+
+  box-shadow:
+    inset
+      0
+      0.0625rem
+      0
+      rgba(
+        255,
+        255,
+        255,
+        0.95
+      ),
+    0
+      0.65rem
+      1.7rem
+      rgba(
+        34,
+        41,
+        55,
+        0.045
+      );
+
+  backdrop-filter:
+    blur(0.75rem)
+    saturate(135%);
+
+  -webkit-backdrop-filter:
+    blur(0.75rem)
+    saturate(135%);
+}
+
+/*
+ * Always one horizontal strip.
+ *
+ * It occupies the full available width but
+ * remains horizontally scrollable whenever
+ * the items no longer fit.
+ */
+.rail {
+  width: 100%;
+
+  display: flex;
+
+  align-items: stretch;
+
+  gap: 0;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  scroll-snap-type:
+    x proximity;
+
+  scroll-padding-inline:
+    clamp(
+      0.4rem,
+      1.5vw,
+      0.7rem
+    );
+
+  overscroll-behavior-inline:
+    contain;
+
+  scrollbar-width: none;
+
+  -webkit-overflow-scrolling:
+    touch;
+
+  touch-action:
+    pan-x pan-y pinch-zoom;
+}
+
+.rail::-webkit-scrollbar {
+  display: none;
+}
+
+/*
+ * Cards remain useful rather than being
+ * crushed to fit the viewport.
+ *
+ * On wide displays they naturally fill
+ * most/all of the strip.
+ *
+ * On smaller displays the overflow becomes
+ * swipe/scroll content.
+ */
+.item {
+  flex:
+    1 0
+    clamp(
+      10.5rem,
+      23vw,
+      17rem
+    );
+
+  display: grid;
+
+  grid-template-columns:
+    clamp(
+      1.8rem,
+      4vw,
+      2rem
+    )
+    minmax(
+      0,
+      1fr
+    );
+
+  align-items: center;
+
+  gap:
+    clamp(
+      0.42rem,
+      1vw,
+      0.58rem
+    );
+
+  min-width: 0;
+
+  min-height:
+    clamp(
+      3.5rem,
+      4.2vw,
+      4.2rem
+    );
+
+  padding:
+    clamp(
+      0.5rem,
+      0.9vw,
+      0.68rem
+    )
+    clamp(
+      0.58rem,
+      1.2vw,
+      0.9rem
+    );
+
+  scroll-snap-align: start;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.72
+    );
+}
+
+.item + .item {
+  border-left:
+    0.0625rem solid
+    rgba(
+      32,
+      37,
+      47,
+      0.06
+    );
+}
+
+.icon {
+  display: grid;
+
+  width:
+    clamp(
+      1.8rem,
+      4vw,
+      2rem
+    );
+
+  aspect-ratio: 1;
+
+  place-items: center;
+
+  border:
+    0.0625rem solid
+    rgba(
+      32,
+      37,
+      47,
+      0.065
+    );
+
+  border-radius:
+    clamp(
+      0.5rem,
+      1vw,
+      0.62rem
+    );
+
+  background:
+    rgba(
+      248,
+      249,
+      251,
+      0.9
+    );
+
+  color: #30333a;
+}
+
+.copy {
+  display: grid;
+
+  min-width: 0;
+
+  gap: 0.08rem;
+}
+
+.copy strong {
+  color: #292c32;
+
+  font-size:
+    clamp(
+      0.6rem,
+      0.75vw,
+      0.72rem
+    );
+
+  font-weight: 720;
+
+  line-height: 1.18;
+
+  white-space: normal;
+
+  overflow-wrap: anywhere;
+}
+
+.copy small {
+  color: #777b84;
+
+  font-size:
+    clamp(
+      0.49rem,
+      0.6vw,
+      0.58rem
+    );
+
+  font-weight: 500;
+
+  line-height: 1.25;
+
+  white-space: normal;
+
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 48rem) {
+  .item {
+    /*
+     * Roughly two cards are visible while enough
+     * of the next one remains to visually signal
+     * that the row can be swiped.
+     */
+    flex-basis:
+      clamp(
+        9.75rem,
+        44vw,
+        13rem
+      );
+
+    min-height:
+      clamp(
+        3.75rem,
+        16vw,
+        4.2rem
+      );
+  }
+
+  .copy strong {
+    font-size:
+      clamp(
+        0.6rem,
+        2.6vw,
+        0.7rem
+      );
+  }
+
+  .copy small {
+    font-size:
+      clamp(
+        0.49rem,
+        2.2vw,
+        0.57rem
+      );
+  }
+}
+
+@media (max-width: 21rem) {
+  .item {
+    flex-basis:
+      clamp(
+        9rem,
+        68vw,
+        11rem
+      );
+  }
+}
+
+@supports not (
+  backdrop-filter:
+    blur(1rem)
+) {
+  .shell {
+    background:
+      rgba(
+        255,
+        255,
+        255,
+        0.98
+      );
+  }
+}
+
+@media (
+  prefers-reduced-motion:
+    reduce
+) {
+  .rail {
+    scroll-behavior: auto;
+  }
+}.shell {
+  position: relative;
+  z-index: 2;
+
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+
+  margin-top:
+    clamp(
+      0.5rem,
+      1vw,
+      0.75rem
+    );
+
+  overflow: hidden;
+
+  border:
+    0.0625rem solid
+    rgba(
+      32,
+      37,
+      47,
+      0.065
+    );
+
+  border-radius:
+    clamp(
+      0.85rem,
+      1.4vw,
+      1rem
+    );
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.82
+    );
+
+  box-shadow:
+    inset
+      0
+      0.0625rem
+      0
+      rgba(
+        255,
+        255,
+        255,
+        0.96
+      ),
+    0
+      0.5rem
+      1.5rem
+      rgba(
+        34,
+        41,
+        55,
+        0.04
+      );
+
+  backdrop-filter:
+    blur(0.75rem)
+    saturate(140%);
+
+  -webkit-backdrop-filter:
+    blur(0.75rem)
+    saturate(140%);
+}
+
+/*
+ * This is ALWAYS one row.
+ *
+ * It never wraps.
+ * It never becomes a 2 x 2 grid.
+ *
+ * When there is insufficient space, the rail
+ * itself becomes horizontally scrollable.
+ */
+.rail {
+  position: relative;
+
+  display: flex;
+
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+
+  flex-wrap: nowrap;
+
+  align-items: stretch;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  scroll-snap-type:
+    x proximity;
+
+  scroll-padding-inline:
+    clamp(
+      0.55rem,
+      2vw,
+      0.85rem
+    );
+
+  overscroll-behavior-x:
+    contain;
+
+  scrollbar-width:
+    none;
+
+  -webkit-overflow-scrolling:
+    touch;
+
+  /*
+   * Real touch gestures remain native.
+   */
+  touch-action:
+    pan-x pan-y pinch-zoom;
+
+  cursor: grab;
+
+  user-select: none;
+}
+
+.rail::-webkit-scrollbar {
+  display: none;
+}
+
+.rail[data-dragging="true"] {
+  cursor: grabbing;
+
+  scroll-snap-type:
+    none;
+}
+
+/*
+ * Desktop:
+ * 4 cards naturally occupy the entire strip.
+ *
+ * Critically:
+ * flex-shrink is ZERO.
+ *
+ * This is what guarantees real overflow on
+ * narrow screens instead of crushing the
+ * cards until everything fits.
+ */
+.item {
+  flex:
+    1 0
+    clamp(
+      10.75rem,
+      23vw,
+      17rem
+    );
+
+  display: grid;
+
+  grid-template-columns:
+    clamp(
+      1.85rem,
+      3vw,
+      2rem
+    )
+    minmax(
+      0,
+      1fr
+    );
+
+  align-items: center;
+
+  gap:
+    clamp(
+      0.42rem,
+      1vw,
+      0.58rem
+    );
+
+  min-width: 0;
+
+  min-height:
+    clamp(
+      3.6rem,
+      4.4vw,
+      4.25rem
+    );
+
+  padding:
+    clamp(
+      0.5rem,
+      0.9vw,
+      0.68rem
+    )
+    clamp(
+      0.6rem,
+      1.2vw,
+      0.9rem
+    );
+
+  scroll-snap-align:
+    start;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.7
+    );
+}
+
+.item + .item {
+  border-left:
+    0.0625rem solid
+    rgba(
+      32,
+      37,
+      47,
+      0.06
+    );
+}
+
+.icon {
+  display: grid;
+
+  width:
+    clamp(
+      1.85rem,
+      3vw,
+      2rem
+    );
+
+  aspect-ratio: 1;
+
+  flex: 0 0 auto;
+
+  place-items: center;
+
+  border:
+    0.0625rem solid
+    rgba(
+      32,
+      37,
+      47,
+      0.065
+    );
+
+  border-radius:
+    clamp(
+      0.5rem,
+      1vw,
+      0.62rem
+    );
+
+  background:
+    rgba(
+      248,
+      249,
+      251,
+      0.9
+    );
+
+  color: #30333a;
+
+  box-shadow:
+    inset
+      0
+      0.0625rem
+      0
+      rgba(
+        255,
+        255,
+        255,
+        0.9
+      );
+}
+
+.copy {
+  display: grid;
+
+  min-width: 0;
+
+  gap:
+    0.08rem;
+}
+
+.copy strong {
+  min-width: 0;
+
+  color: #292c32;
+
+  font-size:
+    clamp(
+      0.6rem,
+      0.72vw,
+      0.7rem
+    );
+
+  font-weight: 720;
+
+  line-height: 1.2;
+
+  overflow-wrap: anywhere;
+}
+
+.copy small {
+  min-width: 0;
+
+  color: #777b84;
+
+  font-size:
+    clamp(
+      0.49rem,
+      0.58vw,
+      0.57rem
+    );
+
+  font-weight: 500;
+
+  line-height: 1.25;
+
+  overflow-wrap: anywhere;
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (
+  max-width: 48rem
+) {
+  /*
+   * Important:
+   *
+   * Do NOT use 1fr.
+   * Do NOT use auto-fit.
+   * Do NOT allow shrinking.
+   *
+   * Each item intentionally occupies around
+   * 44% of the viewport so roughly two are
+   * visible and the remaining cards must be
+   * reached by horizontal swipe.
+   */
+  .item {
+    flex:
+      0 0
+      clamp(
+        10rem,
+        44vw,
+        12.75rem
+      );
+
+    min-height:
+      clamp(
+        3.8rem,
+        16vw,
+        4.25rem
+      );
+
+    padding-inline:
+      clamp(
+        0.52rem,
+        2.5vw,
+        0.7rem
+      );
+  }
+
+  .copy strong {
+    font-size:
+      clamp(
+        0.6rem,
+        2.65vw,
+        0.69rem
+      );
+  }
+
+  .copy small {
+    font-size:
+      clamp(
+        0.49rem,
+        2.15vw,
+        0.57rem
+      );
+  }
+}
+
+/* =========================================
+   VERY NARROW / HEAVY ZOOM
+========================================= */
+
+@media (
+  max-width: 22rem
+) {
+  .item {
+    flex-basis:
+      clamp(
+        9.5rem,
+        66vw,
+        11rem
+      );
+  }
+}
+
+/* =========================================
+   FALLBACK
+========================================= */
+
+@supports not (
+  backdrop-filter:
+    blur(1rem)
+) {
+  .shell {
+    background:
+      rgba(
+        255,
+        255,
+        255,
+        0.98
+      );
+  }
+}
+
+/* =========================================
+   ACCESSIBILITY
+========================================= */
+
+@media (
+  prefers-reduced-motion:
+    reduce
+) {
+  .rail {
+    scroll-behavior: auto;
+  }
+}
+
+@media (
+  prefers-contrast:
+    more
+) {
+  .shell {
+    border-color:
+      rgba(
+        32,
+        37,
+        47,
+        0.16
+      );
+
+    background:
+      #ffffff;
+  }
+
+  .item {
+    background:
+      #ffffff;
+  }
+
+  .copy small {
+    color:
+      #555a63;
+  }
+}

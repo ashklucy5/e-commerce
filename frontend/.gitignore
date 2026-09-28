@@ -1,0 +1,76 @@
+﻿# ============================================================
+# Ene Dei frontend
+# Next.js / React
+# ============================================================
+.local-archive/
+# Dependencies
+node_modules/
+
+# Next.js build output
+.next/
+out/
+
+# Other build output
+dist/
+build/
+
+# Testing / coverage
+coverage/
+.nyc_output/
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Vercel
+.vercel/
+
+# Turborepo / caches
+.turbo/
+.cache/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Local temporary files
+*.tmp
+*.temp
+tmp/
+.temp/
+
+# Local archives / backups
+.local-archive/
+*.zip
+*.rar
+*.7z
+*.tar
+*.tar.gz
+*.tgz
+*.bak
+*.backup
+*.old
+*.before-*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+
+# Certificates / private keys
+*.pem
+*.key
+*.p12
+*.pfx
+.admin-portal-slug

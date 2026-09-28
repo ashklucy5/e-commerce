@@ -1,0 +1,17 @@
+.page {
+  position: relative;
+  isolation: isolate;
+  overflow-x: clip;
+  padding-block: clamp(0.65rem, 1.25vw, 1.05rem) clamp(1rem, 2vw, 1.6rem);
+  background:
+    radial-gradient(circle at 82% 4%, rgba(222, 229, 239, 0.55), transparent 25rem),
+    linear-gradient(180deg, #f8fafc 0%, #ffffff 20rem, #f7f9fc 100%);
+}
+
+@media (max-width: 48rem) {
+  .page {
+    padding-top: 0.5rem;
+    padding-bottom: calc(4.8rem + var(--safe-bottom));
+  }
+
+}

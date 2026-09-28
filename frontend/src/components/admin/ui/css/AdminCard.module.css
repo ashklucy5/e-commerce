@@ -1,0 +1,24 @@
+.card {
+  position: relative;
+  overflow: hidden;
+
+  border: 1px solid
+    rgba(255, 255, 255, 0.08);
+
+  border-radius: 1.25rem;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(24, 24, 29, 0.82),
+      rgba(13, 13, 17, 0.74)
+    );
+
+  box-shadow:
+    0 22px 60px
+      rgba(0, 0, 0, 0.18),
+    inset 0 1px
+      rgba(255, 255, 255, 0.035);
+
+  backdrop-filter: blur(18px);
+}

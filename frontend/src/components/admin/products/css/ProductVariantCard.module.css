@@ -1,0 +1,103 @@
+.variant {
+  position: relative;
+
+  padding: 1rem;
+
+  border: 1px solid
+    rgba(255, 255, 255, 0.065);
+
+  border-radius: 1rem;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.035),
+      rgba(255, 255, 255, 0.015)
+    );
+}
+
+.header {
+  display: flex;
+
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 1rem;
+
+  margin-bottom: 1rem;
+}
+
+.eyebrow {
+  margin: 0 0 0.22rem;
+
+  color: #65656f;
+
+  font-size: 0.56rem;
+  font-weight: 800;
+
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0;
+
+  color: #eeeeef;
+
+  font-size: 0.8rem;
+  font-weight: 740;
+}
+
+.generated {
+  margin: 0.3rem 0 0;
+
+  color: #5e5e68;
+
+  font-size: 0.58rem;
+  line-height: 1.45;
+}
+
+.fields {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+
+  gap: 0.85rem;
+}
+
+.moneyField {
+  position: relative;
+}
+
+.currency {
+  position: absolute;
+
+  z-index: 2;
+
+  left: 1rem;
+  top: 50%;
+
+  transform:
+    translateY(-50%);
+
+  color: #9999a2;
+
+  font-size: 0.82rem;
+  font-weight: 760;
+
+  pointer-events: none;
+}
+
+.moneyField input {
+  padding-left: 2.3rem;
+}
+
+@media (max-width: 620px) {
+  .fields {
+    grid-template-columns: 1fr;
+  }
+}

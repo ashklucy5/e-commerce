@@ -1,0 +1,613 @@
+:global(:root) {
+  --mobile-bottom-nav-offset:
+    calc(
+      4.35rem +
+      max(0.55rem, env(safe-area-inset-bottom, 0px))
+    );
+}
+
+.shell {
+  position: fixed;
+  z-index: 90;
+
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  display: none;
+  justify-content: center;
+
+  padding-inline:
+    max(
+      0.75rem,
+      env(safe-area-inset-left, 0px)
+    );
+
+  padding-bottom:
+    max(
+      0.55rem,
+      env(safe-area-inset-bottom, 0px)
+    );
+
+  pointer-events: none;
+}
+
+/*
+ * One calm liquid-glass surface.
+ *
+ * The material remains translucent, but is opaque
+ * enough that products and strong red imagery below
+ * do not visually fight with the navigation.
+ */
+.glass {
+  position: relative;
+
+  width:
+    min(
+      calc(100vw - 1.5rem),
+      30rem
+    );
+
+  min-width: 0;
+
+  overflow: hidden;
+
+  border:
+    0.0625rem solid
+    rgba(255, 255, 255, 0.96);
+
+  border-radius:
+    clamp(
+      1.05rem,
+      4vw,
+      1.28rem
+    );
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.96) 0%,
+      rgba(250, 250, 252, 0.91) 100%
+    );
+
+  box-shadow:
+    inset
+      0
+      0.0625rem
+      0
+      rgba(255, 255, 255, 1),
+    inset
+      0
+      -0.0625rem
+      0
+      rgba(31, 31, 35, 0.035),
+    0
+      0.35rem
+      1rem
+      rgba(20, 24, 34, 0.075),
+    0
+      1rem
+      2.6rem
+      rgba(20, 24, 34, 0.12);
+
+  backdrop-filter:
+    blur(1.6rem)
+    saturate(140%);
+
+  -webkit-backdrop-filter:
+    blur(1.6rem)
+    saturate(140%);
+
+  pointer-events: auto;
+
+  isolation: isolate;
+}
+
+/*
+ * Restrained specular light at the top edge.
+ */
+.highlight {
+  position: absolute;
+  z-index: 0;
+
+  top: 0;
+  right: 10%;
+  left: 10%;
+
+  height: 42%;
+
+  border-radius: 999rem;
+
+  background:
+    radial-gradient(
+      ellipse at top,
+      rgba(255, 255, 255, 0.92),
+      rgba(255, 255, 255, 0) 74%
+    );
+
+  pointer-events: none;
+}
+
+.navigation {
+  position: relative;
+  z-index: 1;
+
+  min-height:
+    clamp(
+      3.65rem,
+      13vw,
+      4rem
+    );
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      5,
+      minmax(0, 1fr)
+    );
+
+  align-items: stretch;
+}
+
+.item {
+  position: relative;
+
+  min-width: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  gap:
+    clamp(
+      0.12rem,
+      0.45vw,
+      0.18rem
+    );
+
+  padding:
+    clamp(
+      0.42rem,
+      1.35vw,
+      0.52rem
+    )
+    0.05rem;
+
+  border-radius: 0.9rem;
+
+  color:
+    rgba(
+      39,
+      39,
+      42,
+      0.64
+    );
+
+  text-decoration: none;
+
+  -webkit-tap-highlight-color:
+    transparent;
+
+  touch-action:
+    manipulation;
+
+  user-select: none;
+
+  transition:
+    color 150ms ease,
+    transform 120ms ease;
+}
+
+/*
+ * Compact active lens.
+ *
+ * Instead of highlighting the complete fifth of
+ * the bar, only the icon receives a soft ene-red
+ * glass surface.
+ */
+.activeSurface {
+  position: absolute;
+  z-index: 0;
+
+  top:
+    clamp(
+      0.3rem,
+      1.15vw,
+      0.4rem
+    );
+
+  left: 50%;
+
+  width:
+    clamp(
+      2.45rem,
+      10.5vw,
+      2.75rem
+    );
+
+  height:
+    clamp(
+      1.9rem,
+      8vw,
+      2.08rem
+    );
+
+  border:
+    0.0625rem solid
+    rgba(
+      230,
+      0,
+      35,
+      0.1
+    );
+
+  border-radius:
+    0.78rem;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(
+        255,
+        248,
+        249,
+        0.98
+      ),
+      rgba(
+        255,
+        229,
+        234,
+        0.82
+      )
+    );
+
+  box-shadow:
+    inset
+      0
+      0.0625rem
+      0
+      rgba(
+        255,
+        255,
+        255,
+        0.95
+      ),
+    0
+      0.24rem
+      0.8rem
+      rgba(
+        230,
+        0,
+        35,
+        0.075
+      );
+
+  opacity: 0;
+
+  transform:
+    translateX(-50%)
+    scale(0.86);
+
+  transition:
+    opacity 160ms ease,
+    transform
+      180ms
+      cubic-bezier(
+        0.22,
+        1,
+        0.36,
+        1
+      );
+
+  pointer-events: none;
+}
+
+.iconContainer,
+.label {
+  position: relative;
+  z-index: 1;
+}
+
+.iconContainer {
+  width:
+    clamp(
+      1.45rem,
+      5.8vw,
+      1.68rem
+    );
+
+  height:
+    clamp(
+      1.45rem,
+      5.8vw,
+      1.68rem
+    );
+
+  display: grid;
+
+  place-items: center;
+
+  flex: 0 0 auto;
+
+  transition:
+    transform
+      170ms
+      cubic-bezier(
+        0.22,
+        1,
+        0.36,
+        1
+      );
+}
+
+.icon {
+  display: block;
+}
+
+.label {
+  max-width: 100%;
+
+  overflow: hidden;
+
+  padding-inline: 0.08rem;
+
+  color: inherit;
+
+  font-size:
+    clamp(
+      0.6rem,
+      2.45vw,
+      0.68rem
+    );
+
+  font-weight: 600;
+
+  line-height: 1.08;
+
+  letter-spacing:
+    -0.012em;
+
+  text-align: center;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+}
+
+/*
+ * The old red underline competes with the content
+ * underneath the glass, so it is intentionally removed.
+ */
+.activeIndicator {
+  display: none;
+}
+
+.active {
+  color:
+    var(
+      --ene-red,
+      #e60023
+    );
+}
+
+.active
+  .activeSurface {
+  opacity: 1;
+
+  transform:
+    translateX(-50%)
+    scale(1);
+}
+
+.active
+  .iconContainer {
+  transform:
+    translateY(-0.04rem);
+}
+
+.active
+  .label {
+  font-weight: 700;
+}
+
+@media (
+  hover: hover
+) and (
+  pointer: fine
+) {
+  .item:hover {
+    color:
+      var(
+        --ene-red,
+        #e60023
+      );
+  }
+
+  .item:hover
+    .activeSurface {
+    opacity: 0.72;
+
+    transform:
+      translateX(-50%)
+      scale(1);
+  }
+}
+
+.item:active {
+  transform:
+    scale(0.95);
+}
+
+.item:focus-visible {
+  outline:
+    0.13rem solid
+    rgba(
+      230,
+      0,
+      35,
+      0.24
+    );
+
+  outline-offset:
+    -0.12rem;
+
+  color:
+    var(
+      --ene-red,
+      #e60023
+    );
+}
+
+@media (
+  max-width: 48rem
+) {
+  .shell {
+    display: flex;
+  }
+
+  :global(
+    html[
+      data-store-search-focused="true"
+    ]
+  )
+    .shell {
+    display: none;
+  }
+}
+
+@media (
+  max-width: 21.5rem
+) {
+  .shell {
+    padding-inline:
+      max(
+        0.48rem,
+        env(
+          safe-area-inset-left,
+          0px
+        )
+      );
+  }
+
+  .glass {
+    width:
+      calc(
+        100vw -
+        0.96rem
+      );
+
+    border-radius:
+      1rem;
+  }
+
+  .navigation {
+    min-height:
+      3.5rem;
+  }
+
+  .item {
+    gap: 0.08rem;
+
+    padding-inline:
+      0.02rem;
+  }
+
+  .label {
+    font-size:
+      0.54rem;
+  }
+
+  .activeSurface {
+    width: 2.28rem;
+    height: 1.85rem;
+  }
+}
+
+@supports not (
+  backdrop-filter:
+    blur(1rem)
+) {
+  .glass {
+    background:
+      rgba(
+        252,
+        252,
+        253,
+        0.985
+      );
+  }
+}
+
+@media (
+  prefers-reduced-motion:
+    reduce
+) {
+  .item,
+  .activeSurface,
+  .iconContainer {
+    transition: none;
+  }
+
+  .item:active,
+  .active
+    .iconContainer {
+    transform: none;
+  }
+}
+
+@media (
+  prefers-contrast:
+    more
+) {
+  .glass {
+    border-color:
+      rgba(
+        31,
+        31,
+        34,
+        0.18
+      );
+
+    background:
+      rgba(
+        255,
+        255,
+        255,
+        0.98
+      );
+  }
+
+  .item {
+    color: #34343a;
+  }
+
+  .active {
+    color:
+      var(
+        --ene-red,
+        #e60023
+      );
+  }
+
+  .activeSurface {
+    border-color:
+      rgba(
+        230,
+        0,
+        35,
+        0.22
+      );
+
+    background:
+      rgba(
+        255,
+        241,
+        243,
+        0.96
+      );
+  }
+}

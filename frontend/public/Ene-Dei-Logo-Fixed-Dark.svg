@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 190" width="760" height="190" role="img" aria-labelledby="title desc">
+  <title id="title">Ene dei logo for dark backgrounds</title>
+  <desc id="desc">Ene dei temporary brand logo for dark surfaces.</desc>
+  <g transform="translate(24 21)">
+    <circle cx="74" cy="74" r="68" fill="#E60023"/>
+    <path d="M42 42H82V54H55V68H77V80H55V94H84V106H42Z" fill="#FFFFFF"/>
+    <path d="M80 51C105 51 119 60 124 74C129 88 125 101 116 111C107 121 95 126 80 126"
+          fill="none" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <g transform="translate(192 44)">
+    <text x="0" y="63"
+          font-family="Inter Display, Inter, Helvetica Neue, Arial, sans-serif"
+          font-size="62" font-weight="600" letter-spacing="-1.8"
+          fill="#FFFFFF">Ene dei</text>
+    <text x="2" y="105"
+          font-family="Inter, Helvetica Neue, Arial, sans-serif"
+          font-size="18" font-weight="500" letter-spacing="0.2"
+          fill="#C8CCD4">Find what fits you.</text>
+  </g>
+</svg>

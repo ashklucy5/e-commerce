@@ -1,0 +1,151 @@
+.surface {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.9fr) minmax(0, 0.9fr);
+  min-width: 0;
+  overflow: hidden;
+  border: 0.0625rem solid rgba(35, 40, 51, 0.075);
+  border-radius: clamp(0.8rem, 1.2vw, 1rem);
+  background: #ffffff;
+}
+
+.panel {
+  min-width: 0;
+}
+
+.panel + .panel {
+  border-left: 0.0625rem solid rgba(35, 40, 51, 0.065);
+}
+
+.mobileToggle {
+  display: none;
+}
+
+.content {
+  min-width: 0;
+  padding: clamp(0.75rem, 1.3vw, 1rem);
+}
+
+.content h2 {
+  margin: 0 0 0.5rem;
+  color: #202228;
+  font-size: clamp(0.72rem, 0.85vw, 0.88rem);
+  font-weight: 790;
+}
+
+.content p,
+.description {
+  margin: 0;
+  color: #646a73;
+  font-size: clamp(0.62rem, 0.7vw, 0.72rem);
+  line-height: 1.55;
+}
+
+.content p + p {
+  margin-top: 0.55rem;
+}
+
+.description {
+  white-space: pre-line;
+}
+
+.specs {
+  display: grid;
+  gap: 0.36rem;
+  margin: 0;
+}
+
+.specs > div {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
+  gap: 0.5rem;
+  align-items: baseline;
+}
+
+.specs dt {
+  color: #777c85;
+  font-size: clamp(0.53rem, 0.6vw, 0.62rem);
+}
+
+.specs dd {
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  color: #30333a;
+  font-size: clamp(0.56rem, 0.64vw, 0.66rem);
+  font-weight: 690;
+  text-align: right;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 48rem) {
+  .surface {
+    display: block;
+    border-right: 0;
+    border-left: 0;
+    border-radius: 0;
+  }
+
+  .panel + .panel {
+    border-top: 0.0625rem solid rgba(35, 40, 51, 0.07);
+    border-left: 0;
+  }
+
+  .mobileToggle {
+    width: 100%;
+    min-height: 2.35rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+    border: 0;
+    background: #ffffff;
+    padding: 0.52rem 0;
+    color: #24262c;
+    font-size: clamp(0.56rem, 2.4vw, 0.66rem);
+    font-weight: 740;
+    text-align: left;
+  }
+
+  .mobileToggle > span + span {
+    transition: transform 140ms ease;
+  }
+
+  .mobileOpen .mobileToggle > span + span {
+    transform: rotate(90deg);
+  }
+
+  .content {
+    display: none;
+    padding: 0 0 0.68rem;
+  }
+
+  .mobileOpen .content {
+    display: block;
+  }
+
+  .content h2 {
+    display: none;
+  }
+
+  .content p,
+  .description {
+    font-size: clamp(0.52rem, 2.2vw, 0.62rem);
+    line-height: 1.5;
+  }
+
+  .specs {
+    gap: 0.28rem;
+  }
+
+  .specs dt,
+  .specs dd {
+    font-size: clamp(0.48rem, 2vw, 0.57rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobileToggle > span + span {
+    transition: none;
+  }
+}

@@ -1,0 +1,126 @@
+.shell {
+  position: relative;
+  z-index: 4;
+  width: 100%;
+  border-top: 1px solid rgba(20, 24, 32, 0.045);
+  background: rgba(250, 251, 253, 0.78);
+  backdrop-filter: blur(1.15rem) saturate(145%);
+  -webkit-backdrop-filter: blur(1.15rem) saturate(145%);
+}
+
+.rail {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: clamp(1.05rem, 2.1vw, 2.15rem);
+  min-width: 0;
+  min-height: clamp(2.55rem, 3vw, 3rem);
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-inline: 0.08rem;
+  scroll-padding-inline: 0.5rem;
+  overscroll-behavior-inline: contain;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x pan-y pinch-zoom;
+  cursor: grab;
+  user-select: none;
+}
+
+.rail::-webkit-scrollbar {
+  display: none;
+}
+
+.rail[data-dragging="true"] {
+  cursor: grabbing;
+  scroll-behavior: auto;
+}
+
+.item {
+  position: relative;
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  min-height: clamp(2.55rem, 3vw, 3rem);
+  padding-inline: 0.08rem;
+  color: rgba(39, 41, 48, 0.74);
+  font-size: clamp(0.67rem, 0.74vw, 0.79rem);
+  font-weight: 620;
+  line-height: 1;
+  white-space: nowrap;
+  transition: color 140ms ease, transform 120ms ease;
+}
+
+.item::after {
+  content: "";
+  position: absolute;
+  right: 18%;
+  bottom: 0.18rem;
+  left: 18%;
+  height: 0.12rem;
+  border-radius: 999rem;
+  background: var(--ene-red);
+  opacity: 0;
+  transform: scaleX(0.4);
+  transform-origin: center;
+  transition: opacity 140ms ease, transform 160ms ease;
+}
+
+.active {
+  color: var(--ene-red);
+  font-weight: 720;
+}
+
+.active::after {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .item:hover {
+    color: var(--ene-red);
+  }
+
+  .item:hover::after {
+    opacity: 0.75;
+    transform: scaleX(1);
+  }
+}
+
+.item:active {
+  transform: scale(0.97);
+}
+
+.item:focus-visible {
+  border-radius: 0.45rem;
+  outline-offset: -0.12rem;
+}
+
+@media (max-width: 48rem) {
+  .rail {
+    gap: clamp(0.9rem, 4.8vw, 1.4rem);
+    min-height: 2.65rem;
+  }
+
+  .item {
+    min-height: 2.65rem;
+    font-size: clamp(0.64rem, 2.8vw, 0.74rem);
+  }
+
+  :global(html[data-store-search-focused="true"]) .shell {
+    display: none;
+  }
+}
+
+@supports not (backdrop-filter: blur(1rem)) {
+  .shell {
+    background: rgba(250, 251, 253, 0.98);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .item,
+  .item::after {
+    transition: none;
+  }
+}

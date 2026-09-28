@@ -1,0 +1,631 @@
+/* Location: src/components/product/css/ProductPurchasePanel.module.css */
+.panel {
+  display: grid;
+  min-width: 0;
+  gap: clamp(0.58rem, 0.9vw, 0.78rem);
+  margin-top: clamp(0.62rem, 1vw, 0.85rem);
+}
+
+.priceRow {
+  display: flex;
+  min-width: 0;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.38rem;
+  padding-bottom: clamp(0.5rem, 0.8vw, 0.68rem);
+  border-bottom: 0.0625rem solid rgba(35, 40, 51, 0.075);
+}
+
+.currentPrice {
+  color: var(--ene-red);
+  font-size: clamp(1.45rem, 2.4vw, 2.1rem);
+  font-weight: 840;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.unit,
+.comparePrice {
+  color: #6b7079;
+  font-size: clamp(0.6rem, 0.7vw, 0.72rem);
+}
+
+.comparePrice {
+  margin-left: 0.1rem;
+}
+
+.discount {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.35rem;
+  border: 0.0625rem solid rgba(230, 0, 35, 0.2);
+  border-radius: 999rem;
+  background: #fff3f5;
+  padding-inline: 0.42rem;
+  color: var(--ene-red);
+  font-size: 0.6rem;
+  font-weight: 780;
+}
+
+.optionSection {
+  display: grid;
+  min-width: 0;
+  gap: 0.38rem;
+}
+
+.optionHeading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.6rem;
+  color: #202228;
+}
+
+.optionHeading strong,
+.quantityLabel {
+  font-size: clamp(0.62rem, 0.7vw, 0.72rem);
+  font-weight: 780;
+}
+
+.optionHeading small {
+  color: #7b7f88;
+  font-size: clamp(0.48rem, 0.55vw, 0.56rem);
+  line-height: 1.2;
+  text-align: right;
+}
+
+.variantRail,
+.sizeRail {
+  display: flex;
+  min-width: 0;
+  flex-wrap: wrap;
+  gap: clamp(0.35rem, 0.55vw, 0.48rem);
+}
+
+.variantCard {
+  display: grid;
+  flex: 1 1 8rem;
+  min-width: min(100%, 7.4rem);
+  max-width: 12rem;
+  gap: 0.13rem;
+  border: 0.0625rem solid rgba(35, 40, 51, 0.1);
+  border-radius: 0.62rem;
+  background: #ffffff;
+  padding: clamp(0.42rem, 0.65vw, 0.55rem);
+  color: #24262c;
+  text-align: left;
+  transition: border-color 140ms ease, box-shadow 140ms ease, transform 140ms ease;
+}
+
+.variantCard strong {
+  overflow: hidden;
+  font-size: clamp(0.58rem, 0.66vw, 0.68rem);
+  font-weight: 760;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.variantCard > span {
+  overflow: hidden;
+  color: #777c85;
+  font-size: clamp(0.44rem, 0.5vw, 0.52rem);
+  font-weight: 560;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.variantCard small {
+  font-size: clamp(0.45rem, 0.52vw, 0.54rem);
+  font-weight: 760;
+}
+
+.variantCardSelected {
+  border-color: rgba(230, 0, 35, 0.72);
+  box-shadow: inset 0 0 0 0.06rem rgba(230, 0, 35, 0.08);
+}
+
+.inStock {
+  color: #16863b;
+}
+
+.outOfStock {
+  color: var(--ene-red);
+}
+
+.sizeButton {
+  min-width: clamp(2.75rem, 4vw, 3.5rem);
+  min-height: clamp(2.05rem, 2.7vw, 2.35rem);
+  border: 0.0625rem solid rgba(35, 40, 51, 0.1);
+  border-radius: 0.58rem;
+  background: #ffffff;
+  padding-inline: 0.7rem;
+  color: #35383f;
+  font-size: clamp(0.58rem, 0.65vw, 0.68rem);
+  font-weight: 720;
+}
+
+.sizeButtonSelected {
+  border-color: rgba(230, 0, 35, 0.75);
+  color: #1f2126;
+  box-shadow: inset 0 0 0 0.06rem rgba(230, 0, 35, 0.08);
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0;
+  overflow: hidden;
+  border: 0.0625rem solid rgba(35, 40, 51, 0.075);
+  border-radius: 0.68rem;
+  background: #fafbfc;
+}
+
+.facts > div {
+  display: grid;
+  min-width: 0;
+  gap: 0.13rem;
+  padding: clamp(0.48rem, 0.7vw, 0.62rem);
+}
+
+.facts > div + div {
+  border-left: 0.0625rem solid rgba(35, 40, 51, 0.065);
+}
+
+.facts dt {
+  color: #6f747e;
+  font-size: clamp(0.46rem, 0.52vw, 0.55rem);
+  font-weight: 630;
+}
+
+.facts dd {
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  color: #22242a;
+  font-size: clamp(0.65rem, 0.78vw, 0.8rem);
+  font-weight: 790;
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.facts .stockValue {
+  color: #16863b;
+}
+
+.facts .stockValueEmpty {
+  color: var(--ene-red);
+}
+
+.quantitySection {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.quantityLine {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.quantityControl {
+  display: grid;
+  grid-template-columns: 2.2rem minmax(3rem, 5rem) 2.2rem;
+  min-width: 0;
+  overflow: hidden;
+  border: 0.0625rem solid rgba(35, 40, 51, 0.1);
+  border-radius: 0.58rem;
+  background: #ffffff;
+}
+
+.quantityControl button,
+.quantityControl input {
+  height: clamp(2.1rem, 2.7vw, 2.35rem);
+  border: 0;
+  background: transparent;
+  color: #24262c;
+}
+
+.quantityControl button {
+  display: grid;
+  place-items: center;
+}
+
+.quantityControl button:disabled {
+  cursor: not-allowed;
+  color: #b7bbc3;
+}
+
+.quantityControl input {
+  width: 100%;
+  min-width: 0;
+  border-right: 0.0625rem solid rgba(35, 40, 51, 0.08);
+  border-left: 0.0625rem solid rgba(35, 40, 51, 0.08);
+  padding: 0 0.3rem;
+  outline: none;
+  font-size: 0.7rem;
+  font-weight: 780;
+  text-align: center;
+  appearance: textfield;
+}
+
+.quantityControl input::-webkit-inner-spin-button,
+.quantityControl input::-webkit-outer-spin-button {
+  margin: 0;
+  appearance: none;
+}
+
+.quantityHelp {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.3rem;
+  color: #777c85;
+  font-size: clamp(0.48rem, 0.55vw, 0.56rem);
+  line-height: 1.2;
+}
+
+.priceBreakSection {
+  overflow: hidden;
+  border: 0.0625rem solid rgba(35, 40, 51, 0.075);
+  border-radius: 0.68rem;
+  background: #fafbfc;
+}
+
+.priceBreakToggle {
+  width: 100%;
+  min-height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  border: 0;
+  background: transparent;
+  padding: 0.45rem 0.62rem;
+  color: #30333a;
+  font-size: clamp(0.53rem, 0.6vw, 0.62rem);
+  font-weight: 760;
+  text-align: left;
+}
+
+.priceBreakToggle[aria-expanded="true"] > span + span {
+  transform: rotate(90deg);
+}
+
+.priceBreakPreview {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 0.0625rem solid rgba(35, 40, 51, 0.06);
+}
+
+.priceBreakPreview > div {
+  display: grid;
+  min-width: 0;
+  gap: 0.1rem;
+  padding: 0.45rem 0.6rem;
+}
+
+.priceBreakPreview > div + div {
+  border-left: 0.0625rem solid rgba(35, 40, 51, 0.06);
+}
+
+.priceBreakPreview > div:nth-child(n + 4) {
+  display: none;
+}
+
+.priceBreakPreviewOpen > div:nth-child(n + 4) {
+  display: grid;
+}
+
+.priceBreakPreview span {
+  color: #737882;
+  font-size: 0.49rem;
+}
+
+.priceBreakPreview strong {
+  color: #24262c;
+  font-size: 0.63rem;
+  font-weight: 780;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.86fr);
+  gap: 0.52rem;
+}
+
+.addToCart,
+.buyNow {
+  min-height: clamp(2.55rem, 3.2vw, 2.9rem);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.42rem;
+  border-radius: 0.62rem;
+  padding-inline: 0.8rem;
+  font-size: clamp(0.66rem, 0.75vw, 0.78rem);
+  font-weight: 790;
+  transition: transform 140ms ease, box-shadow 140ms ease, background-color 140ms ease;
+}
+
+.addToCart {
+  border: 0.0625rem solid var(--ene-red);
+  background: var(--ene-red);
+  color: #ffffff;
+  box-shadow: 0 0.7rem 1.5rem rgba(230, 0, 35, 0.14);
+}
+
+.buyNow {
+  border: 0.0625rem solid rgba(230, 0, 35, 0.68);
+  background: #ffffff;
+  color: var(--ene-red);
+}
+
+.addToCart:disabled,
+.buyNow:disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
+  box-shadow: none;
+}
+
+.requestLink {
+  color: var(--ene-red);
+  font-size: 0.61rem;
+  font-weight: 720;
+  text-align: center;
+}
+
+.trustStrip {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.45rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  color: #5f646d;
+}
+
+.trustStrip::-webkit-scrollbar {
+  display: none;
+}
+
+.trustStrip span {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: clamp(0.47rem, 0.55vw, 0.56rem);
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+.subtotal {
+  margin: -0.15rem 0 0;
+  color: #767b84;
+  font-size: 0.54rem;
+  text-align: right;
+}
+
+.subtotal strong {
+  color: #34373e;
+}
+
+.success,
+.error {
+  margin: 0;
+  border-radius: 0.58rem;
+  padding: 0.5rem 0.6rem;
+  font-size: 0.62rem;
+  line-height: 1.35;
+}
+
+.success {
+  background: #f0faf3;
+  color: #157235;
+}
+
+.error {
+  background: #fff3f5;
+  color: #a40f27;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .variantCard:hover,
+  .sizeButton:hover {
+    border-color: rgba(230, 0, 35, 0.28);
+  }
+
+  .addToCart:hover:not(:disabled),
+  .buyNow:hover:not(:disabled) {
+    transform: translateY(-0.05rem);
+  }
+}
+
+@media (max-width: 48rem) {
+  .panel {
+    gap: 0.42rem;
+    margin-top: 0.45rem;
+  }
+
+  .priceRow {
+    gap: 0.28rem;
+    padding-bottom: 0.38rem;
+  }
+
+  .currentPrice {
+    font-size: clamp(1.15rem, 5.8vw, 1.5rem);
+  }
+
+  .unit,
+  .comparePrice {
+    font-size: clamp(0.5rem, 2.1vw, 0.6rem);
+  }
+
+  .discount {
+    min-height: 1.05rem;
+    padding-inline: 0.3rem;
+    font-size: 0.48rem;
+  }
+
+  .optionSection {
+    gap: 0.26rem;
+  }
+
+  .optionHeading strong,
+  .quantityLabel {
+    font-size: clamp(0.54rem, 2.3vw, 0.62rem);
+  }
+
+  .optionHeading small {
+    font-size: clamp(0.4rem, 1.7vw, 0.47rem);
+  }
+
+  .variantRail {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.28rem;
+  }
+
+  .variantCard {
+    min-width: 0;
+    max-width: none;
+    padding: 0.34rem 0.3rem;
+    border-radius: 0.5rem;
+  }
+
+  .variantCard strong {
+    font-size: clamp(0.48rem, 2.1vw, 0.56rem);
+  }
+
+  .variantCard > span,
+  .variantCard small {
+    font-size: clamp(0.37rem, 1.55vw, 0.43rem);
+  }
+
+  .sizeRail {
+    gap: 0.28rem;
+  }
+
+  .sizeButton {
+    min-width: clamp(2.25rem, 12vw, 3rem);
+    min-height: 1.8rem;
+    border-radius: 0.48rem;
+    padding-inline: 0.45rem;
+    font-size: clamp(0.48rem, 2vw, 0.56rem);
+  }
+
+  .facts {
+    border-radius: 0.55rem;
+  }
+
+  .facts > div {
+    padding: 0.38rem 0.42rem;
+  }
+
+  .facts dt {
+    font-size: clamp(0.39rem, 1.65vw, 0.45rem);
+  }
+
+  .facts dd {
+    font-size: clamp(0.55rem, 2.35vw, 0.64rem);
+  }
+
+  .quantitySection {
+    gap: 0.2rem;
+  }
+
+  .quantityControl {
+    grid-template-columns: 1.85rem minmax(2.5rem, 4rem) 1.85rem;
+    border-radius: 0.48rem;
+  }
+
+  .quantityControl button,
+  .quantityControl input {
+    height: 1.85rem;
+  }
+
+  .quantityControl input {
+    font-size: 0.58rem;
+  }
+
+  .quantityHelp {
+    gap: 0.2rem;
+    font-size: clamp(0.4rem, 1.7vw, 0.47rem);
+  }
+
+  .priceBreakSection {
+    border-radius: 0.52rem;
+  }
+
+  .priceBreakToggle {
+    min-height: 1.72rem;
+    padding: 0.34rem 0.45rem;
+    font-size: clamp(0.45rem, 1.9vw, 0.52rem);
+  }
+
+  .priceBreakPreview > div {
+    padding: 0.34rem 0.42rem;
+  }
+
+  .priceBreakPreview span {
+    font-size: clamp(0.38rem, 1.6vw, 0.44rem);
+  }
+
+  .priceBreakPreview strong {
+    font-size: clamp(0.48rem, 2vw, 0.56rem);
+  }
+
+  .actions {
+    gap: 0.36rem;
+  }
+
+  .addToCart,
+  .buyNow {
+    min-height: 2.15rem;
+    border-radius: 0.52rem;
+    padding-inline: 0.42rem;
+    font-size: clamp(0.53rem, 2.3vw, 0.62rem);
+  }
+
+  .trustStrip {
+    justify-content: flex-start;
+    gap: 0.8rem;
+    padding-block: 0.08rem;
+  }
+
+  .trustStrip span {
+    font-size: clamp(0.4rem, 1.7vw, 0.47rem);
+  }
+
+  .subtotal {
+    display: none;
+  }
+}
+
+@media (max-width: 23rem) {
+  .variantRail {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .facts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .facts > div:nth-child(3) {
+    grid-column: 1 / -1;
+    border-top: 0.0625rem solid rgba(35, 40, 51, 0.065);
+    border-left: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .variantCard,
+  .sizeButton,
+  .addToCart,
+  .buyNow {
+    transition: none;
+  }
+}

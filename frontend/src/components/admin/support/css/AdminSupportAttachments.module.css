@@ -1,0 +1,502 @@
+.attachmentInput {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.composerDragging {
+  isolation: isolate;
+}
+
+.composerSurface {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(112, 150, 199, 0.14);
+  border-radius: 17px;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.012)),
+    rgba(7, 15, 26, 0.64);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.035),
+    0 18px 54px rgba(0, 7, 17, 0.12);
+  backdrop-filter: blur(18px) saturate(1.18);
+  -webkit-backdrop-filter: blur(18px) saturate(1.18);
+  transition:
+    border-color 140ms ease,
+    box-shadow 140ms ease,
+    background 140ms ease;
+}
+
+.composerSurface:focus-within {
+  border-color: rgba(102, 184, 255, 0.32);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 0 0 3px rgba(102, 184, 255, 0.055),
+    0 18px 54px rgba(0, 7, 17, 0.14);
+}
+
+.composerDragging .composerSurface {
+  border-color: rgba(117, 183, 255, 0.52);
+  background:
+    linear-gradient(145deg, rgba(88, 154, 228, 0.12), rgba(69, 109, 180, 0.045)),
+    rgba(8, 18, 31, 0.84);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 0 0 4px rgba(91, 161, 238, 0.07),
+    0 22px 64px rgba(0, 7, 17, 0.18);
+}
+
+.composerSurface textarea {
+  min-height: 112px;
+  display: block;
+  width: 100%;
+  padding: 13px 14px 10px;
+  border: 0;
+  border-radius: 0;
+  outline: none;
+  resize: vertical;
+  background: transparent;
+  color: #e8f1fa;
+  font: inherit;
+  font-size: 11px;
+  line-height: 1.58;
+  box-shadow: none;
+}
+
+.composerSurface textarea:focus {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.dropOverlay {
+  position: absolute;
+  z-index: 5;
+  inset: 6px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 5px;
+  border: 1px dashed rgba(117, 183, 255, 0.46);
+  border-radius: 13px;
+  background: rgba(8, 20, 35, 0.88);
+  color: #cfe6ff;
+  text-align: center;
+  pointer-events: none;
+  backdrop-filter: blur(16px) saturate(1.2);
+  -webkit-backdrop-filter: blur(16px) saturate(1.2);
+}
+
+.dropOverlay strong {
+  font-size: 12px;
+}
+
+.dropOverlay span {
+  color: #7f95ae;
+  font-size: 9px;
+}
+
+.attachmentPreviewGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  padding: 0 10px 10px;
+}
+
+.attachmentPreview {
+  position: relative;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) 26px;
+  align-items: center;
+  gap: 9px;
+  min-height: 60px;
+  padding: 6px 7px;
+  border: 1px solid rgba(127, 162, 208, 0.12);
+  border-radius: 13px;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.012)),
+    rgba(18, 34, 52, 0.54);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+.attachmentPreviewImageButton {
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 10px;
+  background: rgba(4, 9, 16, 0.68);
+  cursor: zoom-in;
+}
+
+.attachmentPreviewImage {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.attachmentPreviewLinkIcon {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(117, 183, 255, 0.13);
+  border-radius: 10px;
+  color: #8bc2ff;
+  background: rgba(48, 98, 154, 0.18);
+}
+
+.attachmentPreviewCopy {
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+}
+
+.attachmentPreviewCopy strong {
+  overflow: hidden;
+  color: #d6e4f2;
+  font-size: 10px;
+  font-weight: 720;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.attachmentPreviewCopy span {
+  color: #6f8197;
+  font-size: 9px;
+}
+
+.attachmentRemoveButton {
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid rgba(133, 164, 202, 0.11);
+  border-radius: 9px;
+  background: rgba(9, 17, 28, 0.55);
+  color: #8b9db2;
+  font: inherit;
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.attachmentRemoveButton:hover {
+  border-color: rgba(255, 139, 147, 0.22);
+  color: #ffc0c4;
+  background: rgba(92, 30, 42, 0.2);
+}
+
+.linkComposer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 7px;
+  padding: 0 10px 10px;
+}
+
+.linkComposer input {
+  min-width: 0;
+  min-height: 36px;
+  padding: 0 11px;
+  border: 1px solid rgba(107, 145, 193, 0.15);
+  border-radius: 11px;
+  outline: none;
+  background: rgba(5, 12, 21, 0.66);
+  color: #e7f1fa;
+  font: inherit;
+  font-size: 10px;
+}
+
+.linkComposer input:focus {
+  border-color: rgba(102, 184, 255, 0.42);
+  box-shadow: 0 0 0 3px rgba(102, 184, 255, 0.065);
+}
+
+.linkSaveButton,
+.linkCancelButton,
+.attachmentAction {
+  appearance: none;
+  border: 0;
+  font: inherit;
+  cursor: pointer;
+}
+
+.linkSaveButton,
+.linkCancelButton {
+  min-height: 36px;
+  padding: 0 11px;
+  border-radius: 10px;
+  font-size: 9px;
+  font-weight: 750;
+}
+
+.linkSaveButton {
+  color: #dcecff;
+  background: rgba(57, 104, 160, 0.34);
+}
+
+.linkCancelButton {
+  color: #8797aa;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.attachmentError {
+  margin: 0;
+  padding: 0 11px 8px;
+  color: #f0a4aa;
+  font-size: 9px;
+  line-height: 1.45;
+}
+
+.attachmentToolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 10px;
+  border-top: 1px solid rgba(106, 140, 184, 0.085);
+  background: rgba(8, 16, 27, 0.26);
+}
+
+.attachmentActions {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+}
+
+.attachmentAction {
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 9px;
+  border-radius: 10px;
+  color: #8da5bf;
+  background: transparent;
+  font-size: 9px;
+  font-weight: 700;
+  transition: color 120ms ease, background 120ms ease;
+}
+
+.attachmentAction:hover:not(:disabled) {
+  color: #d7e8f9;
+  background: rgba(69, 119, 177, 0.13);
+}
+
+.attachmentAction:disabled,
+.linkSaveButton:disabled,
+.linkCancelButton:disabled,
+.attachmentRemoveButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.attachmentHint {
+  flex: 0 1 auto;
+  color: #5f7084;
+  font-size: 8px;
+  text-align: right;
+}
+
+.messageAttachments {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+  margin-top: 9px;
+}
+
+.messageImageButton {
+  min-width: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid rgba(124, 157, 198, 0.12);
+  border-radius: 11px;
+  background: rgba(5, 11, 19, 0.54);
+  cursor: zoom-in;
+}
+
+.messageImage {
+  width: 100%;
+  height: 118px;
+  display: block;
+  object-fit: cover;
+}
+
+.messageLink {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 11px;
+  border: 1px solid rgba(117, 183, 255, 0.13);
+  border-radius: 11px;
+  color: #a8cdf6;
+  background: rgba(45, 86, 134, 0.13);
+  font-size: 9px;
+  text-decoration: none;
+}
+
+.messageLink span:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.messageLink:hover {
+  border-color: rgba(117, 183, 255, 0.24);
+  color: #d8ecff;
+}
+
+.imageLightbox {
+  position: fixed;
+  z-index: 190;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(2, 7, 13, 0.74);
+  backdrop-filter: blur(22px) saturate(1.08);
+  -webkit-backdrop-filter: blur(22px) saturate(1.08);
+}
+
+.imageLightboxPanel {
+  width: min(94vw, 1040px);
+  max-height: 92dvh;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  overflow: hidden;
+  border: 1px solid rgba(147, 180, 222, 0.16);
+  border-radius: 22px;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.01)),
+    rgba(8, 17, 29, 0.92);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 34px 100px rgba(0, 0, 0, 0.52);
+}
+
+.imageLightboxTopbar {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 8px 10px 8px 15px;
+  border-bottom: 1px solid rgba(126, 158, 199, 0.11);
+}
+
+.imageLightboxTopbar strong {
+  overflow: hidden;
+  color: #dbe7f3;
+  font-size: 11px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.imageLightboxClose {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  padding: 0;
+  border: 1px solid rgba(131, 162, 201, 0.13);
+  border-radius: 10px;
+  color: #9eb0c3;
+  background: rgba(255, 255, 255, 0.035);
+  font: inherit;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.imageLightboxImage {
+  width: 100%;
+  max-height: calc(92dvh - 49px);
+  display: block;
+  object-fit: contain;
+  background: rgba(2, 6, 11, 0.64);
+}
+
+.attachmentAction:focus-visible,
+.attachmentRemoveButton:focus-visible,
+.attachmentPreviewImageButton:focus-visible,
+.messageImageButton:focus-visible,
+.messageLink:focus-visible,
+.linkSaveButton:focus-visible,
+.linkCancelButton:focus-visible,
+.imageLightboxClose:focus-visible {
+  outline: 2px solid rgba(117, 183, 255, 0.72);
+  outline-offset: 2px;
+}
+
+@media (max-width: 700px) {
+  .attachmentPreviewGrid,
+  .messageAttachments {
+    grid-template-columns: 1fr;
+  }
+
+  .attachmentToolbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .attachmentHint {
+    text-align: left;
+  }
+
+  .linkComposer {
+    grid-template-columns: 1fr auto;
+  }
+
+  .linkComposer input {
+    grid-column: 1 / -1;
+  }
+
+  .messageImage {
+    height: min(44vw, 180px);
+  }
+
+  .imageLightbox {
+    padding: 10px;
+  }
+
+  .imageLightboxPanel {
+    width: 100%;
+    max-height: 94dvh;
+    border-radius: 18px;
+  }
+
+  .imageLightboxImage {
+    max-height: calc(94dvh - 49px);
+  }
+}
+
+@media (max-width: 430px) {
+  .attachmentActions {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .attachmentAction {
+    justify-content: center;
+    padding-inline: 7px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .composerSurface,
+  .attachmentAction {
+    transition: none;
+  }
+}

@@ -1,0 +1,549 @@
+.root {
+  position: fixed;
+  right: clamp(1.25rem, 2vw, 2rem);
+  bottom: clamp(1.25rem, 2vw, 2rem);
+  z-index: 70;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+
+  gap: 0.75rem;
+}
+
+/*
+ * Circular desktop launcher.
+ */
+.launcher {
+  position: relative;
+
+  display: grid;
+  place-items: center;
+
+  width: 3.55rem;
+  height: 3.55rem;
+
+  flex: 0 0 3.55rem;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.8);
+
+  border-radius: 50%;
+
+  padding: 0;
+
+  background:
+    rgba(255, 255, 255, 0.86);
+
+  color: #272b33;
+
+  box-shadow:
+    0 0.8rem 2.2rem
+      rgba(20, 26, 38, 0.16),
+    inset 0 1px 0
+      rgba(255, 255, 255, 1);
+
+  cursor: pointer;
+
+  backdrop-filter:
+    blur(1.4rem)
+    saturate(160%);
+
+  -webkit-backdrop-filter:
+    blur(1.4rem)
+    saturate(160%);
+
+  transition:
+    transform 160ms ease,
+    background-color 160ms ease,
+    color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.launcher:hover {
+  transform:
+    translateY(-0.12rem)
+    scale(1.035);
+
+  background:
+    rgba(255, 255, 255, 0.97);
+
+  box-shadow:
+    0 1rem 2.7rem
+      rgba(20, 26, 38, 0.19),
+    inset 0 1px 0
+      rgba(255, 255, 255, 1);
+}
+
+.launcher:active {
+  transform: scale(0.95);
+}
+
+.launcher:focus-visible {
+  outline:
+    0.16rem solid
+    rgba(47, 84, 235, 0.4);
+
+  outline-offset: 0.2rem;
+}
+
+.launcherOpen {
+  background:
+    rgba(25, 28, 34, 0.96);
+
+  color: #fff;
+
+  box-shadow:
+    0 1rem 2.8rem
+      rgba(20, 26, 38, 0.24);
+}
+
+.closeIcon {
+  font-size: 1.75rem;
+  font-weight: 300;
+  line-height: 1;
+
+  transform:
+    translateY(-0.05rem);
+}
+
+.attentionDot {
+  position: absolute;
+
+  top: 0.22rem;
+  right: 0.22rem;
+
+  width: 0.48rem;
+  height: 0.48rem;
+
+  border:
+    0.12rem solid
+    #ffffff;
+
+  border-radius: 50%;
+
+  background:
+    var(--ene-red);
+
+  box-shadow:
+    0 0.1rem 0.35rem
+      rgba(0, 0, 0, 0.14);
+}
+
+/*
+ * One-time tutorial.
+ */
+.tutorial {
+  position: relative;
+
+  width: 18.5rem;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.76);
+
+  border-radius: 1.2rem;
+
+  padding:
+    1rem
+    2.2rem
+    1rem
+    1rem;
+
+  background:
+    rgba(255, 255, 255, 0.92);
+
+  box-shadow:
+    0 1rem 3rem
+      rgba(20, 26, 38, 0.15),
+    inset 0 1px 0
+      rgba(255, 255, 255, 0.98);
+
+  color: #242830;
+
+  backdrop-filter:
+    blur(1.5rem)
+    saturate(160%);
+
+  -webkit-backdrop-filter:
+    blur(1.5rem)
+    saturate(160%);
+
+  animation:
+    tutorialEnter
+    320ms
+    cubic-bezier(
+      0.2,
+      0.8,
+      0.2,
+      1
+    );
+}
+
+.tutorial strong {
+  display: block;
+
+  margin-bottom: 0.35rem;
+
+  font-size: 0.88rem;
+  font-weight: 760;
+
+  letter-spacing: -0.015em;
+}
+
+.tutorial p {
+  margin: 0;
+
+  color: #737986;
+
+  font-size: 0.74rem;
+  line-height: 1.48;
+}
+
+.tutorialAction {
+  margin-top: 0.7rem;
+
+  border: 0;
+
+  padding: 0;
+
+  background: transparent;
+
+  color: #30343c;
+
+  cursor: pointer;
+
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 760;
+}
+
+.tutorialAction:hover {
+  text-decoration: underline;
+}
+
+.tutorialClose {
+  position: absolute;
+
+  top: 0.5rem;
+  right: 0.6rem;
+
+  display: grid;
+  place-items: center;
+
+  width: 1.6rem;
+  height: 1.6rem;
+
+  border: 0;
+  border-radius: 50%;
+
+  background: transparent;
+
+  color: #8a909b;
+
+  cursor: pointer;
+
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.tutorialClose:hover {
+  background:
+    rgba(20, 24, 32, 0.05);
+
+  color: #30343c;
+}
+
+.tutorialArrow {
+  position: absolute;
+
+  right: 1.25rem;
+  bottom: -0.38rem;
+
+  width: 0.8rem;
+  height: 0.8rem;
+
+  border-right:
+    1px solid
+    rgba(255, 255, 255, 0.8);
+
+  border-bottom:
+    1px solid
+    rgba(255, 255, 255, 0.8);
+
+  background:
+    rgba(255, 255, 255, 0.92);
+
+  transform:
+    rotate(45deg);
+}
+
+@keyframes tutorialEnter {
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(0.4rem)
+      scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scale(1);
+  }
+}
+
+/*
+ * Expanded service chooser.
+ */
+.panel {
+  width: min(
+    22rem,
+    calc(
+      100vw -
+      2.5rem
+    )
+  );
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.76);
+
+  border-radius: 1.45rem;
+
+  padding: 0.7rem;
+
+  background:
+    rgba(255, 255, 255, 0.9);
+
+  box-shadow:
+    0 1.5rem 4rem
+      rgba(18, 24, 40, 0.16),
+    inset 0 1px 0
+      rgba(255, 255, 255, 0.98);
+
+  opacity: 0;
+
+  pointer-events: none;
+
+  transform:
+    translateY(0.5rem)
+    scale(0.975);
+
+  transform-origin:
+    bottom right;
+
+  backdrop-filter:
+    blur(1.8rem)
+    saturate(160%);
+
+  -webkit-backdrop-filter:
+    blur(1.8rem)
+    saturate(160%);
+
+  transition:
+    opacity 160ms ease,
+    transform 180ms ease;
+}
+
+.panelOpen {
+  opacity: 1;
+
+  pointer-events: auto;
+
+  transform:
+    translateY(0)
+    scale(1);
+}
+
+.panelHeader {
+  display: grid;
+  gap: 0.18rem;
+
+  padding:
+    0.65rem
+    0.7rem
+    0.8rem;
+}
+
+.panelHeader strong {
+  color: #20232a;
+
+  font-size: 1rem;
+  font-weight: 760;
+
+  letter-spacing: -0.025em;
+}
+
+.eyebrow {
+  color: #858b97;
+
+  font-size: 0.63rem;
+  font-weight: 760;
+
+  letter-spacing: 0.1em;
+
+  text-transform: uppercase;
+}
+
+.actions {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.action {
+  display: grid;
+
+  grid-template-columns:
+    auto
+    minmax(0, 1fr)
+    auto;
+
+  align-items: center;
+
+  gap: 0.75rem;
+
+  min-height: 4.35rem;
+
+  border:
+    1px solid
+    transparent;
+
+  border-radius: 1rem;
+
+  padding:
+    0.65rem
+    0.72rem;
+
+  color: #20232a;
+
+  text-decoration: none;
+
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease,
+    transform 150ms ease;
+}
+
+.action:hover {
+  border-color:
+    rgba(28, 34, 46, 0.06);
+
+  background:
+    rgba(245, 246, 248, 0.95);
+
+  transform:
+    translateX(-0.06rem);
+}
+
+.action:focus-visible {
+  outline:
+    0.14rem solid
+    rgba(47, 84, 235, 0.32);
+
+  outline-offset: 0.08rem;
+}
+
+.actionIcon {
+  display: grid;
+  place-items: center;
+
+  width: 2.5rem;
+  height: 2.5rem;
+
+  border-radius: 0.82rem;
+
+  background:
+    rgba(239, 241, 245, 0.96);
+
+  color: #30343c;
+}
+
+.actionContent {
+  display: grid;
+  gap: 0.18rem;
+
+  min-width: 0;
+}
+
+.actionContent strong {
+  color: #22262e;
+
+  font-size: 0.86rem;
+  font-weight: 750;
+
+  letter-spacing: -0.01em;
+}
+
+.actionContent small {
+  color: #767c88;
+
+  font-size: 0.7rem;
+  font-weight: 500;
+
+  line-height: 1.38;
+}
+
+.arrow {
+  color: #9298a3;
+
+  font-size: 1.35rem;
+  font-weight: 300;
+}
+
+.authNote {
+  margin:
+    0.6rem
+    0.7rem
+    0.3rem;
+
+  border-top:
+    1px solid
+    rgba(24, 30, 42, 0.06);
+
+  padding-top: 0.7rem;
+
+  color: #858b97;
+
+  font-size: 0.68rem;
+
+  line-height: 1.45;
+}
+
+/*
+ * Mobile uses the permanent
+ * five-button bottom navigation.
+ */
+@media (max-width: 48rem) {
+  .root {
+    display: none;
+  }
+}
+
+@media (
+  prefers-reduced-motion:
+  reduce
+) {
+  .launcher,
+  .panel,
+  .action,
+  .tutorial {
+    animation: none;
+    transition: none;
+  }
+}
+
+@supports not (
+  backdrop-filter: blur(1rem)
+) {
+  .launcher,
+  .panel,
+  .tutorial {
+    background:
+      rgba(255, 255, 255, 0.98);
+  }
+}

@@ -1,0 +1,30 @@
+.card {
+  padding: 1.25rem;
+}
+
+.fields {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+
+  gap: 0.9rem;
+}
+
+.full {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 680px) {
+  .fields {
+    grid-template-columns:
+      1fr;
+  }
+
+  .full {
+    grid-column: auto;
+  }
+}

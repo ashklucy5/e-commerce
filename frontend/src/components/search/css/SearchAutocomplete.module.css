@@ -1,0 +1,1607 @@
+/*
+ * ============================================================
+ * FILE: SearchAutocomplete.module.css
+ * ============================================================
+ *
+ * PURPOSE:
+ * Header text search + direct visual search.
+ *
+ * VISUAL SEARCH:
+ * public/icons/search/visual_search.svg
+ *
+ * NO CUSTOM VISUAL-SEARCH DIALOG.
+ *
+ * Mobile/tablet search is designed to expand to the
+ * available header width when focused.
+ * ============================================================
+ */
+
+.root {
+  position: relative;
+
+  z-index: 170;
+
+  width: 100%;
+
+  min-width: 0;
+}
+
+
+/* ============================================================
+   SEARCH FIELD
+   ============================================================ */
+
+.form {
+  width: 100%;
+
+  height: 2.7rem;
+
+  display: grid;
+
+  grid-template-columns:
+    2.55rem
+    minmax(0, 1fr)
+    auto;
+
+  align-items: center;
+
+  overflow: hidden;
+
+  border:
+    1px solid
+    rgba(
+      40,
+      42,
+      49,
+      0.09
+    );
+
+  border-radius:
+    0.9rem;
+
+  background:
+    rgba(
+      244,
+      245,
+      247,
+      0.94
+    );
+
+  box-shadow:
+    inset 0 1px 0
+    rgba(
+      255,
+      255,
+      255,
+      0.9
+    );
+
+  transition:
+    border-color
+      160ms ease,
+    background-color
+      160ms ease,
+    box-shadow
+      160ms ease;
+}
+
+
+.form:focus-within {
+  border-color:
+    rgba(
+      230,
+      0,
+      35,
+      0.19
+    );
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.99
+    );
+
+  box-shadow:
+    0 0 0 0.16rem
+      rgba(
+        230,
+        0,
+        35,
+        0.035
+      ),
+    0 0.35rem 1.25rem
+      rgba(
+        17,
+        17,
+        19,
+        0.045
+      );
+}
+
+
+/* ============================================================
+   SEARCH ICON
+   ============================================================ */
+
+.searchButton {
+  width: 2.55rem;
+
+  height: 100%;
+
+  display: grid;
+
+  place-items: center;
+
+  border: 0;
+
+  padding: 0;
+
+  background:
+    transparent;
+
+  color: #95979f;
+
+  cursor: pointer;
+
+  transition:
+    color
+      140ms ease,
+    transform
+      120ms ease;
+}
+
+
+.searchButton:active {
+  transform:
+    scale(0.93);
+}
+
+
+@media (
+  hover: hover
+) and (
+  pointer: fine
+) {
+  .searchButton:hover {
+    color:
+      var(--ene-red);
+  }
+}
+
+
+/* ============================================================
+   SEARCH INPUT
+   ============================================================ */
+
+.input {
+  width: 100%;
+
+  min-width: 0;
+
+  height: 100%;
+
+  border: 0;
+
+  outline: 0;
+
+  padding:
+    0 0.2rem 0 0;
+
+  background:
+    transparent;
+
+  color: #222329;
+
+  font: inherit;
+
+  font-size:
+    0.86rem;
+}
+
+
+.input::placeholder {
+  color:
+    rgba(
+      93,
+      95,
+      104,
+      0.55
+    );
+
+  opacity: 1;
+}
+
+
+.input::-webkit-search-decoration {
+  display: none;
+}
+
+
+.input::-webkit-search-cancel-button {
+  cursor: pointer;
+}
+
+
+/* ============================================================
+   RIGHT CONTROLS
+   ============================================================ */
+
+.controls {
+  height: 100%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content:
+    flex-end;
+
+  gap: 0.18rem;
+
+  margin-left:
+    0.2rem;
+
+  padding:
+    0
+    0.38rem
+    0
+    0.18rem;
+}
+
+
+/* ============================================================
+   HIDDEN NATIVE IMAGE INPUT
+   ============================================================ */
+
+.visualSearchInput {
+  position: absolute;
+
+  width: 1px;
+
+  height: 1px;
+
+  overflow: hidden;
+
+  opacity: 0;
+
+  pointer-events: none;
+}
+
+
+/* ============================================================
+   VISUAL SEARCH BUTTON
+   ============================================================ */
+
+.imageSearchButton {
+  width: 2rem;
+
+  min-width: 2rem;
+
+  height: 2rem;
+
+  min-height: 2rem;
+
+  flex:
+    0 0 2rem;
+
+  display: grid;
+
+  place-items: center;
+
+  border: 0;
+
+  border-radius:
+    0.55rem;
+
+  padding:
+    0.26rem;
+
+  margin-left:
+    0.12rem;
+
+  background:
+    transparent;
+
+  cursor: pointer;
+
+  -webkit-tap-highlight-color:
+    transparent;
+
+  transition:
+    background-color
+      140ms ease,
+    transform
+      120ms ease;
+}
+
+
+.visualSearchIcon {
+  display: block;
+
+  width: 100%;
+
+  height: 100%;
+
+  object-fit: contain;
+
+  pointer-events: none;
+}
+
+
+.imageSearchButton:active {
+  transform:
+    scale(0.92);
+}
+
+
+@media (
+  hover: hover
+) and (
+  pointer: fine
+) {
+  .imageSearchButton:hover {
+    background:
+      rgba(
+        0,
+        0,
+        0,
+        0.035
+      );
+  }
+}
+
+
+/* ============================================================
+   TEXT-SUGGESTION LOADING SPINNER
+   ============================================================ */
+
+.loading {
+  width: 0.82rem;
+
+  height: 0.82rem;
+
+  flex: 0 0 auto;
+
+  border:
+    1.5px solid
+    rgba(
+      110,
+      111,
+      120,
+      0.18
+    );
+
+  border-top-color:
+    var(--ene-red);
+
+  border-radius: 50%;
+
+  animation:
+    search-spin
+    650ms linear infinite;
+}
+
+
+/* ============================================================
+   DROPDOWN
+   ============================================================ */
+
+.dropdown {
+  position: absolute;
+
+  top:
+    calc(
+      100% +
+      0.45rem
+    );
+
+  right: 0;
+
+  left: 0;
+
+  z-index: 240;
+
+  max-height:
+    min(
+      40rem,
+      calc(
+        100dvh -
+        9.5rem
+      )
+    );
+
+  overflow-x: hidden;
+
+  overflow-y: auto;
+
+  border:
+    1px solid
+    rgba(
+      17,
+      17,
+      19,
+      0.07
+    );
+
+  border-radius:
+    1rem;
+
+  background:
+    rgba(
+      253,
+      253,
+      254,
+      0.975
+    );
+
+  box-shadow:
+    0 1.4rem 4rem
+      rgba(
+        17,
+        17,
+        19,
+        0.14
+      ),
+    0 0.25rem 1rem
+      rgba(
+        17,
+        17,
+        19,
+        0.04
+      );
+
+  backdrop-filter:
+    blur(1.5rem)
+    saturate(150%);
+
+  -webkit-backdrop-filter:
+    blur(1.5rem)
+    saturate(150%);
+
+  overscroll-behavior:
+    contain;
+
+  scrollbar-width:
+    none;
+}
+
+
+.dropdown::-webkit-scrollbar {
+  width: 0;
+
+  height: 0;
+}
+
+
+/* ============================================================
+   SECTIONS
+   ============================================================ */
+
+.section {
+  padding:
+    0.75rem;
+}
+
+
+.section + .section {
+  border-top:
+    1px solid
+    rgba(
+      35,
+      35,
+      40,
+      0.06
+    );
+}
+
+
+.sectionTitle {
+  display: block;
+
+  padding:
+    0
+    0.4rem
+    0.45rem;
+
+  color: #92949d;
+
+  font-size:
+    0.54rem;
+
+  font-weight: 800;
+
+  letter-spacing:
+    0.08em;
+
+  text-transform:
+    uppercase;
+}
+
+
+/* ============================================================
+   VISUAL SEARCH RESULTS
+   ============================================================ */
+
+.visualSection {
+  padding:
+    0.8rem;
+}
+
+
+.visualHeader {
+  min-height:
+    2.7rem;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content:
+    space-between;
+
+  gap: 1rem;
+
+  margin-bottom:
+    0.65rem;
+}
+
+
+.visualHeader > div {
+  min-width: 0;
+
+  display: grid;
+
+  gap: 0.08rem;
+}
+
+
+.visualHeader
+.sectionTitle {
+  padding: 0;
+}
+
+
+.visualHeader strong {
+  color: #292a30;
+
+  font-size:
+    0.76rem;
+
+  font-weight: 780;
+}
+
+
+.chooseAnother {
+  flex: 0 0 auto;
+
+  min-height:
+    2rem;
+
+  border:
+    1px solid
+    rgba(
+      37,
+      38,
+      44,
+      0.08
+    );
+
+  border-radius:
+    0.58rem;
+
+  background:
+    rgba(
+      246,
+      247,
+      249,
+      0.96
+    );
+
+  padding:
+    0 0.65rem;
+
+  color: #55575f;
+
+  font-size:
+    0.59rem;
+
+  font-weight: 720;
+
+  cursor: pointer;
+}
+
+
+.visualLoading {
+  min-height:
+    6rem;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content:
+    center;
+
+  gap: 0.65rem;
+
+  color: #73757e;
+
+  font-size:
+    0.68rem;
+}
+
+
+.visualSpinner {
+  width: 1.2rem;
+
+  height: 1.2rem;
+
+  flex: 0 0 auto;
+
+  border:
+    2px solid
+    rgba(
+      90,
+      92,
+      101,
+      0.15
+    );
+
+  border-top-color:
+    var(--ene-red);
+
+  border-radius: 50%;
+
+  animation:
+    search-spin
+    650ms linear infinite;
+}
+
+
+.visualError {
+  border-radius:
+    0.65rem;
+
+  background:
+    #fff1f3;
+
+  padding:
+    0.8rem;
+
+  color:
+    #ac001a;
+
+  font-size:
+    0.66rem;
+
+  font-weight: 650;
+
+  line-height: 1.45;
+}
+
+
+.visualEmpty {
+  min-height:
+    6rem;
+
+  display: grid;
+
+  place-items: center;
+
+  align-content:
+    center;
+
+  gap: 0.2rem;
+
+  color: #858790;
+
+  text-align: center;
+}
+
+
+.visualEmpty strong {
+  color: #37383e;
+
+  font-size:
+    0.72rem;
+}
+
+
+.visualEmpty span {
+  font-size:
+    0.61rem;
+}
+
+
+.visualGrid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      4,
+      minmax(
+        0,
+        1fr
+      )
+    );
+
+  gap: 0.5rem;
+}
+
+
+.visualProduct {
+  min-width: 0;
+
+  display: grid;
+
+  overflow: hidden;
+
+  border:
+    1px solid
+    rgba(
+      36,
+      37,
+      43,
+      0.065
+    );
+
+  border-radius:
+    0.75rem;
+
+  padding: 0;
+
+  background:
+    #fff;
+
+  color: inherit;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    transform
+      150ms ease,
+    border-color
+      150ms ease;
+}
+
+
+.visualProductMedia {
+  position: relative;
+
+  width: 100%;
+
+  aspect-ratio:
+    1 / 0.92;
+
+  display: grid;
+
+  place-items: center;
+
+  overflow: hidden;
+
+  background:
+    #f4f5f6;
+}
+
+
+.visualProductImage {
+  object-fit: contain;
+
+  padding:
+    0.35rem;
+}
+
+
+.visualMatch {
+  position: absolute;
+
+  top: 0.3rem;
+
+  left: 0.3rem;
+
+  border-radius:
+    0.35rem;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.9
+    );
+
+  padding:
+    0.16rem
+    0.3rem;
+
+  color: #5d5f67;
+
+  font-size:
+    0.42rem;
+
+  font-weight: 750;
+
+  backdrop-filter:
+    blur(0.5rem);
+
+  -webkit-backdrop-filter:
+    blur(0.5rem);
+}
+
+
+.visualProductBody {
+  min-width: 0;
+
+  display: grid;
+
+  gap: 0.16rem;
+
+  padding:
+    0.5rem;
+}
+
+
+.visualProductBody strong,
+.visualProductBody small {
+  overflow: hidden;
+
+  text-overflow:
+    ellipsis;
+
+  white-space: nowrap;
+}
+
+
+.visualProductBody strong {
+  color: #303137;
+
+  font-size:
+    0.62rem;
+}
+
+
+.visualProductBody small {
+  color: #9698a0;
+
+  font-size:
+    0.48rem;
+}
+
+
+.visualProductBody b {
+  margin-top:
+    0.1rem;
+
+  color:
+    var(--ene-red);
+
+  font-size:
+    0.66rem;
+}
+
+
+@media (
+  hover: hover
+) and (
+  pointer: fine
+) {
+  .visualProduct:hover {
+    transform:
+      translateY(
+        -0.08rem
+      );
+
+    border-color:
+      rgba(
+        230,
+        0,
+        35,
+        0.16
+      );
+  }
+}
+
+
+/* ============================================================
+   NORMAL PRODUCT SUGGESTIONS
+   ============================================================ */
+
+.productList {
+  display: grid;
+
+  gap: 0.12rem;
+}
+
+
+.product {
+  width: 100%;
+
+  min-width: 0;
+
+  min-height: 4rem;
+
+  display: grid;
+
+  grid-template-columns:
+    3rem
+    minmax(0, 1fr)
+    auto;
+
+  align-items: center;
+
+  gap: 0.65rem;
+
+  border: 0;
+
+  border-radius:
+    0.75rem;
+
+  background:
+    transparent;
+
+  padding:
+    0.35rem
+    0.45rem;
+
+  color: inherit;
+
+  text-align: left;
+
+  cursor: pointer;
+}
+
+
+.product:hover,
+.product.active {
+  background:
+    rgba(
+      245,
+      246,
+      248,
+      0.98
+    );
+}
+
+
+.productImage {
+  width: 3rem;
+
+  height: 3.25rem;
+
+  display: grid;
+
+  place-items: center;
+
+  overflow: hidden;
+
+  border-radius:
+    0.6rem;
+
+  background:
+    #f1f2f4;
+}
+
+
+.productImage img {
+  width: 100%;
+
+  height: 100%;
+
+  object-fit: contain;
+}
+
+
+.imageFallback {
+  color:
+    var(--ene-red);
+
+  font-size:
+    1.15rem;
+
+  font-weight: 850;
+}
+
+
+.productText {
+  min-width: 0;
+}
+
+
+.productText strong,
+.productText small {
+  display: block;
+
+  overflow: hidden;
+
+  text-overflow:
+    ellipsis;
+
+  white-space: nowrap;
+}
+
+
+.productText strong {
+  color: #27272a;
+
+  font-size:
+    0.72rem;
+
+  font-weight: 720;
+}
+
+
+.productText small {
+  margin-top:
+    0.2rem;
+
+  color: #92949d;
+
+  font-size:
+    0.55rem;
+}
+
+
+.price {
+  color:
+    var(--ene-red);
+
+  font-size:
+    0.68rem;
+
+  font-weight: 800;
+
+  white-space: nowrap;
+}
+
+
+/* ============================================================
+   CATEGORY SUGGESTIONS
+   ============================================================ */
+
+.compactList {
+  display: grid;
+
+  gap: 0.12rem;
+}
+
+
+.compactRow {
+  width: 100%;
+
+  min-height:
+    2.6rem;
+
+  display: grid;
+
+  grid-template-columns:
+    2rem
+    minmax(0, 1fr)
+    auto;
+
+  align-items: center;
+
+  gap: 0.5rem;
+
+  border: 0;
+
+  border-radius:
+    0.65rem;
+
+  background:
+    transparent;
+
+  padding:
+    0.25rem
+    0.45rem;
+
+  color: #3f3f46;
+
+  text-align: left;
+
+  font-size:
+    0.68rem;
+
+  font-weight: 680;
+
+  cursor: pointer;
+}
+
+
+.compactRow:hover,
+.compactRow.active {
+  background:
+    #f6f7f8;
+
+  color:
+    var(--ene-red);
+}
+
+
+.compactIcon {
+  width: 1.9rem;
+
+  height: 1.9rem;
+
+  display: grid;
+
+  place-items: center;
+
+  border-radius:
+    0.55rem;
+
+  background:
+    #f1f2f4;
+
+  color: #71717a;
+}
+
+
+.arrow {
+  color: #a1a1aa;
+}
+
+
+/* ============================================================
+   BRANDS
+   ============================================================ */
+
+.brandList {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 0.4rem;
+
+  padding:
+    0.05rem
+    0.3rem
+    0.2rem;
+}
+
+
+.brand {
+  min-height: 2rem;
+
+  border:
+    1px solid
+    #e5e5e8;
+
+  border-radius:
+    999rem;
+
+  background: #fff;
+
+  padding:
+    0 0.7rem;
+
+  color: #52525b;
+
+  font-size:
+    0.62rem;
+
+  font-weight: 680;
+
+  cursor: pointer;
+}
+
+
+.brand:hover,
+.activeBrand {
+  border-color:
+    rgba(
+      230,
+      0,
+      35,
+      0.2
+    );
+
+  background:
+    #fff5f6;
+
+  color:
+    var(--ene-red);
+}
+
+
+/* ============================================================
+   EMPTY
+   ============================================================ */
+
+.empty {
+  padding:
+    1rem
+    1.25rem
+    0.65rem;
+
+  color: #92949d;
+
+  font-size:
+    0.68rem;
+}
+
+
+/* ============================================================
+   SEARCH ALL
+   ============================================================ */
+
+.searchAll {
+  width: 100%;
+
+  min-height:
+    3.4rem;
+
+  display: grid;
+
+  grid-template-columns:
+    2rem
+    minmax(0, 1fr)
+    auto;
+
+  align-items: center;
+
+  gap: 0.55rem;
+
+  border: 0;
+
+  border-top:
+    1px solid
+    rgba(
+      35,
+      35,
+      40,
+      0.06
+    );
+
+  background:
+    rgba(
+      249,
+      249,
+      250,
+      0.94
+    );
+
+  padding:
+    0.45rem 1rem;
+
+  color: #3f3f46;
+
+  text-align: left;
+
+  font-size:
+    0.67rem;
+
+  cursor: pointer;
+}
+
+
+.searchAll:hover,
+.searchAllActive {
+  background:
+    #fff2f4;
+
+  color:
+    var(--ene-red);
+}
+
+
+.searchAll strong {
+  color:
+    var(--ene-red);
+}
+
+
+.searchAllIcon {
+  width: 1.9rem;
+
+  height: 1.9rem;
+
+  display: grid;
+
+  place-items: center;
+
+  border-radius:
+    0.55rem;
+
+  background: #fff;
+
+  color:
+    var(--ene-red);
+}
+
+
+/* ============================================================
+   TABLET
+   ============================================================ */
+
+@media (
+  max-width: 74rem
+) {
+  .form {
+    height:
+      2.55rem;
+
+    grid-template-columns:
+      2.25rem
+      minmax(0, 1fr)
+      auto;
+  }
+
+
+  .searchButton {
+    width:
+      2.25rem;
+  }
+
+
+  .visualGrid {
+    grid-template-columns:
+      repeat(
+        3,
+        minmax(
+          0,
+          1fr
+        )
+      );
+  }
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (
+  max-width: 48rem
+) {
+  .form {
+    height:
+      2.35rem;
+
+    grid-template-columns:
+      1.9rem
+      minmax(0, 1fr)
+      auto;
+
+    border-radius:
+      0.8rem;
+  }
+
+
+  .searchButton {
+    width: 1.9rem;
+  }
+
+
+  /*
+   * 16px prevents Safari's input-focus zoom.
+   */
+  .input {
+    font-size: 16px;
+  }
+
+
+  .controls {
+    margin-left:
+      0.05rem;
+
+    padding:
+      0
+      0.18rem
+      0
+      0.08rem;
+  }
+
+
+  .imageSearchButton {
+    width: 1.9rem;
+
+    min-width:
+      1.9rem;
+
+    height: 1.9rem;
+
+    min-height:
+      1.9rem;
+
+    flex:
+      0 0 1.9rem;
+
+    padding:
+      0.25rem;
+
+    margin-left:
+      0.05rem;
+  }
+
+
+  /*
+   * In normal header mode the search field is narrow,
+   * but while focused SiteHeader expands it.
+   *
+   * Dropdown should use almost the full viewport.
+   */
+  .dropdown {
+    position: fixed;
+
+    top:
+      calc(
+        env(
+          safe-area-inset-top,
+          0px
+        ) +
+        3.55rem
+      );
+
+    right: 0.45rem;
+
+    left: 0.45rem;
+
+    width: auto;
+
+    max-height:
+      min(
+        62dvh,
+        31rem
+      );
+
+    border-radius:
+      0.9rem;
+  }
+
+
+  .visualGrid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(
+          0,
+          1fr
+        )
+      );
+
+    gap: 0.45rem;
+  }
+
+
+  .visualProductBody {
+    padding:
+      0.45rem;
+  }
+
+
+  .visualHeader {
+    align-items:
+      flex-start;
+
+    gap: 0.6rem;
+  }
+
+
+  .product {
+    min-height:
+      3.8rem;
+
+    grid-template-columns:
+      2.75rem
+      minmax(0, 1fr)
+      auto;
+
+    padding-inline:
+      0.35rem;
+  }
+
+
+  .productImage {
+    width: 2.75rem;
+
+    height: 3rem;
+  }
+}
+
+
+/* ============================================================
+   NARROW MOBILE
+   ============================================================ */
+
+@media (
+  max-width: 23rem
+) {
+  .form {
+    height: 2.25rem;
+
+    grid-template-columns:
+      1.75rem
+      minmax(0, 1fr)
+      auto;
+  }
+
+
+  .searchButton {
+    width: 1.75rem;
+  }
+
+
+  .imageSearchButton {
+    width: 1.75rem;
+
+    min-width:
+      1.75rem;
+
+    height: 1.75rem;
+
+    min-height:
+      1.75rem;
+
+    flex:
+      0 0 1.75rem;
+
+    padding:
+      0.22rem;
+  }
+}
+
+
+/* ============================================================
+   FOCUS
+   ============================================================ */
+
+.searchButton:focus-visible,
+.imageSearchButton:focus-visible,
+.chooseAnother:focus-visible,
+.visualProduct:focus-visible,
+.product:focus-visible,
+.compactRow:focus-visible,
+.brand:focus-visible,
+.searchAll:focus-visible {
+  outline:
+    0.18rem solid
+    rgba(
+      230,
+      0,
+      35,
+      0.18
+    );
+
+  outline-offset:
+    0.08rem;
+}
+
+
+/* ============================================================
+   ANIMATION
+   ============================================================ */
+
+@keyframes search-spin {
+  to {
+    transform:
+      rotate(360deg);
+  }
+}
+
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+
+@media (
+  prefers-reduced-motion:
+    reduce
+) {
+  .form,
+  .imageSearchButton,
+  .searchButton,
+  .visualProduct {
+    transition: none;
+  }
+
+
+  .loading,
+  .visualSpinner {
+    animation-duration:
+      1.2s;
+  }
+}

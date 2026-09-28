@@ -1,0 +1,824 @@
+.prompt {
+  position: fixed;
+  z-index: 96;
+
+  right:
+    max(
+      0.75rem,
+      var(--safe-right)
+    );
+
+  bottom:
+    calc(
+      var(
+        --mobile-bottom-nav-offset,
+        4.35rem
+      ) +
+      0.65rem
+    );
+
+  left:
+    max(
+      0.75rem,
+      var(--safe-left)
+    );
+
+  display: none;
+
+  grid-template-columns:
+    auto
+    minmax(0, 1fr)
+    auto
+    auto;
+
+  align-items: center;
+
+  gap: 0.62rem;
+
+  width:
+    min(
+      calc(
+        100vw - 1.5rem
+      ),
+      29rem
+    );
+
+  margin-inline: auto;
+
+  padding:
+    0.62rem
+    0.55rem
+    0.62rem
+    0.62rem;
+
+  border:
+    1px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.95
+    );
+
+  border-radius:
+    1.15rem;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(
+        255,
+        255,
+        255,
+        0.97
+      ),
+      rgba(
+        249,
+        249,
+        251,
+        0.91
+      )
+    );
+
+  box-shadow:
+    inset
+      0
+      1px
+      0
+      #fff,
+    0
+      0.6rem
+      1.7rem
+      rgba(
+        20,
+        24,
+        34,
+        0.11
+      ),
+    0
+      1.4rem
+      3.4rem
+      rgba(
+        20,
+        24,
+        34,
+        0.08
+      );
+
+  backdrop-filter:
+    blur(1.45rem)
+    saturate(145%);
+
+  -webkit-backdrop-filter:
+    blur(1.45rem)
+    saturate(145%);
+}
+
+.promptIcon,
+.sheetBrand {
+  display: grid;
+  place-items: center;
+
+  overflow: hidden;
+
+  border:
+    1px solid
+    rgba(
+      230,
+      0,
+      35,
+      0.08
+    );
+
+  background:
+    #fff;
+
+  box-shadow:
+    0
+      0.2rem
+      0.8rem
+      rgba(
+        20,
+        24,
+        34,
+        0.07
+      );
+}
+
+.promptIcon {
+  width: 2.55rem;
+  height: 2.55rem;
+
+  border-radius:
+    0.82rem;
+}
+
+.promptIcon img {
+  width: 2.1rem;
+  height: 2.1rem;
+}
+
+.promptCopy {
+  min-width: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 0.13rem;
+}
+
+.promptCopy strong {
+  color:
+    var(--ene-black);
+
+  font-size: 0.79rem;
+  font-weight: 780;
+
+  line-height: 1.15;
+
+  letter-spacing:
+    -0.018em;
+}
+
+.promptCopy span {
+  overflow: hidden;
+
+  color:
+    rgba(
+      63,
+      63,
+      70,
+      0.72
+    );
+
+  font-size: 0.64rem;
+  font-weight: 550;
+
+  line-height: 1.25;
+
+  text-overflow:
+    ellipsis;
+
+  white-space:
+    nowrap;
+}
+
+.installButton,
+.doneButton {
+  border: 0;
+
+  background:
+    var(--ene-red);
+
+  color: #fff;
+
+  font-weight: 780;
+
+  box-shadow:
+    0
+      0.4rem
+      1.1rem
+      rgba(
+        230,
+        0,
+        35,
+        0.18
+      );
+}
+
+.installButton {
+  min-height:
+    2.2rem;
+
+  border-radius:
+    0.75rem;
+
+  padding-inline:
+    0.86rem;
+
+  font-size:
+    0.7rem;
+}
+
+.installButton:active,
+.doneButton:active {
+  transform:
+    scale(0.98);
+}
+
+.dismissButton,
+.sheetClose {
+  display: grid;
+
+  place-items: center;
+
+  border: 0;
+
+  color:
+    rgba(
+      39,
+      39,
+      42,
+      0.66
+    );
+
+  background:
+    transparent;
+}
+
+.dismissButton {
+  width: 1.8rem;
+  height: 1.8rem;
+
+  border-radius:
+    999rem;
+}
+
+.backdrop {
+  position: fixed;
+
+  z-index: 160;
+
+  inset: 0;
+
+  display: flex;
+
+  align-items:
+    flex-end;
+
+  justify-content:
+    center;
+
+  padding:
+    1rem
+    max(
+      0.75rem,
+      var(--safe-right)
+    )
+    max(
+      0.75rem,
+      var(--safe-bottom)
+    )
+    max(
+      0.75rem,
+      var(--safe-left)
+    );
+
+  background:
+    rgba(
+      17,
+      17,
+      19,
+      0.34
+    );
+
+  backdrop-filter:
+    blur(0.55rem);
+
+  -webkit-backdrop-filter:
+    blur(0.55rem);
+}
+
+.sheet {
+  position: relative;
+
+  width:
+    min(
+      100%,
+      31rem
+    );
+
+  max-height:
+    min(
+      43rem,
+      calc(
+        100dvh -
+        var(--safe-top) -
+        1rem
+      )
+    );
+
+  overflow: auto;
+
+  overscroll-behavior:
+    contain;
+
+  border:
+    1px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.92
+    );
+
+  border-radius:
+    1.55rem;
+
+  padding:
+    0.58rem
+    1rem
+    1rem;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(
+        255,
+        255,
+        255,
+        0.985
+      ),
+      rgba(
+        250,
+        250,
+        252,
+        0.96
+      )
+    );
+
+  box-shadow:
+    inset
+      0
+      1px
+      0
+      #fff,
+    0
+      1.4rem
+      4rem
+      rgba(
+        17,
+        17,
+        19,
+        0.22
+      );
+}
+
+.sheetHandle {
+  width: 2.4rem;
+  height: 0.28rem;
+
+  margin:
+    0 auto 0.72rem;
+
+  border-radius:
+    999rem;
+
+  background:
+    rgba(
+      113,
+      113,
+      122,
+      0.28
+    );
+}
+
+.sheetHeader {
+  display: grid;
+
+  grid-template-columns:
+    auto
+    minmax(0, 1fr)
+    auto;
+
+  align-items: center;
+
+  gap: 0.8rem;
+}
+
+.sheetBrand {
+  width: 3.45rem;
+  height: 3.45rem;
+
+  border-radius:
+    1rem;
+}
+
+.sheetBrand img {
+  width: 2.8rem;
+  height: 2.8rem;
+}
+
+.sheetHeader h2 {
+  margin: 0;
+
+  color:
+    var(--ene-black);
+
+  font-size:
+    clamp(
+      1.2rem,
+      5.5vw,
+      1.45rem
+    );
+
+  font-weight: 800;
+
+  line-height: 1.05;
+
+  letter-spacing:
+    -0.035em;
+}
+
+.sheetHeader p {
+  margin:
+    0.28rem 0 0;
+
+  color:
+    rgba(
+      82,
+      82,
+      91,
+      0.82
+    );
+
+  font-size:
+    0.76rem;
+
+  font-weight:
+    520;
+
+  line-height:
+    1.42;
+}
+
+.sheetClose {
+  width: 2.2rem;
+  height: 2.2rem;
+
+  border-radius:
+    999rem;
+
+  background:
+    rgba(
+      244,
+      244,
+      245,
+      0.88
+    );
+}
+
+.steps {
+  display: grid;
+
+  gap: 0.62rem;
+
+  margin:
+    1rem 0 0;
+
+  padding: 0;
+
+  list-style:
+    none;
+}
+
+.steps li {
+  display: grid;
+
+  grid-template-columns:
+    auto
+    minmax(0, 1fr);
+
+  align-items: center;
+
+  gap: 0.78rem;
+
+  min-width: 0;
+
+  border:
+    1px solid
+    rgba(
+      39,
+      39,
+      42,
+      0.07
+    );
+
+  border-radius:
+    1rem;
+
+  padding:
+    0.76rem;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.72
+    );
+}
+
+.stepIcon,
+.stepNumber {
+  display: grid;
+
+  place-items: center;
+
+  width: 2.35rem;
+  height: 2.35rem;
+
+  border-radius:
+    0.78rem;
+
+  background:
+    rgba(
+      230,
+      0,
+      35,
+      0.075
+    );
+
+  color:
+    var(--ene-red);
+}
+
+.stepNumber {
+  font-size:
+    0.76rem;
+
+  font-weight:
+    820;
+}
+
+.steps strong {
+  display: block;
+
+  color:
+    var(--ene-black);
+
+  font-size:
+    0.8rem;
+
+  font-weight:
+    760;
+
+  line-height:
+    1.2;
+}
+
+.steps p {
+  margin:
+    0.22rem 0 0;
+
+  color:
+    rgba(
+      82,
+      82,
+      91,
+      0.82
+    );
+
+  font-size:
+    0.71rem;
+
+  font-weight:
+    520;
+
+  line-height:
+    1.42;
+}
+
+.note {
+  margin:
+    0.72rem 0 0;
+
+  border:
+    1px solid
+    rgba(
+      22,
+      128,
+      58,
+      0.09
+    );
+
+  border-radius:
+    0.9rem;
+
+  padding:
+    0.68rem
+    0.75rem;
+
+  background:
+    rgba(
+      22,
+      128,
+      58,
+      0.055
+    );
+
+  color:
+    rgba(
+      39,
+      39,
+      42,
+      0.82
+    );
+
+  font-size:
+    0.68rem;
+
+  font-weight:
+    560;
+
+  line-height:
+    1.45;
+}
+
+.doneButton {
+  width: 100%;
+
+  min-height:
+    2.85rem;
+
+  margin-top:
+    0.78rem;
+
+  border-radius:
+    0.95rem;
+
+  font-size:
+    0.78rem;
+}
+
+@media (
+  max-width:
+    48rem
+) {
+  .prompt {
+    display: grid;
+  }
+}
+
+@media (
+  max-width:
+    23rem
+) {
+  .prompt {
+    gap: 0.46rem;
+
+    padding-left:
+      0.5rem;
+  }
+
+  .promptCopy span {
+    display: none;
+  }
+
+  .installButton {
+    padding-inline:
+      0.68rem;
+  }
+}
+
+@media (
+  hover: hover
+) and (
+  pointer: fine
+) {
+  .installButton:hover,
+  .doneButton:hover {
+    background:
+      var(
+        --ene-red-hover
+      );
+  }
+
+  .dismissButton:hover,
+  .sheetClose:hover {
+    color:
+      var(--ene-black);
+
+    background:
+      rgba(
+        244,
+        244,
+        245,
+        0.96
+      );
+  }
+}
+
+@media (
+  prefers-reduced-motion:
+    no-preference
+) {
+  .prompt {
+    animation:
+      installPromptIn
+      260ms
+      cubic-bezier(
+        0.22,
+        1,
+        0.36,
+        1
+      )
+      both;
+  }
+
+  .sheet {
+    animation:
+      installSheetIn
+      240ms
+      cubic-bezier(
+        0.22,
+        1,
+        0.36,
+        1
+      )
+      both;
+  }
+}
+
+@keyframes installPromptIn {
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(
+        0.6rem
+      )
+      scale(
+        0.98
+      );
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(
+        0
+      )
+      scale(
+        1
+      );
+  }
+}
+
+@keyframes installSheetIn {
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(
+        1.1rem
+      )
+      scale(
+        0.985
+      );
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(
+        0
+      )
+      scale(
+        1
+      );
+  }
+}

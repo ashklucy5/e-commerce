@@ -1,0 +1,143 @@
+.shell {
+  position: relative;
+  min-width: 0;
+  padding-bottom: 0.75rem;
+}
+
+.rail {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: calc((100% - 2.8rem) / 5);
+  gap: 0.7rem;
+  width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.05rem 0.06rem 0.22rem;
+  scroll-snap-type: x proximity;
+  scroll-padding-inline: 0.06rem;
+  overscroll-behavior-inline: contain;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x pan-y pinch-zoom;
+}
+
+.rail::-webkit-scrollbar {
+  display: none;
+}
+
+.rail > * {
+  min-width: 0;
+  scroll-snap-align: start;
+}
+
+.arrow {
+  position: absolute;
+  z-index: 6;
+  top: calc(50% - 0.4rem);
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  padding: 0;
+  background: rgba(255, 255, 255, 0.82);
+  color: #34363d;
+  box-shadow: 0 0.35rem 1rem rgba(35, 42, 55, 0.1);
+  backdrop-filter: blur(0.75rem);
+  -webkit-backdrop-filter: blur(0.75rem);
+  transform: translateY(-50%);
+  transition: opacity 140ms ease, color 140ms ease, transform 140ms ease;
+}
+
+.previous {
+  left: -0.22rem;
+}
+
+.next {
+  right: -0.22rem;
+}
+
+.arrow:disabled {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.dots {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  transform: translateX(-50%);
+}
+
+.dot,
+.activeDot {
+  height: 0.28rem;
+  border: 0;
+  border-radius: 999rem;
+  padding: 0;
+  transition: width 160ms ease, background-color 160ms ease;
+}
+
+.dot {
+  width: 0.28rem;
+  background: rgba(63, 66, 74, 0.18);
+}
+
+.activeDot {
+  width: 0.78rem;
+  background: var(--ene-red);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .arrow:not(:disabled):hover {
+    color: var(--ene-red);
+    transform: translateY(-50%) scale(1.04);
+  }
+}
+
+@media (max-width: 80rem) {
+  .rail {
+    grid-auto-columns: calc((100% - 2.1rem) / 4);
+  }
+}
+
+@media (max-width: 64rem) {
+  .rail {
+    grid-auto-columns: calc((100% - 1.4rem) / 3);
+  }
+}
+
+@media (max-width: 48rem) {
+  .rail {
+    grid-auto-columns: minmax(8rem, 46%);
+    gap: 0.48rem;
+  }
+
+  .arrow {
+    display: none;
+  }
+}
+
+@media (max-width: 22rem) {
+  .rail {
+    grid-auto-columns: minmax(7.4rem, 48%);
+    gap: 0.38rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rail {
+    scroll-behavior: auto;
+  }
+
+  .arrow,
+  .dot,
+  .activeDot {
+    transition: none;
+  }
+}

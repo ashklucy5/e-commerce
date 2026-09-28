@@ -1,0 +1,99 @@
+﻿.page {
+  width: 100%;
+  min-width: 0;
+
+  padding-top:
+    clamp(
+      0.25rem,
+      0.6vw,
+      0.45rem
+    );
+
+  padding-bottom:
+    clamp(
+      1.5rem,
+      3vw,
+      2.5rem
+    );
+
+  background:
+    #ffffff;
+}
+
+/*
+ * Desktop and tablet intentionally retain the
+ * reusable storefront Header + CategoryStrip.
+ *
+ * Only the compact mobile Product page removes
+ * them to maximize purchasing space.
+ */
+@media (
+  max-width: 48rem
+) {
+  :global(
+    .app-shell:has(
+      .product-route
+    )
+    > header
+  ) {
+    display: none;
+  }
+
+  /*
+   * Remove the generic storefront mobile
+   * bottom spacing here.
+   *
+   * Product owns its exact BottomNav clearance
+   * below.
+   */
+  :global(
+    .app-shell:has(
+      .product-route
+    )
+    .site-main
+  ) {
+    padding-top:
+      0 !important;
+
+    padding-bottom:
+      0 !important;
+  }
+
+  .page {
+    padding-top: 0;
+
+    /*
+     * Approved floating BottomNav clearance:
+     *
+     * nav height
+     * + nav bottom/safe-area inset
+     * + tiny visual gap
+     *
+     * This prevents "You might also like" from
+     * disappearing under the navbar without
+     * creating another giant empty scroll area.
+     */
+    padding-bottom:
+      calc(
+        clamp(
+          3.75rem,
+          14vw,
+          4.35rem
+        )
+        +
+        max(
+          clamp(
+            0.45rem,
+            1.8vw,
+            0.75rem
+          ),
+          env(
+            safe-area-inset-bottom,
+            0px
+          )
+        )
+        +
+        0.25rem
+      );
+  }
+}

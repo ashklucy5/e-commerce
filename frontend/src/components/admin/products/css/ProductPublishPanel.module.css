@@ -1,0 +1,81 @@
+.card {
+  position: sticky;
+  top: 6.2rem;
+
+  padding: 1.15rem;
+}
+
+.codeBox {
+  margin: 1rem 0;
+
+  padding: 0.85rem;
+
+  border: 1px solid
+    rgba(255, 255, 255, 0.065);
+
+  border-radius: 0.85rem;
+
+  background:
+    rgba(255, 255, 255, 0.022);
+}
+
+.codeLabel {
+  margin: 0 0 0.3rem;
+
+  color: #62626c;
+
+  font-size: 0.56rem;
+  font-weight: 800;
+
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.code {
+  margin: 0;
+
+  color: #e3e3e6;
+
+  font-family:
+    var(--font-geist-mono),
+    monospace;
+
+  font-size: 0.72rem;
+}
+
+.progress,
+.error,
+.note {
+  margin: 0.8rem 0 0;
+
+  font-size: 0.62rem;
+  line-height: 1.55;
+}
+
+.progress {
+  color: #a7f3d0;
+}
+
+.error {
+  padding: 0.7rem;
+
+  border: 1px solid
+    rgba(244, 63, 94, 0.16);
+
+  border-radius: 0.75rem;
+
+  background:
+    rgba(244, 63, 94, 0.06);
+
+  color: #fda4af;
+}
+
+.note {
+  color: #606069;
+}
+
+@media (max-width: 960px) {
+  .card {
+    position: static;
+  }
+}

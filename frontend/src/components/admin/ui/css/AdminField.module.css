@@ -1,0 +1,49 @@
+.field {
+  display: grid;
+  gap: 0.5rem;
+
+  width: 100%;
+}
+
+.label {
+  display: flex;
+
+  align-items: center;
+
+  gap: 0.28rem;
+
+  padding-left: 0.12rem;
+
+  color: rgba(235, 235, 240, 0.72);
+
+  font-size: 0.68rem;
+  font-weight: 700;
+
+  letter-spacing: 0.015em;
+}
+
+.required {
+  color: #ef4650;
+
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.hint {
+  padding-left: 0.12rem;
+
+  color: rgba(255, 255, 255, 0.35);
+
+  font-size: 0.61rem;
+  line-height: 1.5;
+}
+
+.error {
+  padding-left: 0.12rem;
+
+  color: #fda4af;
+
+  font-size: 0.61rem;
+  font-weight: 600;
+  line-height: 1.5;
+}

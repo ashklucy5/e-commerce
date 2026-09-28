@@ -1,0 +1,1613 @@
+.hero {
+  position: relative;
+
+  isolation: isolate;
+
+  width: 100%;
+  min-width: 0;
+
+  overflow: hidden;
+
+  border:
+    0.0625rem solid
+    rgba(
+      33,
+      39,
+      51,
+      0.07
+    );
+
+  border-radius:
+    clamp(
+      1rem,
+      1.6vw,
+      1.4rem
+    );
+
+  background:
+    #f7f9fc;
+
+  box-shadow:
+    inset
+      0
+      0.0625rem
+      0
+      rgba(
+        255,
+        255,
+        255,
+        0.94
+      ),
+    0
+      1rem
+      3rem
+      rgba(
+        31,
+        39,
+        55,
+        0.065
+      );
+}
+
+/* =========================================================
+   CAROUSEL
+========================================================= */
+
+.rail {
+  display: flex;
+
+  width: 100%;
+  min-width: 0;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  scroll-snap-type:
+    x mandatory;
+
+  scroll-behavior:
+    smooth;
+
+  overscroll-behavior-inline:
+    contain;
+
+  scrollbar-width: none;
+
+  -webkit-overflow-scrolling:
+    touch;
+
+  /*
+   * Native touch swipe and trackpad scrolling
+   * remain enabled.
+   */
+  touch-action:
+    pan-x pan-y pinch-zoom;
+
+  cursor: grab;
+
+  user-select: none;
+}
+
+.rail::-webkit-scrollbar {
+  display: none;
+}
+
+.rail[data-dragging="true"] {
+  cursor: grabbing;
+
+  scroll-snap-type:
+    none;
+
+  scroll-behavior:
+    auto;
+}
+
+/* =========================================================
+   SLIDE
+========================================================= */
+
+.slide {
+  position: relative;
+
+  flex:
+    0 0 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(
+      0,
+      0.9fr
+    )
+    minmax(
+      17rem,
+      1.1fr
+    );
+
+  align-items: stretch;
+
+  width: 100%;
+  min-width: 100%;
+
+  min-height:
+    clamp(
+      22rem,
+      31vw,
+      29rem
+    );
+
+  overflow: hidden;
+
+  scroll-snap-align:
+    start;
+
+  scroll-snap-stop:
+    always;
+
+  background:
+    radial-gradient(
+      circle at 77% 30%,
+      rgba(
+        255,
+        255,
+        255,
+        0.98
+      ),
+      transparent 29%
+    ),
+    radial-gradient(
+      circle at 90% 10%,
+      rgba(
+        210,
+        220,
+        236,
+        0.58
+      ),
+      transparent 39%
+    ),
+    linear-gradient(
+      132deg,
+      #ffffff 0%,
+      #f9fafc 47%,
+      #edf2f8 100%
+    );
+}
+
+.slide::before {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      112deg,
+      transparent 57%,
+      rgba(
+        255,
+        255,
+        255,
+        0.46
+      )
+        57.45%,
+      transparent 57.9%
+    ),
+    linear-gradient(
+      150deg,
+      transparent 67%,
+      rgba(
+        255,
+        255,
+        255,
+        0.4
+      )
+        67.4%,
+      transparent 67.8%
+    );
+
+  opacity: 0.65;
+}
+
+/* =========================================================
+   COPY
+========================================================= */
+
+.copy {
+  position: relative;
+
+  z-index: 3;
+
+  display: flex;
+
+  min-width: 0;
+
+  flex-direction: column;
+
+  align-items: flex-start;
+
+  justify-content: center;
+
+  padding:
+    clamp(
+      1.5rem,
+      4vw,
+      4rem
+    );
+}
+
+.eyebrow {
+  display: inline-flex;
+
+  align-items: center;
+
+  min-height:
+    clamp(
+      1.45rem,
+      2vw,
+      1.7rem
+    );
+
+  border:
+    0.0625rem solid
+    rgba(
+      41,
+      45,
+      55,
+      0.075
+    );
+
+  border-radius:
+    999rem;
+
+  padding-inline:
+    clamp(
+      0.52rem,
+      1vw,
+      0.68rem
+    );
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.68
+    );
+
+  color: #696e78;
+
+  font-size:
+    clamp(
+      0.54rem,
+      0.58vw,
+      0.64rem
+    );
+
+  font-weight: 760;
+
+  letter-spacing:
+    0.055em;
+
+  text-transform:
+    uppercase;
+
+  backdrop-filter:
+    blur(0.5rem);
+
+  -webkit-backdrop-filter:
+    blur(0.5rem);
+}
+
+.copy h1,
+.copy h2 {
+  max-width:
+    min(
+      36rem,
+      100%
+    );
+
+  margin:
+    clamp(
+      0.7rem,
+      1.2vw,
+      1rem
+    )
+    0
+    0;
+
+  color: #111216;
+
+  font-size:
+    clamp(
+      2.15rem,
+      4.15vw,
+      4.35rem
+    );
+
+  font-weight: 820;
+
+  letter-spacing:
+    -0.055em;
+
+  line-height: 0.98;
+
+  text-wrap: balance;
+}
+
+.copy h1 span,
+.copy h2 span {
+  display: block;
+
+  margin-top: 0.08em;
+
+  color:
+    var(
+      --ene-red,
+      #e60023
+    );
+}
+
+.copy p {
+  max-width:
+    min(
+      31rem,
+      100%
+    );
+
+  margin:
+    clamp(
+      0.82rem,
+      1.4vw,
+      1.15rem
+    )
+    0
+    0;
+
+  color: #61656e;
+
+  font-size:
+    clamp(
+      0.78rem,
+      0.95vw,
+      0.95rem
+    );
+
+  line-height: 1.58;
+}
+
+/* =========================================================
+   ACTIONS
+========================================================= */
+
+.actions {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap:
+    clamp(
+      0.45rem,
+      0.8vw,
+      0.68rem
+    );
+
+  margin-top:
+    clamp(
+      1rem,
+      1.7vw,
+      1.45rem
+    );
+}
+
+.primaryAction,
+.secondaryAction {
+  display: inline-flex;
+
+  min-height:
+    clamp(
+      2.55rem,
+      3.4vw,
+      2.85rem
+    );
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius:
+    clamp(
+      0.62rem,
+      0.85vw,
+      0.72rem
+    );
+
+  padding-inline:
+    clamp(
+      0.82rem,
+      1.4vw,
+      1.18rem
+    );
+
+  font-size:
+    clamp(
+      0.68rem,
+      0.75vw,
+      0.79rem
+    );
+
+  font-weight: 740;
+
+  white-space: nowrap;
+
+  transition:
+    transform 140ms ease,
+    box-shadow 140ms ease,
+    background-color 140ms ease;
+}
+
+.primaryAction {
+  background:
+    var(
+      --ene-red,
+      #e60023
+    );
+
+  color: #ffffff;
+
+  box-shadow:
+    0
+      0.7rem
+      1.5rem
+      rgba(
+        230,
+        0,
+        35,
+        0.17
+      );
+}
+
+.secondaryAction {
+  border:
+    0.0625rem solid
+    rgba(
+      32,
+      36,
+      45,
+      0.085
+    );
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.82
+    );
+
+  color: #292c32;
+
+  box-shadow:
+    0
+      0.35rem
+      1rem
+      rgba(
+        31,
+        38,
+        52,
+        0.045
+      );
+
+  backdrop-filter:
+    blur(0.6rem);
+
+  -webkit-backdrop-filter:
+    blur(0.6rem);
+}
+
+/* =========================================================
+   PRODUCT VISUAL
+========================================================= */
+
+.visual {
+  position: relative;
+
+  min-width: 0;
+
+  min-height: 100%;
+
+  overflow: hidden;
+}
+
+.visualHalo {
+  position: absolute;
+
+  top: 48%;
+  left: 54%;
+
+  width:
+    min(
+      32rem,
+      84%
+    );
+
+  aspect-ratio: 1;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(
+        255,
+        255,
+        255,
+        0.98
+      )
+        0%,
+      rgba(
+        239,
+        243,
+        249,
+        0.84
+      )
+        46%,
+      rgba(
+        216,
+        225,
+        239,
+        0.36
+      )
+        64%,
+      transparent 76%
+    );
+
+  transform:
+    translate(
+      -50%,
+      -50%
+    );
+
+  pointer-events: none;
+}
+
+.productStage {
+  position: absolute;
+
+  inset:
+    3%
+    2%
+    8%
+    -2%;
+
+  z-index: 1;
+}
+
+.productStage::after {
+  content: "";
+
+  position: absolute;
+
+  right: 12%;
+  bottom: 5%;
+  left: 12%;
+
+  height: 11%;
+
+  border-radius: 50%;
+
+  background:
+    rgba(
+      65,
+      75,
+      95,
+      0.13
+    );
+
+  filter:
+    blur(
+      clamp(
+        0.55rem,
+        1vw,
+        0.9rem
+      )
+    );
+
+  transform:
+    perspective(
+      12rem
+    )
+    rotateX(68deg);
+}
+
+.productImage {
+  z-index: 2;
+
+  object-fit: contain;
+
+  padding:
+    clamp(
+      0.25rem,
+      1vw,
+      0.9rem
+    );
+
+  filter:
+    drop-shadow(
+      0
+      1.35rem
+      1.6rem
+      rgba(
+        40,
+        47,
+        61,
+        0.2
+      )
+    );
+}
+
+/* =========================================================
+   PRODUCT GLASS INFO
+========================================================= */
+
+.productInfo {
+  position: absolute;
+
+  z-index: 5;
+
+  right:
+    clamp(
+      0.75rem,
+      1.5vw,
+      1.25rem
+    );
+
+  bottom:
+    clamp(
+      2.5rem,
+      4vw,
+      3.25rem
+    );
+
+  display: grid;
+
+  width:
+    min(
+      15rem,
+      58%
+    );
+
+  min-width: 0;
+
+  gap:
+    clamp(
+      0.18rem,
+      0.4vw,
+      0.3rem
+    );
+
+  border:
+    0.0625rem solid
+    rgba(
+      255,
+      255,
+      255,
+      0.88
+    );
+
+  border-radius:
+    clamp(
+      0.8rem,
+      1.25vw,
+      1rem
+    );
+
+  padding:
+    clamp(
+      0.62rem,
+      1vw,
+      0.82rem
+    );
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.72
+    );
+
+  color: #252830;
+
+  box-shadow:
+    inset
+      0
+      0.0625rem
+      0
+      rgba(
+        255,
+        255,
+        255,
+        0.96
+      ),
+    0
+      0.75rem
+      2rem
+      rgba(
+        39,
+        47,
+        63,
+        0.09
+      );
+
+  backdrop-filter:
+    blur(1rem)
+    saturate(160%);
+
+  -webkit-backdrop-filter:
+    blur(1rem)
+    saturate(160%);
+
+  transition:
+    transform 150ms ease,
+    background-color 150ms ease;
+}
+
+.productInfoLabel {
+  color: #7a7e87;
+
+  font-size:
+    clamp(
+      0.46rem,
+      0.55vw,
+      0.56rem
+    );
+
+  font-weight: 720;
+
+  letter-spacing:
+    0.04em;
+
+  text-transform:
+    uppercase;
+}
+
+.productName {
+  display: -webkit-box;
+
+  overflow: hidden;
+
+  color: #202229;
+
+  font-size:
+    clamp(
+      0.7rem,
+      0.9vw,
+      0.88rem
+    );
+
+  font-weight: 760;
+
+  line-height: 1.25;
+
+  -webkit-box-orient:
+    vertical;
+
+
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
+}
+
+.productInfoBottom {
+  display: flex;
+
+  min-width: 0;
+
+  align-items: center;
+
+  justify-content:
+    space-between;
+
+  gap: 0.45rem;
+
+  margin-top: 0.08rem;
+}
+
+.productInfoBottom > strong {
+  flex: 0 0 auto;
+
+  color: #17191e;
+
+  font-size:
+    clamp(
+      0.68rem,
+      0.82vw,
+      0.82rem
+    );
+
+  font-weight: 800;
+
+  white-space: nowrap;
+}
+
+/* =========================================================
+   STOCK
+========================================================= */
+
+.inStock,
+.outOfStock {
+  display: inline-flex;
+
+  min-width: 0;
+
+  align-items: center;
+
+  gap: 0.25rem;
+
+  font-size:
+    clamp(
+      0.5rem,
+      0.6vw,
+      0.58rem
+    );
+
+  font-weight: 720;
+}
+
+.inStock {
+  color: #16863b;
+}
+
+.outOfStock {
+  color:
+    var(
+      --ene-red,
+      #e60023
+    );
+}
+
+.stockDot {
+  width:
+    clamp(
+      0.28rem,
+      0.35vw,
+      0.34rem
+    );
+
+  aspect-ratio: 1;
+
+  flex: 0 0 auto;
+
+  border-radius: 50%;
+
+  background:
+    currentColor;
+}
+
+/* =========================================================
+   FALLBACK
+========================================================= */
+
+.fallback {
+  position: absolute;
+
+  inset: 12%;
+
+  display: grid;
+
+  place-items: center;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      #ffffff,
+      #e9edf3
+    );
+
+  color: #bec4cf;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:
+    clamp(
+      3rem,
+      8vw,
+      7rem
+    );
+
+  letter-spacing:
+    0.08em;
+}
+
+/* =========================================================
+   DOTS
+========================================================= */
+
+.dots {
+  position: absolute;
+
+  z-index: 8;
+
+  bottom:
+    clamp(
+      0.48rem,
+      1vw,
+      0.75rem
+    );
+
+  left: 50%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap:
+    clamp(
+      0.02rem,
+      0.15vw,
+      0.08rem
+    );
+
+  transform:
+    translateX(-50%);
+}
+
+.dots button {
+  position: relative;
+
+  width:
+    clamp(
+      1rem,
+      1.4vw,
+      1.2rem
+    );
+
+  aspect-ratio: 1;
+
+  border: 0;
+
+  padding: 0;
+
+  background: transparent;
+
+  cursor: pointer;
+}
+
+.dots button::after {
+  content: "";
+
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  width:
+    clamp(
+      0.26rem,
+      0.35vw,
+      0.32rem
+    );
+
+  aspect-ratio: 1;
+
+  border-radius:
+    999rem;
+
+  background:
+    rgba(
+      61,
+      64,
+      73,
+      0.2
+    );
+
+  transform:
+    translate(
+      -50%,
+      -50%
+    );
+
+  transition:
+    width 160ms ease,
+    background-color 160ms ease;
+}
+
+.dots
+  .activeDot::after {
+  width:
+    clamp(
+      0.72rem,
+      0.9vw,
+      0.88rem
+    );
+
+  background:
+    var(
+      --ene-red,
+      #e60023
+    );
+}
+
+/* =========================================================
+   DESKTOP POINTER STATES
+========================================================= */
+
+@media (
+  hover: hover
+) and (
+  pointer: fine
+) {
+  .primaryAction:hover,
+  .secondaryAction:hover {
+    transform:
+      translateY(
+        -0.06rem
+      );
+  }
+
+  .productInfo:hover {
+    background:
+      rgba(
+        255,
+        255,
+        255,
+        0.9
+      );
+
+    transform:
+      translateY(
+        -0.08rem
+      );
+  }
+}
+
+/* =========================================================
+   TABLET / NARROW DESKTOP
+========================================================= */
+
+@media (
+  max-width: 64rem
+) {
+  .slide {
+    grid-template-columns:
+      minmax(
+        0,
+        0.96fr
+      )
+      minmax(
+        14rem,
+        1.04fr
+      );
+
+    min-height:
+      clamp(
+        19rem,
+        39vw,
+        24rem
+      );
+  }
+
+  .productInfo {
+    width:
+      min(
+        13rem,
+        62%
+      );
+  }
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (
+  max-width: 48rem
+) {
+  .hero {
+    border-radius:
+      clamp(
+        0.85rem,
+        4vw,
+        1.1rem
+      );
+  }
+
+  /*
+   * Mobile keeps the two-part hero composition, but the
+   * copy receives a little more width so its controls never
+   * drift into the product visual.
+   */
+  .slide {
+    grid-template-columns:
+      minmax(
+        0,
+        1.06fr
+      )
+      minmax(
+        7.7rem,
+        0.94fr
+      );
+
+    min-height:
+      clamp(
+        16rem,
+        68vw,
+        19rem
+      );
+  }
+
+  .copy {
+    padding:
+      clamp(
+        0.85rem,
+        4vw,
+        1.2rem
+      )
+      clamp(
+        0.3rem,
+        1.5vw,
+        0.46rem
+      )
+      1.7rem
+      clamp(
+        0.85rem,
+        4vw,
+        1.2rem
+      );
+  }
+
+  .eyebrow {
+    min-height:
+      1.25rem;
+
+    padding-inline:
+      0.44rem;
+
+    font-size:
+      clamp(
+        0.42rem,
+        1.8vw,
+        0.5rem
+      );
+  }
+
+  .copy h1,
+  .copy h2 {
+    max-width:
+      11.7rem;
+
+    margin-top:
+      0.5rem;
+
+    font-size:
+      clamp(
+        1.35rem,
+        6.2vw,
+        1.9rem
+      );
+
+    letter-spacing:
+      -0.045em;
+
+    line-height:
+      1;
+  }
+
+  .copy p {
+    display:
+      -webkit-box;
+
+    max-width:
+      11.2rem;
+
+    margin-top:
+      0.52rem;
+
+    overflow: hidden;
+
+    font-size:
+      clamp(
+        0.52rem,
+        2.35vw,
+        0.64rem
+      );
+
+    line-height: 1.42;
+
+    -webkit-box-orient:
+      vertical;
+    line-clamp: 3;
+    -webkit-line-clamp: 3;
+  }
+
+  /*
+   * Keep both actions inside the copy column. The previous
+   * fixed padding could push the secondary action across the
+   * column boundary on narrow phones.
+   */
+  .actions {
+    width: 100%;
+    max-width: 11.3rem;
+
+    flex-wrap: nowrap;
+
+    gap: 0.3rem;
+
+    margin-top:
+      0.7rem;
+  }
+
+  .primaryAction,
+  .secondaryAction {
+    min-width: 0;
+    min-height:
+      2.1rem;
+
+    border-radius:
+      0.55rem;
+
+    padding-inline:
+      clamp(
+        0.42rem,
+        1.8vw,
+        0.58rem
+      );
+
+    font-size:
+      clamp(
+        0.46rem,
+        1.92vw,
+        0.54rem
+      );
+  }
+
+  .primaryAction {
+    flex: 0 1 auto;
+  }
+
+  .secondaryAction {
+    flex: 1 1 auto;
+  }
+
+  /*
+   * Mobile hero visual:
+   *
+   * Keep the right column open instead of turning the whole column
+   * into a tall framed image window. Product media has mixed aspect
+   * ratios, so the tall frame creates empty bands and awkward cuts.
+   */
+  .visual {
+    align-self: stretch;
+
+    margin:
+      0.55rem
+      0.42rem
+      1.35rem
+      0.08rem;
+
+    overflow: visible;
+
+    border: 0;
+    border-radius: 0;
+
+    background: transparent;
+
+    box-shadow: none;
+  }
+
+  .visualHalo {
+    top: 43%;
+    left: 51%;
+
+    width: 118%;
+
+    opacity: 0.58;
+  }
+
+  /*
+   * One compact media stage gives every hero product a consistent
+   * visual footprint without creating a tall blank panel.
+   */
+  .productStage {
+    top:
+      clamp(
+        2.15rem,
+        9vw,
+        2.85rem
+      );
+
+    right: 0;
+    bottom: auto;
+    left: 0;
+
+    width: 100%;
+
+    aspect-ratio: 1 / 1.08;
+
+    overflow: hidden;
+
+    border:
+      0.0625rem solid
+      rgba(
+        255,
+        255,
+        255,
+        0.9
+      );
+
+    border-radius:
+      clamp(
+        0.78rem,
+        3.5vw,
+        1rem
+      );
+
+    background:
+      linear-gradient(
+        145deg,
+        rgba(
+          255,
+          255,
+          255,
+          0.92
+        ),
+        rgba(
+          242,
+          246,
+          251,
+          0.82
+        )
+      );
+
+    box-shadow:
+      inset
+        0
+        0.0625rem
+        0
+        rgba(
+          255,
+          255,
+          255,
+          0.98
+        ),
+      0
+        0.65rem
+        1.55rem
+        rgba(
+          35,
+          44,
+          60,
+          0.09
+        );
+  }
+
+  .productStage::after {
+    display: none;
+  }
+
+  .productImage {
+    padding: 0;
+
+    /*
+     * This is promotional hero media, not the product-detail gallery.
+     * A controlled crop keeps mixed catalog images visually consistent
+     * and removes the large letterbox bands visible in the screenshots.
+     */
+    object-fit: cover;
+    object-position: center;
+
+    filter: none;
+  }
+
+  .productInfo {
+    /*
+     * Float the liquid-glass product summary across the lower-right
+     * edge of the media stage rather than trapping it inside the image.
+     */
+    right:
+      clamp(
+        -0.22rem,
+        -0.7vw,
+        -0.1rem
+      );
+
+    bottom:
+      clamp(
+        0.5rem,
+        2vw,
+        0.66rem
+      );
+
+    width:
+      min(
+        8.8rem,
+        calc(100% + 0.12rem)
+      );
+
+    gap: 0.12rem;
+
+    border-radius:
+      clamp(
+        0.62rem,
+        3vw,
+        0.78rem
+      );
+
+    padding:
+      clamp(
+        0.4rem,
+        1.8vw,
+        0.54rem
+      );
+
+    background:
+      linear-gradient(
+        145deg,
+        rgba(
+          255,
+          255,
+          255,
+          0.9
+        ),
+        rgba(
+          255,
+          255,
+          255,
+          0.74
+        )
+      );
+
+    box-shadow:
+      inset
+        0
+        0.0625rem
+        0
+        rgba(
+          255,
+          255,
+          255,
+          0.98
+        ),
+      0
+        0.45rem
+        1.1rem
+        rgba(
+          30,
+          38,
+          52,
+          0.11
+        );
+  }
+
+  .productInfoLabel {
+    font-size:
+      clamp(
+        0.39rem,
+        1.5vw,
+        0.45rem
+      );
+  }
+
+  .productName {
+    font-size:
+      clamp(
+        0.54rem,
+        2.1vw,
+        0.64rem
+      );
+  }
+
+  .productInfoBottom > strong {
+    font-size:
+      clamp(
+        0.52rem,
+        2.05vw,
+        0.62rem
+      );
+  }
+
+  .inStock,
+  .outOfStock {
+    font-size:
+      clamp(
+        0.39rem,
+        1.62vw,
+        0.46rem
+      );
+  }
+
+  .dots {
+    bottom:
+      clamp(
+        0.34rem,
+        1.8vw,
+        0.46rem
+      );
+  }
+}
+
+/* =========================================================
+   VERY NARROW / HIGH ZOOM
+========================================================= */
+
+@media (
+  max-width: 22rem
+) {
+  .slide {
+    grid-template-columns:
+      minmax(
+        0,
+        1fr
+      )
+      minmax(
+        7.2rem,
+        0.88fr
+      );
+  }
+
+  .secondaryAction {
+    display: none;
+  }
+
+  .productInfo {
+    width:
+      min(
+        8rem,
+        82%
+      );
+  }
+
+  .productInfoLabel {
+    display: none;
+  }
+}
+
+/* =========================================================
+   FOCUS
+========================================================= */
+
+.primaryAction:focus-visible,
+.secondaryAction:focus-visible,
+.productInfo:focus-visible,
+.dots button:focus-visible {
+  outline:
+    0.14rem solid
+    rgba(
+      230,
+      0,
+      35,
+      0.28
+    );
+
+  outline-offset:
+    0.12rem;
+}
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (
+  prefers-reduced-motion:
+    reduce
+) {
+  .rail {
+    scroll-behavior: auto;
+  }
+
+  .primaryAction,
+  .secondaryAction,
+  .productInfo,
+  .dots button::after {
+    transition: none;
+  }
+}

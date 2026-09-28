@@ -1,0 +1,469 @@
+.carousel {
+  position: relative;
+
+  z-index: 2;
+
+  display: grid;
+
+  grid-template-columns:
+    2.35rem
+    minmax(0, 1fr)
+    2.35rem;
+
+  align-items: center;
+
+  gap: 0.5rem;
+
+  margin-top:
+    clamp(
+      0.7rem,
+      1.2vw,
+      0.95rem
+    );
+
+  /*
+   * Critical:
+   * do not reserve mobile navigation space here.
+   * Home.module.css owns that responsibility.
+   */
+  margin-bottom: 0;
+
+  border:
+    1px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.82
+    );
+
+  border-radius: 0.95rem;
+
+  padding: 0.5rem;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(
+        255,
+        255,
+        255,
+        0.64
+      ),
+      rgba(
+        255,
+        255,
+        255,
+        0.36
+      )
+    );
+
+  box-shadow:
+    inset 0 1px 0
+      rgba(
+        255,
+        255,
+        255,
+        0.92
+      ),
+    0 0.75rem 1.9rem
+      rgba(
+        39,
+        48,
+        67,
+        0.05
+      );
+
+  backdrop-filter:
+    blur(1.25rem)
+    saturate(145%);
+
+  -webkit-backdrop-filter:
+    blur(1.25rem)
+    saturate(145%);
+}
+
+
+.rail {
+  min-width: 0;
+
+  display: grid;
+
+  grid-auto-columns:
+    minmax(
+      10.25rem,
+      1fr
+    );
+
+  grid-auto-flow: column;
+
+  gap: 0.46rem;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  scroll-snap-type:
+    x proximity;
+
+  overscroll-behavior-x:
+    contain;
+
+  -webkit-overflow-scrolling:
+    touch;
+
+  scrollbar-width: none;
+
+  touch-action:
+    pan-x pan-y;
+}
+
+
+.rail::-webkit-scrollbar {
+  display: none;
+}
+
+
+.item {
+  min-width: 0;
+
+  display: grid;
+
+  grid-template-columns:
+    1.95rem
+    minmax(0, 1fr);
+
+  align-items: center;
+
+  gap: 0.5rem;
+
+  scroll-snap-align: start;
+
+  border:
+    1px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.72
+    );
+
+  border-radius: 0.76rem;
+
+  padding:
+    0.56rem
+    0.62rem;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.46
+    );
+}
+
+
+.icon {
+  width: 1.95rem;
+  height: 1.95rem;
+
+  display: grid;
+
+  place-items: center;
+
+  border-radius: 0.6rem;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.68
+    );
+
+  color: #303038;
+}
+
+
+.item > span:last-child {
+  min-width: 0;
+
+  display: grid;
+
+  gap: 0.05rem;
+}
+
+
+.item strong,
+.item small {
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+}
+
+
+.item strong {
+  color: #29292f;
+
+  font-size: 0.61rem;
+
+  font-weight: 730;
+}
+
+
+.item small {
+  color: #797a84;
+
+  font-size: 0.5rem;
+}
+
+
+.navButton {
+  width: 2.15rem;
+  height: 2.15rem;
+
+  display: grid;
+
+  place-items: center;
+
+  border:
+    1px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.86
+    );
+
+  border-radius: 50%;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.64
+    );
+
+  color: #303038;
+
+  cursor: pointer;
+
+  transition:
+    color 140ms ease,
+    background-color 140ms ease,
+    transform 140ms ease;
+}
+
+
+.navButton:disabled {
+  opacity: 0.3;
+}
+
+
+.dots {
+  position: absolute;
+
+  left: 50%;
+
+  bottom: -0.62rem;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 0.26rem;
+
+  transform:
+    translateX(-50%);
+}
+
+
+.dots span {
+  width: 0.28rem;
+  height: 0.28rem;
+
+  border-radius: 50%;
+
+  background:
+    rgba(
+      60,
+      61,
+      70,
+      0.2
+    );
+
+  transition:
+    width 160ms ease,
+    background-color 160ms ease;
+}
+
+
+.dots .activeDot {
+  width: 0.72rem;
+
+  border-radius: 999rem;
+
+  background:
+    var(--ene-red);
+}
+
+
+@media (
+  hover: hover
+) and (
+  pointer: fine
+) {
+  .navButton:not(:disabled):hover {
+    color:
+      var(--ene-red);
+
+    background:
+      rgba(
+        255,
+        255,
+        255,
+        0.84
+      );
+
+    transform:
+      scale(1.04);
+  }
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (
+  max-width: 48rem
+) {
+  .carousel {
+    grid-template-columns:
+      minmax(0, 1fr);
+
+    padding:
+      0.5rem
+      0.58rem;
+
+    margin-bottom: 0;
+
+    border-radius: 0.9rem;
+  }
+
+
+  .navButton {
+    display: none;
+  }
+
+
+  .rail {
+    /*
+     * Roughly two information cards visible.
+     */
+    grid-auto-columns:
+      minmax(
+        9.4rem,
+        48%
+      );
+
+    gap: 0.45rem;
+  }
+
+
+  .item {
+    grid-template-columns:
+      1.85rem
+      minmax(0, 1fr);
+
+    gap: 0.44rem;
+
+    padding: 0.5rem;
+  }
+
+
+  .icon {
+    width: 1.85rem;
+    height: 1.85rem;
+  }
+
+
+  .item strong,
+  .item small {
+    overflow: visible;
+
+    text-overflow: clip;
+
+    white-space: normal;
+  }
+
+
+  .item strong {
+    font-size:
+      clamp(
+        0.57rem,
+        2.65vw,
+        0.64rem
+      );
+  }
+
+
+  .item small {
+    font-size:
+      clamp(
+        0.46rem,
+        2.15vw,
+        0.51rem
+      );
+  }
+
+
+  .dots {
+    bottom: -0.55rem;
+  }
+}
+
+
+/* ============================================================
+   SMALL PHONE
+   ============================================================ */
+
+@media (
+  max-width: 22rem
+) {
+  .rail {
+    grid-auto-columns:
+      minmax(
+        8.8rem,
+        49%
+      );
+  }
+
+
+  .item {
+    padding: 0.44rem;
+  }
+}
+
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+
+@media (
+  prefers-reduced-motion:
+    reduce
+) {
+  .navButton,
+  .dots span {
+    transition: none;
+  }
+
+
+  .rail {
+    scroll-behavior: auto;
+  }
+}

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" width="180" height="180" role="img" aria-labelledby="title desc">
+  <title id="title">Ene dei symbol</title>
+  <desc id="desc">Ene dei red circular monogram with a white E and a dark D shaped as a subtle smile.</desc>
+  <circle cx="90" cy="90" r="82" fill="#E60023"/>
+  <path d="M51 51H99V65H67V81H94V95H67V111H101V125H51Z" fill="#FFFFFF"/>
+  <path d="M96 61C126 61 143 72 149 89C155 106 150 122 139 134C128 146 114 152 96 152"
+        fill="none" stroke="#111113" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

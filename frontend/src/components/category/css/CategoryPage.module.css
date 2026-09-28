@@ -1,0 +1,1007 @@
+.page {
+  width: 100%;
+  min-width: 0;
+  padding-block: clamp(0.45rem, 0.9vw, 0.8rem) clamp(1.3rem, 3vw, 2.5rem);
+  background: #ffffff;
+}
+
+.breadcrumbs {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.38rem;
+  overflow-x: auto;
+  margin: 0 0 clamp(0.4rem, 0.8vw, 0.65rem);
+  padding: 0.05rem 0 0.12rem;
+  color: rgba(53, 56, 64, 0.58);
+  font-size: clamp(0.56rem, 0.64vw, 0.67rem);
+  line-height: 1.2;
+  scrollbar-width: none;
+  white-space: nowrap;
+}
+
+.breadcrumbs::-webkit-scrollbar {
+  display: none;
+}
+
+.breadcrumbs a {
+  flex: 0 0 auto;
+  color: inherit;
+  text-decoration: none;
+  transition: color 140ms ease;
+}
+
+.breadcrumbs span {
+  flex: 0 0 auto;
+}
+
+.breadcrumbs .breadcrumbCurrent {
+  max-width: min(44vw, 24rem);
+  overflow: hidden;
+  color: rgba(34, 37, 44, 0.82);
+  font-weight: 700;
+  text-overflow: ellipsis;
+}
+
+/* =========================================================
+   Dynamic category hero
+========================================================= */
+
+.hero {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: minmax(0, 1.12fr) minmax(13rem, 0.88fr);
+  align-items: stretch;
+  min-height: clamp(11.5rem, 21vw, 17rem);
+  overflow: hidden;
+  border: 0.0625rem solid rgba(34, 40, 52, 0.07);
+  border-radius: clamp(0.9rem, 1.4vw, 1.25rem);
+  background:
+    radial-gradient(circle at 78% 22%, rgba(230, 0, 35, 0.055), transparent 31%),
+    linear-gradient(132deg, #fbfcfe 0%, #f4f6f9 56%, #eef2f6 100%);
+  box-shadow:
+    inset 0 0.0625rem 0 rgba(255, 255, 255, 0.94),
+    0 0.7rem 2.2rem rgba(27, 34, 46, 0.055);
+}
+
+.heroBackdrop {
+  position: absolute;
+  z-index: -3;
+  inset: -8%;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.heroBackdropImage {
+  object-fit: cover;
+  object-position: center;
+  opacity: 0.2;
+  filter: blur(clamp(1rem, 2vw, 1.8rem)) saturate(0.86) contrast(0.94);
+  transform: scale(1.1);
+}
+
+.heroWash {
+  position: absolute;
+  z-index: -2;
+  inset: 0;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.985) 0%,
+      rgba(255, 255, 255, 0.95) 38%,
+      rgba(250, 251, 253, 0.66) 66%,
+      rgba(246, 248, 251, 0.42) 100%
+    ),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(240, 243, 247, 0.32));
+  pointer-events: none;
+}
+
+.heroCopy {
+  position: relative;
+  z-index: 2;
+  align-self: center;
+  max-width: 44rem;
+  padding: clamp(1.25rem, 3.2vw, 2.6rem);
+}
+
+.eyebrow {
+  margin: 0 0 clamp(0.32rem, 0.6vw, 0.5rem);
+  color: var(--ene-red, #e60023);
+  font-size: clamp(0.56rem, 0.64vw, 0.68rem);
+  font-weight: 820;
+  letter-spacing: 0.11em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.heroCopy h1 {
+  max-width: 18ch;
+  margin: 0;
+  color: #191b20;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.7rem, 3.3vw, 3.3rem);
+  font-weight: 600;
+  letter-spacing: -0.045em;
+  line-height: 0.98;
+  text-wrap: balance;
+}
+
+.heroDescription {
+  max-width: 52ch;
+  margin: clamp(0.55rem, 1.1vw, 0.85rem) 0 0;
+  color: rgba(50, 54, 63, 0.72);
+  font-size: clamp(0.66rem, 0.82vw, 0.84rem);
+  line-height: 1.58;
+  text-wrap: pretty;
+}
+
+.productCount {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  margin-top: clamp(0.7rem, 1.25vw, 1rem);
+  border: 0.0625rem solid rgba(34, 40, 52, 0.08);
+  border-radius: 999rem;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 0.35rem 0.62rem;
+  color: rgba(43, 46, 54, 0.76);
+  font-size: clamp(0.54rem, 0.62vw, 0.65rem);
+  font-weight: 720;
+  line-height: 1;
+  box-shadow: inset 0 0.0625rem 0 rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(0.75rem) saturate(145%);
+  -webkit-backdrop-filter: blur(0.75rem) saturate(145%);
+}
+
+.heroMedia {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+  min-height: 100%;
+  display: grid;
+  place-items: center;
+  padding: clamp(0.6rem, 1.5vw, 1.2rem) clamp(0.8rem, 2.4vw, 2.2rem);
+}
+
+.heroProductImage {
+  position: relative;
+  width: min(100%, 22rem);
+  height: 100%;
+  min-height: clamp(9.8rem, 18vw, 14.5rem);
+}
+
+.heroSharpImage {
+  object-fit: contain;
+  object-position: center;
+  padding: clamp(0.25rem, 0.8vw, 0.6rem);
+  filter: drop-shadow(0 1.05rem 1.15rem rgba(27, 34, 46, 0.18));
+}
+
+.heroFallback {
+  width: clamp(7rem, 15vw, 11rem);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border: 0.0625rem solid rgba(255, 255, 255, 0.82);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 38% 30%, rgba(255, 255, 255, 0.96), rgba(236, 239, 244, 0.82));
+  color: rgba(30, 33, 40, 0.18);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2.8rem, 7vw, 5.2rem);
+  box-shadow:
+    inset 0 0.0625rem 0 rgba(255, 255, 255, 0.98),
+    0 1rem 2.2rem rgba(27, 34, 46, 0.08);
+}
+
+/* =========================================================
+   Direct subcategories: one complete horizontal row
+========================================================= */
+
+.subcategoryRail {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  align-items: center;
+  gap: clamp(0.42rem, 0.75vw, 0.65rem);
+  overflow-x: auto;
+  overflow-y: hidden;
+  margin-top: clamp(0.55rem, 1.1vw, 0.85rem);
+  padding: 0.08rem 0.04rem 0.18rem;
+  scroll-padding-inline: 0.04rem;
+  scroll-snap-type: x proximity;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x pan-y pinch-zoom;
+  cursor: grab;
+  user-select: none;
+}
+
+.subcategoryRail::-webkit-scrollbar {
+  display: none;
+}
+
+.subcategoryRail[data-dragging="true"] {
+  cursor: grabbing;
+  scroll-snap-type: none;
+}
+
+.subcategoryPill {
+  flex: 0 0 auto;
+  min-height: clamp(2rem, 2.7vw, 2.35rem);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0.0625rem solid rgba(35, 40, 51, 0.08);
+  border-radius: 999rem;
+  background: rgba(249, 250, 252, 0.92);
+  padding-inline: clamp(0.68rem, 1.15vw, 0.9rem);
+  color: rgba(42, 45, 53, 0.72);
+  font-size: clamp(0.56rem, 0.65vw, 0.68rem);
+  font-weight: 690;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  scroll-snap-align: start;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    color 140ms ease,
+    background-color 140ms ease,
+    border-color 140ms ease,
+    transform 110ms ease,
+    box-shadow 140ms ease;
+}
+
+.subcategoryActive {
+  border-color: rgba(230, 0, 35, 0.13);
+  background: rgba(230, 0, 35, 0.065);
+  color: var(--ene-red, #e60023);
+  font-weight: 790;
+}
+
+/* =========================================================
+   Catalog controls
+========================================================= */
+
+.controlsRow {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.7rem;
+  margin-top: clamp(0.5rem, 1vw, 0.8rem);
+  border: 0.0625rem solid rgba(255, 255, 255, 0.86);
+  border-radius: clamp(0.72rem, 1vw, 0.9rem);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(248, 249, 252, 0.8));
+  padding: clamp(0.38rem, 0.65vw, 0.52rem);
+  box-shadow:
+    inset 0 0.0625rem 0 rgba(255, 255, 255, 0.96),
+    0 0.35rem 1.2rem rgba(28, 35, 48, 0.055);
+  backdrop-filter: blur(1.35rem) saturate(175%);
+  -webkit-backdrop-filter: blur(1.35rem) saturate(175%);
+}
+
+.resultsSummary {
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 0.28rem;
+  color: rgba(50, 53, 61, 0.66);
+  font-size: clamp(0.54rem, 0.62vw, 0.64rem);
+  white-space: nowrap;
+}
+
+.resultsSummary strong {
+  color: #25282e;
+  font-size: clamp(0.68rem, 0.75vw, 0.78rem);
+  font-weight: 820;
+}
+
+.resultsSummary small {
+  margin-left: 0.35rem;
+  color: rgba(81, 85, 95, 0.52);
+  font-size: 0.92em;
+}
+
+.controlActions {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: clamp(0.28rem, 0.55vw, 0.45rem);
+}
+
+.controlButton,
+.sortControl {
+  min-height: clamp(2.05rem, 2.7vw, 2.35rem);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.38rem;
+  border: 0.0625rem solid rgba(36, 41, 52, 0.08);
+  border-radius: clamp(0.55rem, 0.75vw, 0.68rem);
+  background: rgba(255, 255, 255, 0.76);
+  color: rgba(39, 42, 50, 0.76);
+  box-shadow: inset 0 0.0625rem 0 rgba(255, 255, 255, 0.92);
+}
+
+.controlButton {
+  position: relative;
+  padding-inline: clamp(0.6rem, 0.9vw, 0.78rem);
+  font: inherit;
+  font-size: clamp(0.55rem, 0.62vw, 0.65rem);
+  font-weight: 720;
+  cursor: pointer;
+}
+
+.controlButton b {
+  min-width: 1rem;
+  height: 1rem;
+  display: grid;
+  place-items: center;
+  border-radius: 999rem;
+  background: var(--ene-red, #e60023);
+  color: #ffffff;
+  padding-inline: 0.2rem;
+  font-size: 0.48rem;
+  line-height: 1;
+}
+
+.controlButtonActive {
+  border-color: rgba(230, 0, 35, 0.14);
+  color: var(--ene-red, #e60023);
+}
+
+.sortControl {
+  position: relative;
+  padding-left: clamp(0.58rem, 0.85vw, 0.72rem);
+}
+
+.sortControl select {
+  min-height: calc(clamp(2.05rem, 2.7vw, 2.35rem) - 0.125rem);
+  max-width: clamp(8.5rem, 13vw, 11rem);
+  border: 0;
+  outline: 0;
+  background: transparent;
+  padding: 0 1.75rem 0 0;
+  color: #30333a;
+  font: inherit;
+  font-size: clamp(0.55rem, 0.62vw, 0.65rem);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* =========================================================
+   Filter overlay / responsive sheet
+========================================================= */
+
+.filterOverlay {
+  position: fixed;
+  z-index: 150;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding:
+    max(1rem, env(safe-area-inset-top, 0px))
+    max(1rem, env(safe-area-inset-right, 0px))
+    max(1rem, env(safe-area-inset-bottom, 0px))
+    max(1rem, env(safe-area-inset-left, 0px));
+}
+
+.filterBackdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background: rgba(20, 23, 29, 0.22);
+  cursor: default;
+  backdrop-filter: blur(0.35rem);
+  -webkit-backdrop-filter: blur(0.35rem);
+}
+
+.filterPanel {
+  position: relative;
+  z-index: 1;
+  width: min(92vw, 31rem);
+  max-height: min(78dvh, 39rem);
+  overflow: auto;
+  border: 0.0625rem solid rgba(255, 255, 255, 0.9);
+  border-radius: clamp(0.9rem, 1.4vw, 1.15rem);
+  background: rgba(252, 253, 254, 0.94);
+  box-shadow:
+    inset 0 0.0625rem 0 rgba(255, 255, 255, 0.98),
+    0 1.3rem 4rem rgba(25, 30, 42, 0.18);
+  backdrop-filter: blur(1.6rem) saturate(175%);
+  -webkit-backdrop-filter: blur(1.6rem) saturate(175%);
+}
+
+.filterPanelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: clamp(0.9rem, 1.7vw, 1.2rem) clamp(0.95rem, 2vw, 1.35rem) 0.6rem;
+}
+
+.filterPanelHeader span {
+  color: var(--ene-red, #e60023);
+  font-size: 0.54rem;
+  font-weight: 780;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.filterPanelHeader h2 {
+  margin: 0.15rem 0 0;
+  color: #202229;
+  font-size: clamp(1rem, 1.4vw, 1.25rem);
+  line-height: 1;
+}
+
+.closeButton {
+  width: 2.1rem;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border: 0.0625rem solid rgba(36, 41, 52, 0.08);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.72);
+  color: #383b43;
+  cursor: pointer;
+}
+
+.filterForm {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0.45rem clamp(0.95rem, 2vw, 1.35rem) clamp(0.95rem, 2vw, 1.35rem);
+}
+
+.filterForm fieldset {
+  min-width: 0;
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+  border: 0.0625rem solid rgba(37, 42, 53, 0.07);
+  border-radius: 0.78rem;
+  background: rgba(255, 255, 255, 0.66);
+  padding: 0.75rem;
+}
+
+.filterForm legend {
+  padding-inline: 0.15rem;
+  color: #282b31;
+  font-size: 0.66rem;
+  font-weight: 790;
+}
+
+.filterForm fieldset > label {
+  min-height: 1.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: rgba(49, 52, 60, 0.78);
+  font-size: 0.62rem;
+  font-weight: 620;
+  cursor: pointer;
+}
+
+.filterForm input[type="radio"] {
+  accent-color: var(--ene-red, #e60023);
+}
+
+.priceInputs {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: end;
+  gap: 0.5rem;
+}
+
+.priceInputs > span {
+  padding-bottom: 0.65rem;
+  color: rgba(54, 57, 65, 0.34);
+}
+
+.priceInputs label {
+  min-width: 0;
+  display: grid;
+  gap: 0.3rem;
+}
+
+.priceInputs label > span {
+  color: rgba(60, 64, 73, 0.58);
+  font-size: 0.52rem;
+  font-weight: 650;
+}
+
+.priceInputs input {
+  width: 100%;
+  min-width: 0;
+  min-height: 2.35rem;
+  border: 0.0625rem solid rgba(37, 42, 53, 0.11);
+  border-radius: 0.6rem;
+  outline: none;
+  background: rgba(255, 255, 255, 0.88);
+  padding-inline: 0.65rem;
+  color: #22252b;
+  font: inherit;
+  font-size: 0.68rem;
+}
+
+.priceInputs input:focus {
+  border-color: rgba(230, 0, 35, 0.28);
+  box-shadow: 0 0 0 0.16rem rgba(230, 0, 35, 0.07);
+}
+
+.filterForm fieldset > small {
+  color: rgba(70, 74, 83, 0.5);
+  font-size: 0.5rem;
+  line-height: 1.4;
+}
+
+.filterError {
+  margin: 0;
+  color: #b42318;
+  font-size: 0.57rem;
+  font-weight: 650;
+  line-height: 1.4;
+}
+
+.filterFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-top: 0.1rem;
+}
+
+.clearFilters {
+  color: rgba(55, 58, 66, 0.68);
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.applyFilters {
+  min-height: 2.3rem;
+  border: 0;
+  border-radius: 0.65rem;
+  background: var(--ene-red, #e60023);
+  padding-inline: 1rem;
+  color: #ffffff;
+  font: inherit;
+  font-size: 0.62rem;
+  font-weight: 790;
+  cursor: pointer;
+  box-shadow: 0 0.45rem 1rem rgba(230, 0, 35, 0.18);
+}
+
+/* =========================================================
+   Product discovery grid
+========================================================= */
+
+.results {
+  min-width: 0;
+  margin-top: clamp(0.65rem, 1.2vw, 1rem);
+}
+
+.productGrid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(0.52rem, 0.85vw, 0.8rem);
+  min-width: 0;
+}
+
+.emptyState {
+  min-height: clamp(12rem, 26vw, 18rem);
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 0.48rem;
+  margin-top: clamp(0.65rem, 1.2vw, 1rem);
+  border: 0.0625rem dashed rgba(37, 42, 53, 0.12);
+  border-radius: 0.9rem;
+  background: #fafbfc;
+  padding: 1.2rem;
+  text-align: center;
+}
+
+.emptyState h2 {
+  margin: 0;
+  color: #24272d;
+  font-size: clamp(0.9rem, 1.2vw, 1.1rem);
+}
+
+.emptyState p {
+  max-width: 42ch;
+  margin: 0;
+  color: rgba(67, 71, 80, 0.66);
+  font-size: clamp(0.6rem, 0.72vw, 0.72rem);
+  line-height: 1.55;
+}
+
+.emptyState a {
+  margin-top: 0.25rem;
+  color: var(--ene-red, #e60023);
+  font-size: 0.62rem;
+  font-weight: 760;
+  text-decoration: none;
+}
+
+/* =========================================================
+   Crawlable pagination
+========================================================= */
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  margin-top: clamp(0.9rem, 1.8vw, 1.4rem);
+  padding-block: 0.12rem;
+}
+
+.pageLink,
+.pageArrow,
+.pageCurrent,
+.pageDisabled {
+  min-width: 2rem;
+  height: 2rem;
+  display: inline-grid;
+  place-items: center;
+  border: 0.0625rem solid rgba(37, 42, 53, 0.08);
+  border-radius: 0.58rem;
+  background: #ffffff;
+  color: rgba(44, 47, 55, 0.7);
+  font-size: 0.58rem;
+  font-weight: 720;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.pageArrow {
+  font-size: 1rem;
+}
+
+.pageCurrent {
+  border-color: rgba(230, 0, 35, 0.14);
+  background: rgba(230, 0, 35, 0.07);
+  color: var(--ene-red, #e60023);
+  font-weight: 820;
+}
+
+.pageDisabled {
+  color: rgba(44, 47, 55, 0.24);
+}
+
+.pageGroup {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.pageGap {
+  min-width: 1rem;
+  color: rgba(44, 47, 55, 0.38);
+  font-size: 0.6rem;
+  text-align: center;
+}
+
+.srOnly {
+  position: absolute;
+  width: 0.0625rem;
+  height: 0.0625rem;
+  overflow: hidden;
+  margin: -0.0625rem;
+  padding: 0;
+  border: 0;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* =========================================================
+   Hover / focus
+========================================================= */
+
+@media (hover: hover) and (pointer: fine) {
+  .breadcrumbs a:hover,
+  .subcategoryPill:hover,
+  .clearFilters:hover {
+    color: var(--ene-red, #e60023);
+  }
+
+  .subcategoryPill:hover {
+    border-color: rgba(230, 0, 35, 0.13);
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 0.25rem 0.8rem rgba(29, 35, 48, 0.05);
+  }
+
+  .controlButton:hover,
+  .sortControl:hover,
+  .closeButton:hover {
+    border-color: rgba(230, 0, 35, 0.14);
+    color: var(--ene-red, #e60023);
+  }
+
+  .pageLink:hover,
+  .pageArrow:hover {
+    border-color: rgba(230, 0, 35, 0.14);
+    color: var(--ene-red, #e60023);
+  }
+}
+
+.subcategoryPill:active,
+.controlButton:active,
+.applyFilters:active {
+  transform: scale(0.97);
+}
+
+.breadcrumbs a:focus-visible,
+.subcategoryPill:focus-visible,
+.controlButton:focus-visible,
+.sortControl:focus-within,
+.closeButton:focus-visible,
+.clearFilters:focus-visible,
+.applyFilters:focus-visible,
+.pageLink:focus-visible,
+.pageArrow:focus-visible {
+  outline: 0.13rem solid rgba(230, 0, 35, 0.24);
+  outline-offset: 0.09rem;
+}
+
+/* =========================================================
+   Responsive density
+========================================================= */
+
+@media (max-width: 74rem) {
+  .productGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 58rem) {
+  .hero {
+    grid-template-columns: minmax(0, 1.2fr) minmax(10rem, 0.8fr);
+  }
+
+  .productGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 48rem) {
+  .page {
+    padding-top: 0.3rem;
+    padding-bottom: clamp(0.75rem, 3.2vw, 1rem);
+  }
+
+  .breadcrumbs {
+    margin-bottom: 0.35rem;
+    font-size: clamp(0.5rem, 2.15vw, 0.58rem);
+  }
+
+  .breadcrumbs .breadcrumbCurrent {
+    max-width: 42vw;
+  }
+
+  .hero {
+    grid-template-columns: minmax(0, 1.22fr) minmax(6.8rem, 0.78fr);
+    min-height: clamp(9.2rem, 43vw, 11rem);
+    border-radius: clamp(0.72rem, 3.3vw, 0.95rem);
+  }
+
+  .heroWash {
+    background:
+      linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.985) 0%,
+        rgba(255, 255, 255, 0.91) 48%,
+        rgba(247, 249, 252, 0.52) 100%
+      );
+  }
+
+  .heroCopy {
+    padding: clamp(0.78rem, 4.2vw, 1.1rem);
+  }
+
+  .eyebrow {
+    margin-bottom: 0.25rem;
+    font-size: clamp(0.48rem, 2vw, 0.55rem);
+  }
+
+  .heroCopy h1 {
+    max-width: 13ch;
+    font-size: clamp(1.28rem, 7vw, 1.9rem);
+    line-height: 1;
+  }
+
+  .heroDescription {
+    display: -webkit-box;
+    max-width: 31ch;
+    overflow: hidden;
+    margin-top: 0.38rem;
+    font-size: clamp(0.53rem, 2.2vw, 0.61rem);
+    line-height: 1.42;
+    line-clamp: 3;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
+
+  .productCount {
+    margin-top: 0.48rem;
+    padding: 0.28rem 0.48rem;
+    font-size: clamp(0.46rem, 1.95vw, 0.53rem);
+  }
+
+  .heroMedia {
+    padding: 0.35rem 0.4rem 0.35rem 0;
+  }
+
+  .heroProductImage {
+    min-height: 7.8rem;
+  }
+
+  .heroSharpImage {
+    padding: 0.12rem;
+    filter: drop-shadow(0 0.7rem 0.8rem rgba(27, 34, 46, 0.16));
+  }
+
+  .subcategoryRail {
+    gap: clamp(0.32rem, 1.8vw, 0.44rem);
+    margin-top: 0.45rem;
+    padding-bottom: 0.12rem;
+  }
+
+  .subcategoryPill {
+    min-height: clamp(1.85rem, 8.2vw, 2.05rem);
+    padding-inline: clamp(0.58rem, 3vw, 0.72rem);
+    font-size: clamp(0.5rem, 2.1vw, 0.58rem);
+  }
+
+  .controlsRow {
+    gap: 0.35rem;
+    margin-top: 0.45rem;
+    border-radius: 0.72rem;
+    padding: 0.3rem;
+  }
+
+  .resultsSummary {
+    gap: 0.2rem;
+    font-size: clamp(0.47rem, 1.95vw, 0.54rem);
+  }
+
+  .resultsSummary strong {
+    font-size: clamp(0.58rem, 2.45vw, 0.68rem);
+  }
+
+  .resultsSummary small {
+    display: none;
+  }
+
+  .controlActions {
+    gap: 0.24rem;
+  }
+
+  .controlButton,
+  .sortControl {
+    min-height: clamp(1.9rem, 8.4vw, 2.08rem);
+    border-radius: 0.55rem;
+  }
+
+  .controlButton {
+    padding-inline: clamp(0.5rem, 2.6vw, 0.64rem);
+    font-size: clamp(0.49rem, 2vw, 0.56rem);
+  }
+
+  .sortControl {
+    padding-left: 0.48rem;
+  }
+
+  .sortControl select {
+    min-height: calc(clamp(1.9rem, 8.4vw, 2.08rem) - 0.125rem);
+    width: clamp(5.6rem, 27vw, 7rem);
+    max-width: 7rem;
+    padding-right: 1rem;
+    font-size: clamp(0.48rem, 1.95vw, 0.55rem);
+    text-overflow: ellipsis;
+  }
+
+  .filterOverlay {
+    align-items: end;
+    padding: 0;
+  }
+
+  .filterBackdrop {
+    background: rgba(20, 23, 29, 0.25);
+  }
+
+  .filterPanel {
+    width: 100%;
+    max-height: min(80dvh, 36rem);
+    border-right: 0;
+    border-bottom: 0;
+    border-left: 0;
+    border-radius: 1rem 1rem 0 0;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  .filterPanelHeader {
+    padding: 0.8rem 0.9rem 0.5rem;
+  }
+
+  .filterForm {
+    padding: 0.35rem 0.9rem 0.9rem;
+  }
+
+  .results {
+    margin-top: 0.5rem;
+  }
+
+  .productGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(0.42rem, 2.1vw, 0.6rem);
+  }
+
+  .pagination {
+    gap: 0.22rem;
+    margin-top: 0.75rem;
+  }
+
+  .pageLink,
+  .pageArrow,
+  .pageCurrent,
+  .pageDisabled {
+    min-width: clamp(1.8rem, 8.4vw, 2rem);
+    height: clamp(1.8rem, 8.4vw, 2rem);
+    border-radius: 0.52rem;
+    font-size: clamp(0.52rem, 2.05vw, 0.58rem);
+  }
+}
+
+@media (max-width: 22rem) {
+  .heroDescription {
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+  }
+
+  .controlButton span {
+    display: none;
+  }
+
+  .controlButton {
+    width: 2rem;
+    padding: 0;
+    justify-content: center;
+  }
+
+  .controlButton b {
+    position: absolute;
+    top: -0.2rem;
+    right: -0.2rem;
+  }
+}
+
+@supports not (backdrop-filter: blur(1rem)) {
+  .productCount,
+  .controlsRow,
+  .filterPanel {
+    background: rgba(250, 251, 253, 0.985);
+  }
+
+  .filterBackdrop {
+    background: rgba(20, 23, 29, 0.3);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .breadcrumbs a,
+  .subcategoryPill,
+  .controlButton,
+  .pageLink,
+  .pageArrow {
+    transition: none;
+  }
+}

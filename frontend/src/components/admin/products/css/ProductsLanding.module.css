@@ -1,0 +1,358 @@
+.page {
+  width: min(
+    100%,
+    92rem
+  );
+
+  margin: 0 auto;
+}
+
+.actions {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+
+  gap: 1rem;
+}
+
+.primaryCard,
+.importCard {
+  position: relative;
+
+  display: grid;
+
+  min-height: 18rem;
+
+  align-content: space-between;
+
+  gap: 1.4rem;
+
+  overflow: hidden;
+
+  border: 1px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.075
+    );
+
+  border-radius: 1.3rem;
+
+  padding: 1.35rem;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(
+        255,
+        255,
+        255,
+        0.045
+      ),
+      rgba(
+        255,
+        255,
+        255,
+        0.015
+      )
+    );
+
+  box-shadow:
+    0 24px 70px
+      rgba(
+        0,
+        0,
+        0,
+        0.2
+      ),
+    inset 0 1px
+      rgba(
+        255,
+        255,
+        255,
+        0.025
+      );
+}
+
+.primaryCard {
+  text-decoration: none;
+
+  transition:
+    transform 170ms ease,
+    border-color 170ms ease,
+    background 170ms ease,
+    box-shadow 170ms ease;
+}
+
+.primaryCard::before {
+  content: "";
+
+  position: absolute;
+
+  width: 18rem;
+  height: 18rem;
+
+  right: -8rem;
+  top: -10rem;
+
+  border-radius: 999px;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(
+        232,
+        53,
+        61,
+        0.16
+      ),
+      transparent 68%
+    );
+
+  pointer-events: none;
+}
+
+.primaryCard:hover {
+  transform:
+    translateY(-2px);
+
+  border-color:
+    rgba(
+      232,
+      53,
+      61,
+      0.24
+    );
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(
+        255,
+        255,
+        255,
+        0.055
+      ),
+      rgba(
+        232,
+        53,
+        61,
+        0.025
+      )
+    );
+
+  box-shadow:
+    0 30px 80px
+      rgba(
+        0,
+        0,
+        0,
+        0.27
+      );
+}
+
+.importCard {
+  opacity: 0.78;
+}
+
+.icon {
+  display: grid;
+
+  width: 2.8rem;
+  height: 2.8rem;
+
+  place-items: center;
+
+  border: 1px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.09
+    );
+
+  border-radius: 0.9rem;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.035
+    );
+
+  color: #ef4851;
+
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.eyebrow {
+  margin:
+    0 0 0.45rem;
+
+  color: #e64a53;
+
+  font-size: 0.58rem;
+  font-weight: 800;
+
+  letter-spacing:
+    0.13em;
+
+  text-transform:
+    uppercase;
+}
+
+.title {
+  margin: 0;
+
+  color: #f3f3f5;
+
+  font-size: 1.1rem;
+  font-weight: 760;
+
+  letter-spacing:
+    -0.025em;
+}
+
+.description {
+  max-width: 30rem;
+
+  margin:
+    0.55rem 0 0;
+
+  color: #777781;
+
+  font-size: 0.67rem;
+  line-height: 1.65;
+}
+
+.actionText,
+.pending {
+  width: fit-content;
+
+  font-size: 0.62rem;
+  font-weight: 720;
+}
+
+.actionText {
+  color: #f0f0f2;
+}
+
+.pending {
+  border: 1px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.07
+    );
+
+  border-radius: 999px;
+
+  padding:
+    0.35rem 0.6rem;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.025
+    );
+
+  color: #777781;
+}
+
+.summary {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(0, 1fr)
+    );
+
+  gap: 0.75rem;
+
+  margin-top: 1rem;
+}
+
+.summary > div {
+  display: grid;
+
+  gap: 0.3rem;
+
+  min-height: 5rem;
+
+  align-content: center;
+
+  border: 1px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.055
+    );
+
+  border-radius: 1rem;
+
+  padding:
+    0.9rem 1rem;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.018
+    );
+}
+
+.summaryLabel {
+  color: #5f5f69;
+
+  font-size: 0.56rem;
+  font-weight: 760;
+
+  letter-spacing:
+    0.08em;
+
+  text-transform:
+    uppercase;
+}
+
+.summary strong {
+  color: #bdbdc4;
+
+  font-size: 0.66rem;
+  font-weight: 680;
+}
+
+@media (
+  max-width: 760px
+) {
+  .actions {
+    grid-template-columns:
+      1fr;
+  }
+
+  .summary {
+    grid-template-columns:
+      1fr;
+  }
+}
+
+@media (
+  prefers-reduced-motion:
+    reduce
+) {
+  .primaryCard {
+    transition: none;
+  }
+}

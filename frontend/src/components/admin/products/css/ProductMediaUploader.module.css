@@ -1,0 +1,225 @@
+.card {
+  padding: 1.25rem;
+}
+
+.dropzone {
+  display: grid;
+
+  min-height: 9rem;
+
+  place-items: center;
+
+  align-content: center;
+
+  gap: 0.35rem;
+
+  border: 1px dashed
+    rgba(255, 255, 255, 0.13);
+
+  border-radius: 1rem;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.028),
+      rgba(255, 255, 255, 0.012)
+    );
+
+  cursor: pointer;
+
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    transform 160ms ease;
+}
+
+.dropzone:hover {
+  border-color:
+    rgba(239, 70, 80, 0.32);
+
+  background:
+    rgba(239, 70, 80, 0.035);
+
+  transform:
+    translateY(-1px);
+}
+
+.fileInput {
+  position: absolute;
+
+  width: 1px;
+  height: 1px;
+
+  opacity: 0;
+
+  pointer-events: none;
+}
+
+.dropIcon {
+  display: grid;
+
+  width: 2.4rem;
+  height: 2.4rem;
+
+  place-items: center;
+
+  border: 1px solid
+    rgba(255, 255, 255, 0.09);
+
+  border-radius: 0.8rem;
+
+  background:
+    rgba(255, 255, 255, 0.04);
+
+  color: #e64a53;
+
+  font-size: 1.2rem;
+}
+
+.dropTitle {
+  color: #d7d7dc;
+
+  font-size: 0.72rem;
+  font-weight: 720;
+}
+
+.dropMeta {
+  color: #666670;
+
+  font-size: 0.59rem;
+}
+
+.gallery {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fill,
+      minmax(13rem, 1fr)
+    );
+
+  gap: 0.8rem;
+
+  margin-top: 1rem;
+}
+
+.mediaCard {
+  overflow: hidden;
+
+  border: 1px solid
+    rgba(255, 255, 255, 0.07);
+
+  border-radius: 0.95rem;
+
+  background:
+    rgba(255, 255, 255, 0.022);
+}
+
+.imageFrame {
+  position: relative;
+
+  aspect-ratio: 4 / 3;
+
+  overflow: hidden;
+
+  background: #111116;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+}
+
+.primaryBadge {
+  position: absolute;
+
+  left: 0.6rem;
+  top: 0.6rem;
+
+  border: 1px solid
+    rgba(255, 255, 255, 0.12);
+
+  border-radius: 999px;
+
+  padding:
+    0.28rem 0.55rem;
+
+  background:
+    rgba(8, 8, 11, 0.72);
+
+  backdrop-filter: blur(10px);
+
+  color: #f2f2f4;
+
+  font-size: 0.55rem;
+  font-weight: 760;
+}
+
+.mediaBody {
+  display: grid;
+
+  gap: 0.55rem;
+
+  padding: 0.7rem;
+}
+
+.fileName {
+  margin: 0;
+
+  overflow: hidden;
+
+  color: #bcbcc4;
+
+  font-size: 0.62rem;
+  font-weight: 690;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.altInput {
+  width: 100%;
+
+  min-height: 2.35rem;
+
+  border: 1px solid
+    rgba(255, 255, 255, 0.07);
+
+  outline: 0;
+
+  border-radius: 0.65rem;
+
+  padding: 0 0.65rem;
+
+  background:
+    rgba(255, 255, 255, 0.025);
+
+  color: #dfdfe3;
+
+  font: inherit;
+  font-size: 0.62rem;
+}
+
+.altInput:focus {
+  border-color:
+    rgba(239, 70, 80, 0.4);
+}
+
+.mediaActions {
+  display: flex;
+
+  min-height: 2rem;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 0.4rem;
+}
+
+.order {
+  color: #5f5f69;
+
+  font-size: 0.56rem;
+}

@@ -1,0 +1,50 @@
+.textarea {
+  width: 100%;
+  min-height: 7rem;
+
+  resize: vertical;
+
+  border: 1px solid
+    rgba(255, 255, 255, 0.085);
+
+  border-radius: 0.82rem;
+
+  outline: none;
+
+  padding: 0.8rem 0.85rem;
+
+  background:
+    rgba(255, 255, 255, 0.035);
+
+  color: #f5f5f7;
+
+  font: inherit;
+  font-size: 0.75rem;
+  line-height: 1.55;
+
+  transition:
+    border-color 150ms ease,
+    box-shadow 150ms ease,
+    background 150ms ease;
+}
+
+.textarea::placeholder {
+  color: #575760;
+}
+
+.textarea:focus {
+  border-color:
+    rgba(232, 53, 61, 0.48);
+
+  background:
+    rgba(255, 255, 255, 0.05);
+
+  box-shadow:
+    0 0 0 3px
+      rgba(232, 53, 61, 0.085);
+}
+
+.invalid {
+  border-color:
+    rgba(244, 63, 94, 0.5);
+}

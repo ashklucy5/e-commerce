@@ -1,0 +1,155 @@
+.shell {
+  position: relative;
+
+  min-height: 100svh;
+  overflow-x: clip;
+
+  background: #0b111a;
+  color: #f5f7fa;
+
+  isolation: isolate;
+}
+
+.layout {
+  position: relative;
+  z-index: 1;
+
+  display: grid;
+  grid-template-columns: 17rem minmax(0, 1fr);
+  gap: 1rem;
+
+  width: 100%;
+  min-height: 100svh;
+
+  padding: 1rem;
+}
+
+.main {
+  min-width: 0;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+
+  min-height: calc(100svh - 6.1rem);
+
+  padding: 0.75rem 0.2rem 4rem;
+}
+
+.sessionStage,
+.errorStage {
+  position: relative;
+  z-index: 2;
+
+  display: grid;
+  min-height: calc(100svh - 2rem);
+  place-content: center;
+
+  padding: 2rem;
+
+  text-align: center;
+}
+
+.sessionPulse {
+  width: 2.3rem;
+  height: 2.3rem;
+
+  margin: 0 auto;
+
+  border: 1px solid rgba(121, 166, 238, 0.18);
+  border-radius: 0.8rem;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(107, 157, 255, 0.28),
+      rgba(91, 214, 170, 0.12)
+    );
+
+  animation: sessionPulse 1.4s ease-in-out infinite;
+}
+
+.sessionCopy {
+  min-width: 11rem;
+}
+
+.loadingText {
+  margin: 0.85rem 0 0;
+
+  color: #7f8da0;
+  font-size: 0.72rem;
+  font-weight: 670;
+}
+
+.errorEyebrow {
+  margin: 0 0 0.45rem;
+
+  color: #f0b963;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.errorTitle {
+  max-width: 36rem;
+  margin: 0;
+
+  color: #f3f6fa;
+  font-size: clamp(1.6rem, 4vw, 2.7rem);
+  font-weight: 760;
+  letter-spacing: -0.045em;
+}
+
+.errorText {
+  max-width: 31rem;
+
+  margin: 0.75rem auto 0;
+
+  color: #7e8a9b;
+  font-size: 0.72rem;
+  line-height: 1.6;
+}
+
+@keyframes sessionPulse {
+  0%,
+  100% {
+    opacity: 0.65;
+    transform: scale(0.98);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+}
+
+@media (max-width: 1080px) {
+  .layout {
+    grid-template-columns: 5rem minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 720px) {
+  .layout {
+    display: block;
+    padding: 0.65rem;
+  }
+
+  .content {
+    padding-bottom: 10rem;
+  }
+
+  .sessionStage,
+  .errorStage {
+    min-height: calc(100svh - 1.3rem);
+    padding-bottom: 10rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sessionPulse {
+    animation: none;
+  }
+}
