@@ -135,16 +135,22 @@ func main() {
 		database and automatically assigned to the Admin Superuser
 		role without requiring another manual bootstrap operation.
 	*/
-	if err :=
-		admincore.SyncSystemAuthorization(
-			ctx,
-			db,
-		); err != nil {
-
-		log.Fatalf(
-			"Admin authorization synchronization failed: %v",
-			err,
+	if cfg.ServerlessRuntime {
+		log.Println(
+			"serverless runtime: automatic Admin authorization synchronization disabled",
 		)
+	} else {
+		if err :=
+			admincore.SyncSystemAuthorization(
+				ctx,
+				db,
+			); err != nil {
+
+			log.Fatalf(
+				"Admin authorization synchronization failed: %v",
+				err,
+			)
+		}
 	}
 
 	redisClient, err :=
