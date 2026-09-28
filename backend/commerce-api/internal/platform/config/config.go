@@ -13,8 +13,9 @@ import (
 )
 
 type Config struct {
-	AppEnv   string
-	HTTPAddr string
+	AppEnv            string
+	HTTPAddr          string
+	ServerlessRuntime bool
 
 	TrustedProxies []string
 
@@ -73,6 +74,38 @@ func Load() (Config, error) {
 				),
 			),
 		)
+
+	/*
+		Vercel and other managed runtimes provide the HTTP listener
+		port through PORT.
+
+		Validate it explicitly here so an invalid deployment value
+		fails during configuration loading rather than later inside
+		the HTTP server.
+	*/
+	if port :=
+		strings.TrimSpace(
+			os.Getenv(
+				"PORT",
+			),
+		); port != "" {
+
+		parsedPort, err :=
+			strconv.ParseUint(
+				port,
+				10,
+				16,
+			)
+
+		if err != nil ||
+			parsedPort == 0 {
+
+			return Config{},
+				fmt.Errorf(
+					"PORT must be an integer between 1 and 65535",
+				)
+		}
+	}
 
 	/*
 		PostgreSQL has two application runtime modes.
@@ -298,6 +331,14 @@ func Load() (Config, error) {
 			)
 	}
 
+	serverlessRuntime, err :=
+		getBoolEnv(
+			"SERVERLESS_RUNTIME",
+			false,
+		)
+	if err != nil {
+		return Config{}, err
+	}
 	paymentExpiryInterval, err :=
 		time.ParseDuration(
 			getEnv(
@@ -393,10 +434,8 @@ func Load() (Config, error) {
 		Config{
 			AppEnv: appEnv,
 
-			HTTPAddr: getEnv(
-				"HTTP_ADDR",
-				":8080",
-			),
+			HTTPAddr:          runtimeHTTPAddr(),
+			ServerlessRuntime: serverlessRuntime,
 
 			TrustedProxies: splitCSV(
 				os.Getenv(
@@ -486,6 +525,46 @@ func (c Config) PostgresURL() string {
 		query.Encode()
 
 	return u.String()
+}
+
+func runtimeHTTPAddr() string {
+	port :=
+		strings.TrimSpace(
+			os.Getenv(
+				"PORT",
+			),
+		)
+
+	if port == "" {
+		return getEnv(
+			"HTTP_ADDR",
+			":8080",
+		)
+	}
+
+	/*
+		PORT has already been validated by Load.
+
+		Parsing it again here keeps this helper safe if it is exercised
+		directly by tests or another caller in the config package.
+	*/
+	parsedPort, err :=
+		strconv.ParseUint(
+			port,
+			10,
+			16,
+		)
+	if err != nil ||
+		parsedPort == 0 {
+
+		return ":" + port
+	}
+
+	return ":" +
+		strconv.FormatUint(
+			parsedPort,
+			10,
+		)
 }
 
 func getEnv(

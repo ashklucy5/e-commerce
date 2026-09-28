@@ -7,6 +7,7 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/redis/go-redis/v9"
 
+	"project.local/commerce-api/internal/jobruntime"
 	"project.local/commerce-api/internal/platform/config"
 	platformlogger "project.local/commerce-api/internal/platform/logger"
 	platformmetrics "project.local/commerce-api/internal/platform/metrics"
@@ -26,6 +27,9 @@ type Dependencies struct {
 	TrustedProxies    []string
 
 	Metrics config.MetricsConfig
+
+	RuntimeTickConfig config.RuntimeTickConfig
+	RuntimeTickRunner *jobruntime.LockedTickRunner
 
 	CODEnabled          bool
 	BKashEnabled        bool
@@ -158,6 +162,12 @@ func New(
 		engine,
 		metricsRegistry,
 		deps.Metrics,
+	)
+
+	registerInternalRuntimeRoutes(
+		engine,
+		deps.RuntimeTickConfig,
+		deps.RuntimeTickRunner,
 	)
 
 	registerPublicRoutes(
