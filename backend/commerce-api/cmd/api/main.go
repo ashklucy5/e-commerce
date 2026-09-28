@@ -84,27 +84,33 @@ func main() {
 	ctx :=
 		context.Background()
 
-	appliedMigrations, err :=
-		database.ApplyMigrations(
-			ctx,
-			cfg,
-		)
-	if err != nil {
-		log.Fatalf(
-			"database migration startup failed: %v",
-			err,
-		)
-	}
-
-	if appliedMigrations > 0 {
-		log.Printf(
-			"database migrations applied: %d",
-			appliedMigrations,
+	if cfg.ServerlessRuntime {
+		log.Println(
+			"serverless runtime: automatic startup migrations disabled",
 		)
 	} else {
-		log.Println(
-			"database migrations current",
-		)
+		appliedMigrations, err :=
+			database.ApplyMigrations(
+				ctx,
+				cfg,
+			)
+		if err != nil {
+			log.Fatalf(
+				"database migration startup failed: %v",
+				err,
+			)
+		}
+
+		if appliedMigrations > 0 {
+			log.Printf(
+				"database migrations applied: %d",
+				appliedMigrations,
+			)
+		} else {
+			log.Println(
+				"database migrations current",
+			)
+		}
 	}
 
 	db, err :=
