@@ -36,6 +36,10 @@ export type StorefrontPromotion = {
 
   name: string;
 
+  scope: string;
+
+  campaign_type: string;
+
   discount_type:
     | "percentage"
     | "fixed";
@@ -44,15 +48,32 @@ export type StorefrontPromotion = {
 
   fixed_amount?: number;
 
-  minimum_subtotal_amount: number;
-
   maximum_discount_amount?: number;
 
   currency: string;
 
-  starts_at?: string;
+  starts_at: string;
 
-  ends_at?: string;
+  ends_at: string;
+
+  targets?: Array<{
+    product_id: string;
+    product_name: string;
+    product_slug: string;
+
+    variant_id: string;
+    sku: string;
+
+    price_amount: number;
+    compare_at_price_amount?: number;
+
+    effective_price_amount: number;
+    discount_amount: number;
+
+    currency: string;
+
+    primary_image_url?: string;
+  }>;
 };
 
 export type StorefrontPromotionsResponse = {

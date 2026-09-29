@@ -20,7 +20,12 @@
 }
 
 .flashSection {
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.94), rgba(255, 248, 249, 0.84));
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.94),
+      rgba(255, 248, 249, 0.84)
+    );
 }
 
 .catalogSection {
@@ -53,16 +58,49 @@
   line-height: 1.15;
 }
 
+/*
+ * Animated Deals / Flash Sale lightning icon.
+ *
+ * Keep the motion subtle so the section feels
+ * active without becoming distracting.
+ */
 .flashIcon {
-  width: 1.05rem;
-  height: 1.05rem;
+  width: 1.12rem;
+  height: 1.12rem;
   flex: 0 0 auto;
   object-fit: contain;
+  transform-origin: 50% 55%;
+  will-change: transform, filter, opacity;
+
+  filter:
+    brightness(1.05)
+    drop-shadow(
+      0 0 0.15rem
+      rgba(255, 185, 0, 0.42)
+    );
+
+  animation:
+    dealFlashPulse
+    1.55s
+    cubic-bezier(
+      0.4,
+      0,
+      0.2,
+      1
+    )
+    infinite;
 }
 
 .catalogGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 10.5rem), 1fr));
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(
+        min(100%, 10.5rem),
+        1fr
+      )
+    );
   gap: clamp(0.48rem, 0.72vw, 0.68rem);
   min-width: 0;
 }
@@ -140,6 +178,110 @@
   }
 }
 
+/*
+ * Lightning animation:
+ *
+ * short energetic pulse
+ * → slight tilt
+ * → soft glow
+ * → settle
+ *
+ * The pause in the second half keeps the
+ * animation refined instead of constantly
+ * shaking.
+ */
+@keyframes dealFlashPulse {
+  0%,
+  100% {
+    transform:
+      translateY(0)
+      rotate(0deg)
+      scale(1);
+
+    opacity: 1;
+
+    filter:
+      brightness(1)
+      drop-shadow(
+        0 0 0.1rem
+        rgba(255, 185, 0, 0.28)
+      );
+  }
+
+  10% {
+    transform:
+      translateY(-0.12rem)
+      rotate(-10deg)
+      scale(1.2);
+
+    filter:
+      brightness(1.35)
+      drop-shadow(
+        0 0 0.45rem
+        rgba(255, 183, 0, 0.82)
+      );
+  }
+
+  20% {
+    transform:
+      translateY(0.04rem)
+      rotate(8deg)
+      scale(0.94);
+
+    filter:
+      brightness(1.05)
+      drop-shadow(
+        0 0 0.18rem
+        rgba(255, 183, 0, 0.42)
+      );
+  }
+
+  30% {
+    transform:
+      translateY(-0.08rem)
+      rotate(-6deg)
+      scale(1.13);
+
+    filter:
+      brightness(1.28)
+      drop-shadow(
+        0 0 0.38rem
+        rgba(255, 183, 0, 0.72)
+      );
+  }
+
+  42% {
+    transform:
+      translateY(0)
+      rotate(3deg)
+      scale(1);
+
+    filter:
+      brightness(1.05)
+      drop-shadow(
+        0 0 0.16rem
+        rgba(255, 183, 0, 0.36)
+      );
+  }
+
+  55%,
+  100% {
+    transform:
+      translateY(0)
+      rotate(0deg)
+      scale(1);
+
+    opacity: 1;
+
+    filter:
+      brightness(1)
+      drop-shadow(
+        0 0 0.1rem
+        rgba(255, 185, 0, 0.28)
+      );
+  }
+}
+
 .pagination {
   display: flex;
   flex-wrap: wrap;
@@ -199,9 +341,20 @@
     font-size: clamp(0.86rem, 4vw, 0.96rem);
   }
 
+  .flashIcon {
+    width: 0.95rem;
+    height: 0.95rem;
+  }
 
   .catalogGrid {
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 8.5rem), 1fr));
+    grid-template-columns:
+      repeat(
+        auto-fit,
+        minmax(
+          min(100%, 8.5rem),
+          1fr
+        )
+      );
     gap: clamp(0.4rem, 1.8vw, 0.55rem);
   }
 }
@@ -212,14 +365,34 @@
   }
 
   .catalogGrid {
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 7.75rem), 1fr));
+    grid-template-columns:
+      repeat(
+        auto-fit,
+        minmax(
+          min(100%, 7.75rem),
+          1fr
+        )
+      );
     gap: 0.35rem;
   }
 }
 
+/*
+ * Respect the customer's operating-system
+ * reduced-motion preference.
+ */
 @media (prefers-reduced-motion: reduce) {
-  .spinner {
+  .spinner,
+  .flashIcon {
     animation: none;
   }
 
+  .flashIcon {
+    transform: none;
+    filter:
+      drop-shadow(
+        0 0 0.12rem
+        rgba(255, 190, 0, 0.22)
+      );
+  }
 }

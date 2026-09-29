@@ -35,18 +35,30 @@ export async function getHomeProductFeed(
   );
 }
 
+/*
+ * Homepage timed Deals / Flash Sale data.
+ *
+ * IMPORTANT:
+ *
+ * /promotions/active contains ordinary
+ * order-level promotions.
+ *
+ * Product flash-sale campaigns use the
+ * dedicated storefront endpoint below.
+ */
 export async function getHomePromotions(): Promise<
   StorefrontPromotion[]
 > {
   const response =
     await commerceFetch<StorefrontPromotionsResponse>(
-      "/api/v1/promotions/active?currency=BDT",
+      "/api/v1/promotions/flash-sales/active?currency=BDT",
       {
         next: {
           revalidate: 30,
 
           tags: [
             "promotions",
+            "flash-sales",
           ],
         },
       },
