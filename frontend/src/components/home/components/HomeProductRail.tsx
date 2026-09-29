@@ -1,6 +1,11 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 import { Icon } from "@/components/ui/Icon";
 import type { HomeProductCard } from "@/lib/api/contracts/home";
@@ -13,119 +18,221 @@ type Props = {
   label: string;
 };
 
-export function HomeProductRail({ products, label }: Props) {
-  const railRef = useRef<HTMLDivElement | null>(null);
-  const [page, setPage] = useState(0);
-  const [pageCount, setPageCount] = useState(1);
+const SCROLL_TOLERANCE = 4;
 
-  const updateMetrics = useCallback(() => {
-    const rail = railRef.current;
+export function HomeProductRail({
+  products,
+  label,
+}: Props) {
+  const railRef =
+    useRef<HTMLDivElement | null>(
+      null,
+    );
 
-    if (!rail) {
-      return;
-    }
+  const [canScrollPrevious, setCanScrollPrevious] =
+    useState(false);
 
-    const maxScroll = Math.max(0, rail.scrollWidth - rail.clientWidth);
+  const [canScrollNext, setCanScrollNext] =
+    useState(false);
 
-    if (maxScroll <= 1) {
-      setPage(0);
-      setPageCount(1);
-      return;
-    }
+  const updateScrollState =
+    useCallback(() => {
+      const rail =
+        railRef.current;
 
-    const pages = Math.max(2, Math.ceil(rail.scrollWidth / rail.clientWidth));
-    const nextPage = Math.round((rail.scrollLeft / maxScroll) * (pages - 1));
+      if (!rail) {
+        return;
+      }
 
-    setPageCount(pages);
-    setPage(Math.max(0, Math.min(pages - 1, nextPage)));
-  }, []);
+      const maxScroll =
+        Math.max(
+          0,
+          rail.scrollWidth -
+            rail.clientWidth,
+        );
+
+      setCanScrollPrevious(
+        rail.scrollLeft >
+          SCROLL_TOLERANCE,
+      );
+
+      setCanScrollNext(
+        rail.scrollLeft <
+          maxScroll -
+            SCROLL_TOLERANCE,
+      );
+    }, []);
 
   useEffect(() => {
-    const rail = railRef.current;
+    const rail =
+      railRef.current;
 
     if (!rail) {
       return;
     }
 
-    updateMetrics();
+    const frame =
+      window.requestAnimationFrame(
+        updateScrollState,
+      );
 
-    const observer = new ResizeObserver(updateMetrics);
-    observer.observe(rail);
+    const observer =
+      new ResizeObserver(
+        updateScrollState,
+      );
 
-    return () => observer.disconnect();
-  }, [products.length, updateMetrics]);
+    observer.observe(
+      rail,
+    );
 
-  function goTo(requested: number) {
-    const rail = railRef.current;
-
-    if (!rail) {
-      return;
+    for (
+      const child
+      of Array.from(
+        rail.children,
+      )
+    ) {
+      observer.observe(
+        child,
+      );
     }
 
-    const safePage = Math.max(0, Math.min(pageCount - 1, requested));
-    const maxScroll = Math.max(0, rail.scrollWidth - rail.clientWidth);
-    const left = pageCount <= 1 ? 0 : (maxScroll / (pageCount - 1)) * safePage;
-    const reducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
+    window.addEventListener(
+      "resize",
+      updateScrollState,
+    );
 
-    rail.scrollTo({
-      left,
-      behavior: reducedMotion ? "auto" : "smooth",
-    });
-    setPage(safePage);
-  }
+    return () => {
+      window.cancelAnimationFrame(
+        frame,
+      );
+
+      observer.disconnect();
+
+      window.removeEventListener(
+        "resize",
+        updateScrollState,
+      );
+    };
+  }, [
+    products.length,
+    updateScrollState,
+  ]);
+
+  const scrollRail =
+    useCallback(
+      (
+        direction:
+          | "previous"
+          | "next",
+      ) => {
+        const rail =
+          railRef.current;
+
+        if (!rail) {
+          return;
+        }
+
+        const reducedMotion =
+          window.matchMedia(
+            "(prefers-reduced-motion: reduce)",
+          ).matches;
+
+        /*
+         * Move almost one viewport at a
+         * time while keeping part of the
+         * previous set visible so the
+         * movement remains understandable.
+         */
+        const amount =
+          Math.max(
+            1,
+            rail.clientWidth *
+              0.9,
+          );
+
+        rail.scrollBy({
+          left:
+            direction ===
+            "next"
+              ? amount
+              : -amount,
+
+          behavior:
+            reducedMotion
+              ? "auto"
+              : "smooth",
+        });
+      },
+      [],
+    );
 
   return (
-    <div className={styles.shell}>
+    <div
+      className={
+        styles.shell
+      }
+    >
       <button
         type="button"
         className={`${styles.arrow} ${styles.previous}`}
-        disabled={page <= 0}
+        disabled={
+          !canScrollPrevious
+        }
         aria-label={`Previous ${label}`}
-        onClick={() => goTo(page - 1)}
+        onClick={() =>
+          scrollRail(
+            "previous",
+          )
+        }
       >
-        <Icon name="chevronLeft" size={15} />
+        <Icon
+          name="chevronLeft"
+          size={15}
+        />
       </button>
 
       <div
         ref={railRef}
-        className={styles.rail}
+        className={
+          styles.rail
+        }
         aria-label={label}
-        onScroll={updateMetrics}
+        onScroll={
+          updateScrollState
+        }
       >
-        {products.map((product) => (
-          <HomeProductTile
-            key={product.id}
-            product={product}
-          />
-        ))}
+        {products.map(
+          product => (
+            <HomeProductTile
+              key={
+                product.id
+              }
+              product={
+                product
+              }
+            />
+          ),
+        )}
       </div>
 
       <button
         type="button"
         className={`${styles.arrow} ${styles.next}`}
-        disabled={page >= pageCount - 1}
+        disabled={
+          !canScrollNext
+        }
         aria-label={`Next ${label}`}
-        onClick={() => goTo(page + 1)}
+        onClick={() =>
+          scrollRail(
+            "next",
+          )
+        }
       >
-        <Icon name="chevronRight" size={15} />
+        <Icon
+          name="chevronRight"
+          size={15}
+        />
       </button>
-
-      {pageCount > 1 ? (
-        <div className={styles.dots} aria-label={`${label} pages`}>
-          {Array.from({ length: pageCount }).map((_, index) => (
-            <button
-              key={index}
-              type="button"
-              className={index === page ? styles.activeDot : styles.dot}
-              aria-label={`Show ${label} page ${index + 1}`}
-              aria-current={index === page ? "true" : undefined}
-              onClick={() => goTo(index)}
-            />
-          ))}
-        </div>
-      ) : null}
     </div>
   );
 }

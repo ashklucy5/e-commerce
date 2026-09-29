@@ -129,10 +129,10 @@ export function HomeCatalogFeed({
   const flashEndsAt = useMemo(() => flashPromotionEnd(promotions), [promotions]);
   const discountLabel = hasFlashSale ? "Flash Sale" : "Deals";
 
-  const remaining = useMemo(
-    () => products.filter((product) => !rows.featuredIds.has(product.id)),
-    [products, rows.featuredIds],
-  );
+  const allProducts = useMemo(
+  () => products,
+  [products],
+);
 
   const loadNext = useCallback(async () => {
     if (loadingRef.current || !meta.has_next) {
@@ -270,15 +270,15 @@ export function HomeCatalogFeed({
 
         </header>
 
-        <div className={styles.catalogGrid}>
-          {remaining.map((product) => (
-            <HomeProductTile
-              key={product.id}
-              product={product}
-              variant="catalog"
-            />
-          ))}
-        </div>
+       <div className={styles.catalogGrid}>
+  {allProducts.map((product) => (
+    <HomeProductTile
+      key={product.id}
+      product={product}
+      variant="catalog"
+    />
+  ))}
+</div>
       </section>
 
       <div ref={sentinel} className={styles.sentinel} aria-hidden="true" />
