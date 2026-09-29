@@ -1,11 +1,17 @@
-// ENE_WISHLIST_HEADER_BADGE_V1
-// Location: src/components/commerce/components/WishlistBadge.tsx
-
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 
-const WISHLIST_UPDATED_EVENT = "ene-wishlist-updated";
+import {
+  useCustomerSession,
+} from "@/lib/account/use-customer-session";
+
+const WISHLIST_UPDATED_EVENT =
+  "ene-wishlist-updated";
 
 type Props = {
   className?: string;
@@ -17,72 +23,163 @@ type WishlistCountResponse = {
   };
 };
 
-function normalizeCount(value: unknown) {
-  const count = Number(value);
+function normalizeCount(
+  value: unknown,
+) {
+  const count =
+    Number(value);
 
-  if (!Number.isFinite(count) || count <= 0) {
+  if (
+    !Number.isFinite(count) ||
+    count <= 0
+  ) {
     return 0;
   }
 
-  return Math.floor(count);
+  return Math.floor(
+    count,
+  );
 }
 
-export function WishlistBadge({ className = "" }: Props) {
-  const [count, setCount] = useState<number | null>(null);
+export function WishlistBadge({
+  className = "",
+}: Props) {
+  const {
+    isAuthenticated,
+    isReady,
+  } =
+    useCustomerSession();
 
-  const refresh = useCallback(async () => {
-    try {
-      const response = await fetch("/api/storefront/account/wishlist/count", {
-        cache: "no-store",
-      });
+  const [
+    count,
+    setCount,
+  ] =
+    useState<number | null>(
+      null,
+    );
 
-      if (response.status === 401) {
-        setCount(0);
-        return;
-      }
+  const refresh =
+    useCallback(
+      async () => {
+        /*
+         * Never probe protected wishlist
+         * endpoints for anonymous visitors.
+         */
+        if (
+          !isAuthenticated
+        ) {
+          setCount(0);
+          return;
+        }
 
-      if (!response.ok) {
-        return;
-      }
+        try {
+          const response =
+            await fetch(
+              "/api/storefront/account/wishlist/count",
+              {
+                cache:
+                  "no-store",
+              },
+            );
 
-      const payload = (await response.json()) as WishlistCountResponse;
-      setCount(normalizeCount(payload.data?.total));
-    } catch {
-      // The badge is non-critical. Wishlist actions remain usable if this fails.
-    }
-  }, []);
+          if (
+            response.status ===
+            401
+          ) {
+            setCount(0);
+
+            window.dispatchEvent(
+              new Event(
+                "customer-auth-changed",
+              ),
+            );
+
+            return;
+          }
+
+          if (
+            !response.ok
+          ) {
+            return;
+          }
+
+          const payload =
+            (await response.json()) as
+              WishlistCountResponse;
+
+          setCount(
+            normalizeCount(
+              payload.data
+                ?.total,
+            ),
+          );
+        } catch {
+          /*
+           * Header badge is non-critical.
+           */
+        }
+      },
+      [
+        isAuthenticated,
+      ],
+    );
 
   useEffect(() => {
-    // Defer the initial state-producing request so it does not synchronously
-    // cascade from the effect body under the project's React lint rules.
-    const initialTimer = window.setTimeout(() => {
-      void refresh();
-    }, 0);
+    if (!isReady) {
+      return;
+    }
 
-    const handleWishlistUpdated = () => {
-      void refresh();
-    };
+    if (
+      !isAuthenticated
+    ) {
+      setCount(0);
+      return;
+    }
 
-    window.addEventListener(WISHLIST_UPDATED_EVENT, handleWishlistUpdated);
-    window.addEventListener("focus", handleWishlistUpdated);
+    void refresh();
+
+    function handleWishlistUpdated() {
+      void refresh();
+    }
+
+    window.addEventListener(
+      WISHLIST_UPDATED_EVENT,
+      handleWishlistUpdated,
+    );
 
     return () => {
-      window.clearTimeout(initialTimer);
-      window.removeEventListener(WISHLIST_UPDATED_EVENT, handleWishlistUpdated);
-      window.removeEventListener("focus", handleWishlistUpdated);
+      window.removeEventListener(
+        WISHLIST_UPDATED_EVENT,
+        handleWishlistUpdated,
+      );
     };
-  }, [refresh]);
+  }, [
+    isAuthenticated,
+    isReady,
+    refresh,
+  ]);
 
-  if (count === null || count === 0) {
+  if (
+    count === null ||
+    count === 0
+  ) {
     return null;
   }
 
   return (
     <span
-      className={className}
-      aria-label={`${count} ${count === 1 ? "product" : "products"} in wishlist`}
+      className={
+        className
+      }
+      aria-label={`${count} ${
+        count === 1
+          ? "product"
+          : "products"
+      } in wishlist`}
     >
-      {count > 99 ? "99+" : count}
+      {count > 99
+        ? "99+"
+        : count}
     </span>
   );
 }

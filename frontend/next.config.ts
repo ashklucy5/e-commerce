@@ -16,6 +16,19 @@ const nextConfig: NextConfig = {
         hostname: "loremflickr.com",
         pathname: "/**",
       },
+
+      /*
+       * Ene Dei product CDN.
+       *
+       * Product images uploaded to Backblaze
+       * are publicly served through ImageKit.
+       */
+      {
+        protocol: "https",
+        hostname: "ik.imagekit.io",
+        pathname: "/o9vicqo4r/**",
+      },
+
       {
         protocol: "http",
         hostname: "localhost",

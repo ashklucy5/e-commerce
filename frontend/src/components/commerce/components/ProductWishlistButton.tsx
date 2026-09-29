@@ -5,7 +5,9 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useSyncExternalStore } from "react";
-
+import {
+  useCustomerSession,
+} from "@/lib/account/use-customer-session";
 import type {
   AccountWishlistItem,
   AccountWishlistResponse,
@@ -233,6 +235,10 @@ export function ProductWishlistButton({
   placement = "catalog",
 }: Props) {
   const router = useRouter();
+  const {
+  isAuthenticated,
+  isReady,
+} = useCustomerSession();
   const [busy, setBusy] = useState(false);
   const [feedback, setFeedback] = useState<Feedback>("idle");
 
@@ -241,8 +247,61 @@ export function ProductWishlistButton({
   useSyncExternalStore(subscribeShared, getSharedRevision, getServerRevision);
 
   useEffect(() => {
-    void ensureWishlistLoaded();
-  }, []);
+  if (!isReady) {
+    return;
+  }
+
+  /*
+   * Guest product cards do not touch
+   * authenticated wishlist APIs.
+   */
+  if (
+    !isAuthenticated
+  ) {
+    if (
+      sharedState !==
+        "signed-out" ||
+      wishlistProductIds.size >
+        0
+    ) {
+      wishlistProductIds =
+        new Set();
+
+      sharedState =
+        "signed-out";
+
+      emitSharedChange();
+    }
+
+    return;
+  }
+
+  /*
+   * Customer has since signed in.
+   */
+  if (
+    sharedState ===
+    "signed-out"
+  ) {
+    sharedState =
+      "idle";
+
+    emitSharedChange();
+  }
+
+  /*
+   * For an authenticated customer this
+   * single shared request is needed to
+   * show saved-heart state accurately.
+   *
+   * It is shared across every product card,
+   * not one request per product.
+   */
+  void ensureWishlistLoaded();
+}, [
+  isAuthenticated,
+  isReady,
+]);
 
   const wishlisted = wishlistProductIds.has(productId);
   const state = busy ? "busy" : feedback === "error" ? "error" : wishlisted ? "saved" : "idle";
@@ -256,7 +315,19 @@ export function ProductWishlistButton({
   }
 
   async function toggleWishlist() {
-    if (busy) return;
+    if (
+  busy ||
+  !isReady
+) {
+  return;
+}
+
+if (
+  !isAuthenticated
+) {
+  goToSignIn();
+  return;
+}
 
     setBusy(true);
     setFeedback("idle");

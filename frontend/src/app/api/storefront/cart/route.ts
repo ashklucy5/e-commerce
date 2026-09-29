@@ -9,6 +9,7 @@ import type { ApiData, Cart } from "@/lib/api/contracts/commerce";
 import {
   createBackendCart,
   getBackendCart,
+  getCurrentCart,
 } from "@/lib/commerce/server";
 import {
   CART_COOKIE,
@@ -80,6 +81,22 @@ async function addOrMergeItem(
     existingItem.id,
     nextQuantity,
   );
+}
+
+export async function GET() {
+  try {
+    const cart =
+      await getCurrentCart();
+
+    return NextResponse.json({
+      data: cart,
+    });
+  } catch (error) {
+    return routeErrorResponse(
+      error,
+      "Unable to load cart.",
+    );
+  }
 }
 
 export async function POST(request: Request) {

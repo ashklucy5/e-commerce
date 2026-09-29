@@ -8,7 +8,7 @@ import {
   type IconName,
 } from "@/components/ui/Icon";
 
-import { useCustomerAuth } from "@/lib/account/use-customer-auth";
+import { useCustomerSession } from "@/lib/account/use-customer-session";
 
 import styles from "../css/MobileBottomNav.module.css";
 
@@ -78,17 +78,17 @@ export function MobileBottomNav() {
 
   const {
     isAuthenticated,
-    isLoading,
-  } = useCustomerAuth();
+    isReady,
+  } = useCustomerSession();
 
   function getItemHref(
     item: NavItem,
   ) {
     if (
-      item.requiresAuth &&
-      !isAuthenticated &&
-      !isLoading
-    ) {
+  item.requiresAuth &&
+  isReady &&
+  !isAuthenticated
+) {
       return signInDestination(
         item.href,
       );

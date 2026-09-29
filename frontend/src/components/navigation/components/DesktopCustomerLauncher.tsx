@@ -10,7 +10,7 @@ import {
 } from "react";
 
 import { Icon } from "@/components/ui/Icon";
-import { useCustomerAuth } from "@/lib/account/use-customer-auth";
+import { useCustomerSession } from "@/lib/account/use-customer-session";
 
 import styles from "../css/DesktopCustomerLauncher.module.css";
 
@@ -34,8 +34,8 @@ export function DesktopCustomerLauncher() {
 
   const {
     isAuthenticated,
-    isLoading,
-  } = useCustomerAuth();
+    isReady,
+  } = useCustomerSession();
 
   const [
     open,
@@ -190,7 +190,7 @@ export function DesktopCustomerLauncher() {
      * The destination itself is already
      * protected server-side.
      */
-    if (isLoading) {
+    if (!isReady) {
       return destination;
     }
 
@@ -454,7 +454,7 @@ export function DesktopCustomerLauncher() {
           </Link>
         </div>
 
-        {!isLoading &&
+        {isReady &&
         !isAuthenticated ? (
           <p
             className={

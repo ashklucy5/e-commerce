@@ -1,4 +1,5 @@
 // Location: src/lib/account/session.ts
+
 import "server-only";
 
 import {
@@ -12,6 +13,10 @@ import type {
 import type {
   AccountAuthTokens,
 } from "@/lib/api/contracts/account";
+
+import {
+  CUSTOMER_SESSION_HINT_COOKIE,
+} from "./session-contract";
 
 export const CUSTOMER_ACCESS_COOKIE =
   "ene_dei_customer_access";
@@ -28,6 +33,39 @@ function authCookieOptions(
 ) {
   return {
     httpOnly: true,
+
+    secure,
+
+    sameSite:
+      "lax" as const,
+
+    path: "/",
+
+    expires:
+      new Date(
+        expiresAt,
+      ),
+  };
+}
+
+/*
+ * Non-sensitive browser-visible session hint.
+ *
+ * IMPORTANT:
+ * This is never authentication authority.
+ *
+ * It contains no customer ID, access token,
+ * refresh token, role, permission or secret.
+ *
+ * Its only purpose is to stop public storefront
+ * components from probing authenticated endpoints
+ * just to discover whether somebody is signed in.
+ */
+function sessionHintCookieOptions(
+  expiresAt: string,
+) {
+  return {
+    httpOnly: false,
 
     secure,
 
@@ -62,6 +100,14 @@ export function setAccountAuthCookies(
       tokens.refresh_expires_at,
     ),
   );
+
+  response.cookies.set(
+    CUSTOMER_SESSION_HINT_COOKIE,
+    "1",
+    sessionHintCookieOptions(
+      tokens.refresh_expires_at,
+    ),
+  );
 }
 
 export function clearAccountAuthCookies(
@@ -73,6 +119,10 @@ export function clearAccountAuthCookies(
 
   response.cookies.delete(
     CUSTOMER_REFRESH_COOKIE,
+  );
+
+  response.cookies.delete(
+    CUSTOMER_SESSION_HINT_COOKIE,
   );
 }
 
