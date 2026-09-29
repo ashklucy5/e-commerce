@@ -532,10 +532,27 @@ func parseSimpleProductRow(
 		Image 1 becomes primary.
 		Image 2-6 remain ordinary
 		product-level images.
+
+		Each cell may contain either:
+
+		  https://...
+		  http://...
+
+		or a filename supplied with the
+		catalog ZIP, for example:
+
+		  product-name-01.webp
+
+		URL-backed imports retain the old
+		behavior.
+
+		Filename-backed imports are resolved
+		to object-storage URLs by Service.Stage
+		before validation/planning.
 	*/
 	for index := 1; index <= 6; index++ {
 
-		imageURL := value(
+		imageValue := value(
 			values,
 			fmt.Sprintf(
 				"image_%d",
@@ -543,9 +560,15 @@ func parseSimpleProductRow(
 			),
 		)
 
-		if imageURL == "" {
+		if imageValue == "" {
 			continue
 		}
+
+		imageURL,
+			imageFile :=
+			simpleImageSource(
+				imageValue,
+			)
 
 		imageSource := RowSource{
 			Sheet: sheetImages,
@@ -565,6 +588,8 @@ func parseSimpleProductRow(
 
 					ImageURL: imageURL,
 
+					ImageFile: imageFile,
+
 					AltText: fmt.Sprintf(
 						"%s image %d",
 						productName,
@@ -577,6 +602,41 @@ func parseSimpleProductRow(
 				},
 			)
 	}
+}
+
+func simpleImageSource(
+	value string,
+) (
+	imageURL string,
+	imageFile string,
+) {
+	value =
+		strings.TrimSpace(
+			value,
+		)
+
+	if value == "" {
+		return "", ""
+	}
+
+	lower :=
+		strings.ToLower(
+			value,
+		)
+
+	if strings.HasPrefix(
+		lower,
+		"https://",
+	) ||
+		strings.HasPrefix(
+			lower,
+			"http://",
+		) {
+
+		return value, ""
+	}
+
+	return "", value
 }
 
 func simpleCategoryPath(

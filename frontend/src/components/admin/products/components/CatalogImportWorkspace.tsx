@@ -18,6 +18,12 @@ import {
   AdminRequestError,
 } from "@/lib/admin/api";
 
+import {
+  prepareCatalogImport,
+  uploadCatalogPackageImages,
+  validateCatalogImportFile,
+} from "@/lib/admin/catalog-import-package";
+
 import type {
   AdminCatalogImportApplyResult,
   AdminCatalogImportBatchListItem,
@@ -31,11 +37,7 @@ import type {
 
 import styles from "../css/CatalogImportWorkspace.module.css";
 
-const MAX_FILE_BYTES =
-  20 * 1024 * 1024;
-
 const PREVIEW_LIMIT = 100;
-
 const HISTORY_LIMIT = 20;
 
 type CatalogImportWorkspaceProps = {
@@ -63,7 +65,9 @@ function requestErrorMessage(
     return value.message;
   }
 
-  if (value instanceof Error) {
+  if (
+    value instanceof Error
+  ) {
     return value.message;
   }
 
@@ -139,32 +143,17 @@ function isStageResult(
 function validateFile(
   file: File,
 ): string {
-  if (file.size <= 0) {
-    return "Choose a non-empty XLSX workbook.";
-  }
-
-  if (
-    !file.name
-      .toLowerCase()
-      .endsWith(".xlsx")
-  ) {
-    return "Catalog imports must use the .xlsx Excel format.";
-  }
-
-  if (
-    file.size >
-    MAX_FILE_BYTES
-  ) {
-    return "The workbook cannot exceed 20 MiB.";
-  }
-
-  return "";
+  return validateCatalogImportFile(
+    file,
+  );
 }
 
 function formatBytes(
   bytes: number,
 ): string {
-  if (bytes < 1024) {
+  if (
+    bytes < 1024
+  ) {
     return `${bytes} B`;
   }
 
@@ -186,7 +175,8 @@ function formatBytes(
 function formatDate(
   value: string,
 ): string {
-  const date = new Date(value);
+  const date =
+    new Date(value);
 
   if (
     Number.isNaN(
@@ -206,7 +196,8 @@ function formatDate(
 }
 
 function statusClass(
-  status: AdminCatalogImportBatchStatus,
+  status:
+    AdminCatalogImportBatchStatus,
 ): string {
   switch (status) {
     case "ready":
@@ -269,7 +260,8 @@ function actionClass(
 }
 
 function rowReference(
-  row: AdminCatalogImportRowPreview,
+  row:
+    AdminCatalogImportRowPreview,
 ): string {
   if (
     row.product_code &&
@@ -286,11 +278,13 @@ function rowReference(
 }
 
 function validationErrorLabel(
-  error: AdminCatalogImportValidationError,
+  error:
+    AdminCatalogImportValidationError,
 ): string {
-  const field = error.field
-    ? `${error.field}: `
-    : "";
+  const field =
+    error.field
+      ? `${error.field}: `
+      : "";
 
   return `${field}${error.message}`;
 }
@@ -303,71 +297,115 @@ export default function CatalogImportWorkspace({
       null,
     );
 
-  const [file, setFile] =
-    useState<File | null>(null);
+  const [
+    file,
+    setFile,
+  ] =
+    useState<File | null>(
+      null,
+    );
 
-  const [dragActive, setDragActive] =
+  const [
+    dragActive,
+    setDragActive,
+  ] =
     useState(false);
 
-  const [uploading, setUploading] =
+  const [
+    uploading,
+    setUploading,
+  ] =
     useState(false);
 
-  const [applying, setApplying] =
+  const [
+    uploadProgress,
+    setUploadProgress,
+  ] =
+    useState("");
+
+  const [
+    applying,
+    setApplying,
+  ] =
     useState(false);
 
-  const [confirmApply, setConfirmApply] =
+  const [
+    confirmApply,
+    setConfirmApply,
+  ] =
     useState(false);
 
   const [
     historyLoading,
     setHistoryLoading,
-  ] = useState(true);
+  ] =
+    useState(true);
 
   const [
     previewLoading,
     setPreviewLoading,
-  ] = useState(false);
+  ] =
+    useState(false);
 
-  const [history, setHistory] =
+  const [
+    history,
+    setHistory,
+  ] =
     useState<
       AdminCatalogImportBatchListItem[]
     >([]);
 
-  const [preview, setPreview] =
+  const [
+    preview,
+    setPreview,
+  ] =
     useState<
-      AdminCatalogImportPreviewResult | null
+      AdminCatalogImportPreviewResult
+        | null
     >(null);
 
   const [
     previewOffset,
     setPreviewOffset,
-  ] = useState(0);
+  ] =
+    useState(0);
 
   const [
     activeFilename,
     setActiveFilename,
-  ] = useState("");
+  ] =
+    useState("");
 
   const [
     activeLastError,
     setActiveLastError,
-  ] = useState("");
+  ] =
+    useState("");
 
   const [
     stageErrors,
     setStageErrors,
-  ] = useState<
-    AdminCatalogImportValidationError[]
-  >([]);
+  ] =
+    useState<
+      AdminCatalogImportValidationError[]
+    >([]);
 
-  const [error, setError] =
+  const [
+    error,
+    setError,
+  ] =
     useState("");
 
-  const [notice, setNotice] =
+  const [
+    notice,
+    setNotice,
+  ] =
     useState("");
 
   async function loadHistory() {
-    setHistoryLoading(true);
+    setHistoryLoading(
+      true,
+    );
 
     try {
       const result =
@@ -386,7 +424,9 @@ export default function CatalogImportWorkspace({
         ),
       );
     } finally {
-      setHistoryLoading(false);
+      setHistoryLoading(
+        false,
+      );
     }
   }
 
@@ -396,7 +436,10 @@ export default function CatalogImportWorkspace({
     filename?: string,
     lastError?: string,
   ) {
-    setPreviewLoading(true);
+    setPreviewLoading(
+      true,
+    );
+
     setError("");
     setConfirmApply(false);
 
@@ -408,7 +451,9 @@ export default function CatalogImportWorkspace({
           )}?limit=${PREVIEW_LIMIT}&offset=${nextOffset}`,
         );
 
-      setPreview(result);
+      setPreview(
+        result,
+      );
 
       setPreviewOffset(
         nextOffset,
@@ -439,41 +484,65 @@ export default function CatalogImportWorkspace({
         ),
       );
     } finally {
-      setPreviewLoading(false);
+      setPreviewLoading(
+        false,
+      );
     }
   }
 
   useEffect(() => {
-  let cancelled = false;
+    let cancelled =
+      false;
 
-  void Promise.resolve().then(() => {
-    if (!cancelled) {
-      void loadHistory();
-    }
-  });
+    void Promise.resolve().then(
+      () => {
+        if (
+          !cancelled
+        ) {
+          void loadHistory();
+        }
+      },
+    );
 
-  return () => {
-    cancelled = true;
-  };
-}, []);
+    return () => {
+      cancelled =
+        true;
+    };
+  }, []);
 
   function chooseFile(
-    nextFile: File | null,
+    nextFile:
+      File | null,
   ) {
     setNotice("");
     setError("");
+    setUploadProgress("");
 
-    if (!nextFile) {
-      setFile(null);
+    if (
+      !nextFile
+    ) {
+      setFile(
+        null,
+      );
+
       return;
     }
 
     const fileError =
-      validateFile(nextFile);
+      validateFile(
+        nextFile,
+      );
 
-    if (fileError) {
-      setFile(null);
-      setError(fileError);
+    if (
+      fileError
+    ) {
+      setFile(
+        null,
+      );
+
+      setError(
+        fileError,
+      );
 
       if (
         fileInputRef.current
@@ -485,7 +554,9 @@ export default function CatalogImportWorkspace({
       return;
     }
 
-    setFile(nextFile);
+    setFile(
+      nextFile,
+    );
   }
 
   function handleFileInput(
@@ -507,7 +578,9 @@ export default function CatalogImportWorkspace({
     event.dataTransfer.dropEffect =
       "copy";
 
-    setDragActive(true);
+    setDragActive(
+      true,
+    );
   }
 
   function handleDragLeave(
@@ -515,7 +588,10 @@ export default function CatalogImportWorkspace({
       DragEvent<HTMLDivElement>,
   ) {
     event.preventDefault();
-    setDragActive(false);
+
+    setDragActive(
+      false,
+    );
   }
 
   function handleDrop(
@@ -523,7 +599,10 @@ export default function CatalogImportWorkspace({
       DragEvent<HTMLDivElement>,
   ) {
     event.preventDefault();
-    setDragActive(false);
+
+    setDragActive(
+      false,
+    );
 
     chooseFile(
       event.dataTransfer.files?.[0] ??
@@ -540,47 +619,139 @@ export default function CatalogImportWorkspace({
     }
 
     const fileError =
-      validateFile(file);
+      validateFile(
+        file,
+      );
 
-    if (fileError) {
-      setError(fileError);
+    if (
+      fileError
+    ) {
+      setError(
+        fileError,
+      );
+
       return;
     }
 
-    setUploading(true);
+    setUploading(
+      true,
+    );
+
     setError("");
     setNotice("");
     setStageErrors([]);
     setConfirmApply(false);
-
-    const formData =
-      new FormData();
-
-    formData.append(
-      "file",
-      file,
-      file.name,
-    );
+    setUploadProgress("");
 
     try {
+      const isZip =
+        file.name
+          .toLowerCase()
+          .endsWith(
+            ".zip",
+          );
+
+      setUploadProgress(
+        isZip
+          ? "Opening catalog package…"
+          : "Preparing workbook…",
+      );
+
+      /*
+       * XLSX:
+       *   used directly.
+       *
+       * ZIP:
+       *   unpacked locally in the browser.
+       *
+       * The ZIP itself never needs to pass
+       * through the commerce API.
+       */
+      const prepared =
+        await prepareCatalogImport(
+          file,
+        );
+
+      let assetMap:
+        Record<
+          string,
+          string
+        > = {};
+
+      if (
+        prepared.isPackage
+      ) {
+        setUploadProgress(
+          `Preparing ${prepared.images.length} product image${prepared.images.length === 1 ? "" : "s"} for storage…`,
+        );
+
+        /*
+         * Images are uploaded directly from
+         * the Admin browser using the existing
+         * presigned product-image upload flow.
+         */
+        assetMap =
+          await uploadCatalogPackageImages(
+            prepared,
+            progress => {
+              setUploadProgress(
+                `Uploading images ${progress.completed}/${progress.total} · ${progress.filename}`,
+              );
+            },
+          );
+      }
+
+      setUploadProgress(
+        "Staging workbook & validating catalog…",
+      );
+
+      const formData =
+        new FormData();
+
+      formData.append(
+        "file",
+        prepared.workbook,
+        prepared.workbook.name,
+      );
+
+      /*
+       * ZIP packages provide a mapping:
+       *
+       * filename.webp
+       *      ↓
+       * public/products/images/uploads/...
+       *
+       * The backend resolves these keys to
+       * permanent public/CDN image URLs.
+       */
+      if (
+        Object.keys(
+          assetMap,
+        ).length > 0
+      ) {
+        formData.append(
+          "asset_map",
+          JSON.stringify(
+            assetMap,
+          ),
+        );
+      }
+
       const result =
         await adminFetchWithStatus<unknown>(
           "/catalog-imports",
           {
-            method: "POST",
-            body: formData,
+            method:
+              "POST",
+
+            body:
+              formData,
           },
           {
             /*
-             * A workbook can be staged
-             * successfully while still
-             * containing validation errors.
-             *
-             * The backend intentionally
-             * returns 422 in that case so
-             * we keep the structured batch
-             * result instead of throwing it
-             * away.
+             * Validation failures are returned
+             * as HTTP 422 while still including
+             * the created staging batch.
              */
             acceptedStatuses: [
               422,
@@ -596,7 +767,7 @@ export default function CatalogImportWorkspace({
         throw new Error(
           serverPayloadMessage(
             result.payload,
-            "The workbook could not be staged.",
+            "The catalog import could not be staged.",
           ),
         );
       }
@@ -605,32 +776,51 @@ export default function CatalogImportWorkspace({
         result.payload;
 
       setStageErrors(
-        stageResult.errors ?? [],
+        stageResult.errors ??
+          [],
       );
 
+      /*
+       * Keep displaying the package filename
+       * for the current import session rather
+       * than only the XLSX filename contained
+       * inside the package.
+       */
       setActiveFilename(
-        file.name,
+        prepared.sourceFilename,
       );
 
-      setActiveLastError("");
+      setActiveLastError(
+        "",
+      );
 
       if (
         stageResult.batch.status ===
         "ready"
       ) {
-        setNotice(
-          "Validation passed. Nothing has changed in the live catalog yet; review the action plan before applying.",
-        );
+        if (
+          prepared.isPackage
+        ) {
+          setNotice(
+            `${prepared.images.length} product image${prepared.images.length === 1 ? "" : "s"} uploaded to storage. Catalog validation passed. Review the action plan before applying.`,
+          );
+        } else {
+          setNotice(
+            "Validation passed. Nothing has changed in the live catalog yet; review the action plan before applying.",
+          );
+        }
       } else {
         setNotice(
-          "Validation found problems. The live catalog was not changed. Correct the workbook and upload a new batch.",
+          prepared.isPackage
+            ? "The images were uploaded to storage, but catalog validation found problems. The live catalog was not changed. Correct the package and stage a new batch."
+            : "Validation found problems. The live catalog was not changed. Correct the workbook and upload a new batch.",
         );
       }
 
       await loadPreview(
         stageResult.batch.id,
         0,
-        file.name,
+        prepared.sourceFilename,
         stageResult.batch.status ===
           "failed"
           ? `Validation failed with ${stageResult.errors.length} error${stageResult.errors.length === 1 ? "" : "s"}.`
@@ -639,7 +829,9 @@ export default function CatalogImportWorkspace({
 
       await loadHistory();
 
-      setFile(null);
+      setFile(
+        null,
+      );
 
       if (
         fileInputRef.current
@@ -651,13 +843,19 @@ export default function CatalogImportWorkspace({
       setError(
         requestErrorMessage(
           value,
-          "The workbook could not be staged.",
+          "The catalog import could not be staged.",
         ),
       );
 
       await loadHistory();
     } finally {
-      setUploading(false);
+      setUploading(
+        false,
+      );
+
+      setUploadProgress(
+        "",
+      );
     }
   }
 
@@ -673,7 +871,10 @@ export default function CatalogImportWorkspace({
       return;
     }
 
-    setApplying(true);
+    setApplying(
+      true,
+    );
+
     setError("");
     setNotice("");
 
@@ -684,7 +885,8 @@ export default function CatalogImportWorkspace({
             preview.batch.id,
           )}/apply`,
           {
-            method: "POST",
+            method:
+              "POST",
           },
         );
 
@@ -692,7 +894,9 @@ export default function CatalogImportWorkspace({
         `Catalog import completed: ${result.applied_rows} row${result.applied_rows === 1 ? "" : "s"} applied and ${result.skipped_rows} skipped.`,
       );
 
-      setConfirmApply(false);
+      setConfirmApply(
+        false,
+      );
 
       await loadPreview(
         preview.batch.id,
@@ -710,24 +914,32 @@ export default function CatalogImportWorkspace({
         ),
       );
     } finally {
-      setApplying(false);
+      setApplying(
+        false,
+      );
     }
   }
 
   const batch =
-    preview?.batch ?? null;
+    preview?.batch ??
+    null;
 
-  const canApply = Boolean(
-    batch &&
-      batch.status === "ready" &&
-      batch.failed_rows === 0 &&
-      !applying,
-  );
+  const canApply =
+    Boolean(
+      batch &&
+        batch.status ===
+          "ready" &&
+        batch.failed_rows ===
+          0 &&
+        !applying,
+    );
 
   const previewFirst =
     preview &&
-    preview.rows.length > 0
-      ? previewOffset + 1
+    preview.rows.length >
+      0
+      ? previewOffset +
+        1
       : 0;
 
   const previewLast =
@@ -739,7 +951,8 @@ export default function CatalogImportWorkspace({
   const canPreviewPrevious =
     Boolean(
       preview &&
-        previewOffset > 0 &&
+        previewOffset >
+          0 &&
         !previewLoading,
     );
 
@@ -747,17 +960,26 @@ export default function CatalogImportWorkspace({
     Boolean(
       preview &&
         previewLast <
-          preview.batch.total_rows &&
+          preview.batch
+            .total_rows &&
         !previewLoading,
     );
 
   return (
-    <div className={styles.page}>
-      <div className={styles.pageTop}>
+    <div
+      className={
+        styles.page
+      }
+    >
+      <div
+        className={
+          styles.pageTop
+        }
+      >
         <AdminPageHeader
           eyebrow="Catalog operations"
           title="Excel catalog import"
-          description="Stage a simple or advanced XLSX workbook, inspect every planned create/update/skip action, then explicitly apply only a clean validated batch."
+          description="Stage a simple or advanced XLSX workbook or an XLSX + product-images ZIP package, inspect every planned create/update/skip action, then explicitly apply only a clean validated batch."
         />
 
         <div
@@ -771,7 +993,9 @@ export default function CatalogImportWorkspace({
               styles.backLink
             }
           >
-            <span aria-hidden="true">
+            <span
+              aria-hidden="true"
+            >
               ←
             </span>
 
@@ -796,16 +1020,23 @@ export default function CatalogImportWorkspace({
 
         <div>
           <strong>
-            Uploading does not modify
-            the catalog
+            Staging does not
+            publish catalog
+            changes
           </strong>
 
           <p>
-            The backend first parses,
-            validates and builds an
-            action plan. Live products
-            change only after a ready
-            batch is explicitly applied.
+            XLSX files are
+            validated first.
+            Catalog ZIP images
+            are uploaded to
+            object storage during
+            preparation, but
+            products, variants
+            and image records
+            change only after a
+            ready batch is
+            explicitly applied.
           </p>
         </div>
       </div>
@@ -819,7 +1050,8 @@ export default function CatalogImportWorkspace({
         >
           <div>
             <strong>
-              Import request failed
+              Import request
+              failed
             </strong>
 
             <span>
@@ -846,7 +1078,9 @@ export default function CatalogImportWorkspace({
           role="status"
           aria-live="polite"
         >
-          <span aria-hidden="true">
+          <span
+            aria-hidden="true"
+          >
             ✓
           </span>
 
@@ -875,8 +1109,10 @@ export default function CatalogImportWorkspace({
                 Step 1
               </span>
 
-              <h2 id="catalog-import-upload">
-                Stage workbook
+              <h2
+                id="catalog-import-upload"
+              >
+                Stage catalog
               </h2>
             </div>
 
@@ -885,7 +1121,8 @@ export default function CatalogImportWorkspace({
                 styles.fileLimit
               }
             >
-              XLSX · max 20 MiB
+              XLSX 20 MiB · ZIP
+              512 MiB
             </span>
           </div>
 
@@ -910,7 +1147,7 @@ export default function CatalogImportWorkspace({
                 fileInputRef
               }
               type="file"
-              accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+              accept=".xlsx,.zip,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/zip"
               className={
                 styles.fileInput
               }
@@ -940,12 +1177,14 @@ export default function CatalogImportWorkspace({
                 ⇧
               </span>
 
-              Choose Excel workbook
+              Choose XLSX or
+              catalog ZIP
             </button>
 
             <p>
-              or drag and drop one
-              .xlsx file here
+              or drag and drop
+              one .xlsx or .zip
+              file here
             </p>
 
             {file ? (
@@ -969,7 +1208,9 @@ export default function CatalogImportWorkspace({
                 <button
                   type="button"
                   onClick={() =>
-                    chooseFile(null)
+                    chooseFile(
+                      null,
+                    )
                   }
                   disabled={
                     uploading
@@ -1003,14 +1244,17 @@ export default function CatalogImportWorkspace({
                   aria-hidden="true"
                 />
 
-                Staging & validating…
+                {uploadProgress ||
+                  "Staging & validating…"}
               </>
             ) : (
               <>
                 Stage & validate
-                workbook
+                catalog
 
-                <span aria-hidden="true">
+                <span
+                  aria-hidden="true"
+                >
                   →
                 </span>
               </>
@@ -1034,7 +1278,9 @@ export default function CatalogImportWorkspace({
                 Workbook contract
               </span>
 
-              <h2 id="catalog-import-contract">
+              <h2
+                id="catalog-import-contract"
+              >
                 Supported workbook
                 formats
               </h2>
@@ -1064,10 +1310,42 @@ export default function CatalogImportWorkspace({
               </strong>
 
               <p>
-                Product Name · Category ·
-                Subcategory · Colors ·
-                Sizes · MOQ · Price ·
-                Opening Stock · Image 1–6
+                Product Name ·
+                Category ·
+                Subcategory ·
+                Colors · Sizes ·
+                MOQ · Price ·
+                Opening Stock ·
+                Image 1–6
+              </p>
+            </div>
+
+            <div
+              className={
+                styles.sheetItem
+              }
+            >
+              <span
+                className={
+                  styles.requiredTag
+                }
+              >
+                Package
+              </span>
+
+              <strong>
+                XLSX + product
+                images ZIP
+              </strong>
+
+              <p>
+                One XLSX workbook
+                plus an images/
+                folder. Image 1–6
+                cells contain
+                matching image
+                filenames such as
+                product-name-01.webp.
               </p>
             </div>
 
@@ -1089,10 +1367,13 @@ export default function CatalogImportWorkspace({
               </strong>
 
               <p>
-                Products: product_code ·
-                product_name · category_path ·
-                Variants: product_code · sku ·
-                price
+                Products:
+                product_code ·
+                product_name ·
+                category_path ·
+                Variants:
+                product_code ·
+                sku · price
               </p>
             </div>
 
@@ -1102,12 +1383,13 @@ export default function CatalogImportWorkspace({
               }
             >
               <span>
-                Advanced optional sheets
+                Advanced optional
+                sheets
               </span>
 
               <strong>
-                Images · PriceTiers ·
-                Categories
+                Images · PriceTiers
+                · Categories
               </strong>
             </div>
           </div>
@@ -1117,7 +1399,9 @@ export default function CatalogImportWorkspace({
               styles.policyNote
             }
           >
-            <span aria-hidden="true">
+            <span
+              aria-hidden="true"
+            >
               !
             </span>
 
@@ -1135,9 +1419,11 @@ export default function CatalogImportWorkspace({
               <code>
                 1
               </code>
-              . MOQ controls the minimum;
-              quantities above MOQ are
-              unrestricted whole numbers.
+              . MOQ controls the
+              minimum; quantities
+              above MOQ are
+              unrestricted whole
+              numbers.
             </p>
           </div>
         </section>
@@ -1159,8 +1445,11 @@ export default function CatalogImportWorkspace({
               Step 2
             </span>
 
-            <h2 id="catalog-import-preview">
-              Validation & action preview
+            <h2
+              id="catalog-import-preview"
+            >
+              Validation & action
+              preview
             </h2>
 
             <p>
@@ -1197,7 +1486,8 @@ export default function CatalogImportWorkspace({
             />
 
             <strong>
-              Loading import preview
+              Loading import
+              preview
             </strong>
           </div>
         ) : !batch ||
@@ -1221,10 +1511,11 @@ export default function CatalogImportWorkspace({
             </strong>
 
             <p>
-              A staged workbook will
-              appear here with row-level
-              validation and
-              create/update/skip actions.
+              A staged workbook
+              will appear here with
+              row-level validation
+              and create/update/skip
+              actions.
             </p>
           </div>
         ) : (
@@ -1244,7 +1535,9 @@ export default function CatalogImportWorkspace({
                 </span>
 
                 <strong>
-                  {batch.total_rows}
+                  {
+                    batch.total_rows
+                  }
                 </strong>
               </div>
 
@@ -1258,13 +1551,16 @@ export default function CatalogImportWorkspace({
                 </span>
 
                 <strong>
-                  {batch.valid_rows}
+                  {
+                    batch.valid_rows
+                  }
                 </strong>
               </div>
 
               <div
                 className={`${styles.metric} ${
-                  batch.failed_rows > 0
+                  batch.failed_rows >
+                  0
                     ? styles.metricDanger
                     : ""
                 }`}
@@ -1274,7 +1570,9 @@ export default function CatalogImportWorkspace({
                 </span>
 
                 <strong>
-                  {batch.failed_rows}
+                  {
+                    batch.failed_rows
+                  }
                 </strong>
               </div>
 
@@ -1288,7 +1586,10 @@ export default function CatalogImportWorkspace({
                 </span>
 
                 <strong>
-                  +{batch.created_products}
+                  +
+                  {
+                    batch.created_products
+                  }
 
                   <small>
                     {" "}/{" "}
@@ -1310,7 +1611,10 @@ export default function CatalogImportWorkspace({
                 </span>
 
                 <strong>
-                  +{batch.created_variants}
+                  +
+                  {
+                    batch.created_variants
+                  }
 
                   <small>
                     {" "}/{" "}
@@ -1351,7 +1655,9 @@ export default function CatalogImportWorkspace({
                 </strong>
 
                 <span>
-                  {activeLastError}
+                  {
+                    activeLastError
+                  }
                 </span>
               </div>
             ) : null}
@@ -1364,13 +1670,16 @@ export default function CatalogImportWorkspace({
                 }
               >
                 <strong>
-                  {stageErrors.length}{" "}
+                  {
+                    stageErrors.length
+                  }{" "}
                   validation error
                   {stageErrors.length ===
                   1
                     ? ""
                     : "s"}{" "}
-                  returned by the backend
+                  returned by the
+                  backend
                 </strong>
 
                 <div>
@@ -1387,8 +1696,14 @@ export default function CatalogImportWorkspace({
                         <span
                           key={`${item.sheet}-${item.row}-${item.code}-${index}`}
                         >
-                          {item.sheet} row{" "}
-                          {item.row}:{" "}
+                          {
+                            item.sheet
+                          }{" "}
+                          row{" "}
+                          {
+                            item.row
+                          }
+                          :{" "}
                           {validationErrorLabel(
                             item,
                           )}
@@ -1402,8 +1717,9 @@ export default function CatalogImportWorkspace({
                       +
                       {stageErrors.length -
                         5}{" "}
-                      more — inspect the
-                      row table below.
+                      more — inspect
+                      the row table
+                      below.
                     </span>
                   ) : null}
                 </div>
@@ -1456,9 +1772,9 @@ export default function CatalogImportWorkspace({
                       styles.noRows
                     }
                   >
-                    No staged rows are
-                    available for this
-                    batch.
+                    No staged rows
+                    are available for
+                    this batch.
                   </div>
                 ) : (
                   preview.rows.map(
@@ -1523,7 +1839,9 @@ export default function CatalogImportWorkspace({
                               row.status,
                             )}`}
                           >
-                            {row.status}
+                            {
+                              row.status
+                            }
                           </span>
                         </span>
 
@@ -1600,7 +1918,9 @@ export default function CatalogImportWorkspace({
                 <span>
                   {previewFirst}–
                   {previewLast} of{" "}
-                  {batch.total_rows}
+                  {
+                    batch.total_rows
+                  }
                 </span>
 
                 <button
@@ -1633,9 +1953,12 @@ export default function CatalogImportWorkspace({
                       styles.viewProductsLink
                     }
                   >
-                    View refreshed products
+                    View refreshed
+                    products
 
-                    <span aria-hidden="true">
+                    <span
+                      aria-hidden="true"
+                    >
                       →
                     </span>
                   </Link>
@@ -1654,7 +1977,8 @@ export default function CatalogImportWorkspace({
                       )
                     }
                   >
-                    Apply to live catalog
+                    Apply to live
+                    catalog
                   </button>
                 )}
               </div>
@@ -1667,11 +1991,12 @@ export default function CatalogImportWorkspace({
                   styles.applyHintDanger
                 }
               >
-                Apply is blocked because
-                this batch contains
-                invalid rows. Fix the
-                workbook and stage a new
-                batch.
+                Apply is blocked
+                because this batch
+                contains invalid
+                rows. Fix the
+                workbook and stage
+                a new batch.
               </p>
             ) : batch.status ===
               "ready" ? (
@@ -1680,10 +2005,17 @@ export default function CatalogImportWorkspace({
                   styles.applyHint
                 }
               >
-                Ready means validation
-                passed; no live data
-                changes occur until you
-                confirm Apply.
+                Ready means
+                validation passed;
+                no live catalog
+                changes occur until
+                you confirm Apply.
+                ZIP image files have
+                already reached
+                object storage, but
+                no product-image
+                records are live
+                yet.
               </p>
             ) : null}
 
@@ -1697,19 +2029,25 @@ export default function CatalogImportWorkspace({
                 aria-labelledby="confirm-import-title"
               >
                 <div>
-                  <strong id="confirm-import-title">
-                    Apply this validated
-                    batch?
+                  <strong
+                    id="confirm-import-title"
+                  >
+                    Apply this
+                    validated batch?
                   </strong>
 
                   <p>
-                    This will write the
-                    planned create/update
-                    actions to the live
-                    catalog. The operation
-                    cannot be treated as a
-                    preview after
-                    confirmation.
+                    This will write
+                    the planned
+                    create/update
+                    actions to the
+                    live catalog.
+                    Product images
+                    from a ZIP
+                    package will now
+                    be attached using
+                    their permanent
+                    storage URLs.
                   </p>
                 </div>
 
@@ -1781,7 +2119,9 @@ export default function CatalogImportWorkspace({
               Recent activity
             </span>
 
-            <h2 id="catalog-import-history">
+            <h2
+              id="catalog-import-history"
+            >
               Import history
             </h2>
           </div>
@@ -1805,7 +2145,8 @@ export default function CatalogImportWorkspace({
         </div>
 
         {historyLoading &&
-        history.length === 0 ? (
+        history.length ===
+          0 ? (
           <div
             className={
               styles.historyEmpty
@@ -1818,7 +2159,8 @@ export default function CatalogImportWorkspace({
               aria-hidden="true"
             />
 
-            Loading recent imports…
+            Loading recent
+            imports…
           </div>
         ) : history.length ===
           0 ? (
@@ -1827,8 +2169,8 @@ export default function CatalogImportWorkspace({
               styles.historyEmpty
             }
           >
-            No catalog import batches
-            yet.
+            No catalog import
+            batches yet.
           </div>
         ) : (
           <div
@@ -1920,7 +2262,9 @@ export default function CatalogImportWorkspace({
                       item.status,
                     )}`}
                   >
-                    {item.status}
+                    {
+                      item.status
+                    }
                   </span>
 
                   <span

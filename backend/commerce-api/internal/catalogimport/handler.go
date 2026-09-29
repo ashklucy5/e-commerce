@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"crypto/sha256"
 	"encoding/hex"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -15,7 +16,13 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-const maxCatalogImportUploadSize int64 = 20 * 1024 * 1024
+const (
+	maxCatalogImportUploadSize int64 = 20 * 1024 * 1024
+
+	maxCatalogImportAssetMapBytes = 2 * 1024 * 1024
+
+	maxCatalogImportAssetMapEntries = 2000
+)
 
 type Handler struct {
 	service *Service
@@ -125,6 +132,40 @@ func (h *Handler) Create(
 		return
 	}
 
+	/*
+		Optional map supplied by the Admin
+		ZIP-import frontend.
+
+		Example:
+
+		{
+		  "shoe-01.webp":
+		    "public/products/images/uploads/.../shoe-01.webp",
+		  "shoe-02.webp":
+		    "public/products/images/uploads/.../shoe-02.webp"
+		}
+
+		Existing XLSX-only imports do not send
+		this field and remain fully supported.
+	*/
+	imageAssets, err :=
+		parseImageAssetMap(
+			c.PostForm(
+				"asset_map",
+			),
+		)
+
+	if err != nil {
+		c.JSON(
+			http.StatusBadRequest,
+			gin.H{
+				"error": err.Error(),
+			},
+		)
+
+		return
+	}
+
 	file, err :=
 		fileHeader.Open()
 
@@ -182,9 +223,17 @@ func (h *Handler) Create(
 			checksum[:],
 		)
 
-	// This endpoint currently stages a directly uploaded
-	// multipart XLSX file. The storage-backed direct-upload
-	// flow will use the admin upload pipeline separately.
+	/*
+		The workbook itself is currently
+		staged from this multipart request.
+
+		For ZIP imports, image files are
+		uploaded directly to object storage
+		before this endpoint is called.
+
+		The asset_map links workbook filenames
+		to those already-uploaded storage keys.
+	*/
 	storageKey :=
 		fmt.Sprintf(
 			"catalog-imports/http/%s",
@@ -200,6 +249,7 @@ func (h *Handler) Create(
 			bytes.NewReader(
 				data,
 			),
+			imageAssets,
 		)
 
 	if err != nil {
@@ -376,6 +426,92 @@ func handleCatalogImportApplyError(
 			},
 		)
 	}
+}
+
+func parseImageAssetMap(
+	raw string,
+) (
+	map[string]string,
+	error,
+) {
+	raw =
+		strings.TrimSpace(
+			raw,
+		)
+
+	/*
+		No asset map means this is a normal
+		legacy XLSX import containing URLs.
+	*/
+	if raw == "" {
+		return nil, nil
+	}
+
+	if len(raw) >
+		maxCatalogImportAssetMapBytes {
+
+		return nil,
+			fmt.Errorf(
+				"catalog image asset map is too large",
+			)
+	}
+
+	var assets map[string]string
+
+	if err :=
+		json.Unmarshal(
+			[]byte(raw),
+			&assets,
+		); err != nil {
+
+		return nil,
+			fmt.Errorf(
+				"catalog image asset map must be valid JSON",
+			)
+	}
+
+	if len(assets) >
+		maxCatalogImportAssetMapEntries {
+
+		return nil,
+			fmt.Errorf(
+				"catalog image asset map cannot contain more than %d entries",
+				maxCatalogImportAssetMapEntries,
+			)
+	}
+
+	clean :=
+		make(
+			map[string]string,
+			len(assets),
+		)
+
+	for filename, storageKey := range assets {
+
+		filename =
+			strings.TrimSpace(
+				filename,
+			)
+
+		storageKey =
+			strings.TrimSpace(
+				storageKey,
+			)
+
+		if filename == "" ||
+			storageKey == "" {
+
+			return nil,
+				fmt.Errorf(
+					"catalog image asset map contains an empty filename or storage key",
+				)
+		}
+
+		clean[filename] =
+			storageKey
+	}
+
+	return clean, nil
 }
 
 func queryInt(

@@ -403,6 +403,7 @@ func registerCatalogAdminRoutes(
 	catalogImportService :=
 		catalogimport.NewService(
 			catalogImportRepository,
+			deps.Storage,
 		)
 
 	catalogImportHandler :=
