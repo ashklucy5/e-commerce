@@ -1,20 +1,24 @@
-﻿[
-  {
-    "corsRuleName": "eneDeiBrowserUploads",
-    "allowedOrigins": [
-      "http://localhost:3000"
-    ],
-    "allowedHeaders": [
-      "*"
-    ],
-    "allowedOperations": [
-      "s3_get",
-      "s3_head",
-      "s3_put"
-    ],
-    "exposeHeaders": [
-      "ETag"
-    ],
-    "maxAgeSeconds": 3600
-  }
-]
+﻿{
+  "CORSRules": [
+    {
+      "AllowedOrigins": [
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "https://frontend-ecru-ten-70st7vvrxx.vercel.app"
+      ],
+      "AllowedMethods": [
+        "GET",
+        "HEAD",
+        "PUT"
+      ],
+      "AllowedHeaders": [
+        "Content-Type",
+        "Cache-Control"
+      ],
+      "ExposeHeaders": [
+        "ETag"
+      ],
+      "MaxAgeSeconds": 3600
+    }
+  ]
+}
