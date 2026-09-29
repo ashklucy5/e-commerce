@@ -52,48 +52,33 @@ export const metadata:
     "/manifest.webmanifest",
 
   icons: {
-    icon: [
-      {
-        url:
-          "/favicon.ico",
-      },
+  icon: [
+    {
+      url: "/favicon.png",
+      type: "image/png",
+    },
 
-      {
-        url:
-          "/icons/pwa/icon-192.png",
+    {
+      url: "/icons/pwa/icon-192.png",
+      sizes: "192x192",
+      type: "image/png",
+    },
 
-        sizes:
-          "192x192",
+    {
+      url: "/icons/pwa/icon-512.png",
+      sizes: "512x512",
+      type: "image/png",
+    },
+  ],
 
-        type:
-          "image/png",
-      },
-
-      {
-        url:
-          "/icons/pwa/icon-512.png",
-
-        sizes:
-          "512x512",
-
-        type:
-          "image/png",
-      },
-    ],
-
-    apple: [
-      {
-        url:
-          "/icons/pwa/apple-touch-icon.png",
-
-        sizes:
-          "180x180",
-
-        type:
-          "image/png",
-      },
-    ],
-  },
+  apple: [
+    {
+      url: "/icons/pwa/apple-touch-icon.png",
+      sizes: "180x180",
+      type: "image/png",
+    },
+  ],
+},
 
   appleWebApp: {
     capable:

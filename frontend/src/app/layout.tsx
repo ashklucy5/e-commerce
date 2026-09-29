@@ -1,6 +1,20 @@
-import type { ReactNode } from "react";
+import type {
+  Metadata,
+} from "next";
+
+import type {
+  ReactNode,
+} from "react";
 
 import "./globals.css";
+
+export const metadata: Metadata = {
+  icons: {
+    icon: "/favicon.png",
+    shortcut: "/favicon.png",
+    apple: "/favicon.png",
+  },
+};
 
 type RootLayoutProps = {
   children: ReactNode;
